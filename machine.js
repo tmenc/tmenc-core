@@ -109,10 +109,10 @@ function init_simple_rng_ref(seed) {
 	var x = seed;
 	const mask = 4294967295;
 	return function () {
-		x ^= (x << 13);
-		x ^= (x >> 17);
-		x ^= (x << 5);
-		return x & 1;
+		x ^= (x << 13) & mask;
+		x ^= (x >> 17) & mask;
+		x ^= (x << 5) & mask;
+		return x;
 	};
 }
 
