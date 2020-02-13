@@ -104,17 +104,6 @@ function bitarray_xor_with(target, other) {
 	}
 }
 
-// // 64 bits only!
-// function init_simple_rng_ref(seed) {
-// 	var x = new Uint32Array([seed]);
-// 	return function () {
-// 		x[0] ^= (x[0] << 13);
-// 		x[0] ^= (x[0] >> 17);
-// 		x[0] ^= (x[0] << 5);
-// 		return x[0];
-// 	};
-// }
-
 // 64 bits only!
 function init_simple_rng_ref(seed) {
 	var x = seed;
@@ -124,30 +113,6 @@ function init_simple_rng_ref(seed) {
 		return x;
 	};
 }
-
-function init_simple_rng(seed) {
-	var x = number_to_bitarray(seed, 32);
-	return function () {
-		const a = bitarray_shift_left(bitarray_copy(x), 13);
-		bitarray_xor_with(x, a);
-		const b = bitarray_shift_right(bitarray_copy(x), 17);
-		bitarray_xor_with(x, b);
-		const c = bitarray_shift_left(bitarray_copy(x), 5);
-		bitarray_xor_with(x, c);
-		return bitarray_copy(x);
-	};
-}
-
-// x = 73;
-// console.log("x = ", x);
-// a = number_to_bitarray(x, 32);
-// console.log("a = ", a);
-
-// var rng = init_simple_rng(21923123);
-
-// for (var i = 0; i < 30; i++) {
-// 	console.log(rng()[4]);
-// }
 
 var rng = init_simple_rng_ref(200);
 
