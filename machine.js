@@ -44,6 +44,30 @@ function bitarray_shift_left(bitarr, dx) {
 	return bitarray_shift_right(bitarr, -dx);
 }
 
+// this function has specific endianess, not sure which
+// but dont care about it please
+function number_to_bitarray64(num) {
+	var arr = [];
+	var count = 0;
+	while (num > 1) {
+		if (count > 64) {
+			throw "number is bigger than 2^64";
+		}
+		arr.push(num % 2);
+		num = Math.floor(num / 2);
+		count++;
+	}
+
+	while (count < 64) {
+		arr.push(1);
+		count++;
+	}
+
+	console.log("COUNT =", arr.length);
+
+	return arr;
+}
+
 // 64 bits only!
 function init_simple_rng(seed) {
 	x = seed;
@@ -55,4 +79,9 @@ function init_simple_rng(seed) {
 		return Math.abs(x);
 	}
 }
+
+x = 73;
+console.log("x = ", x);
+a = number_to_bitarray64(x);
+console.log("a = ", a);
 
