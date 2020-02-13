@@ -104,14 +104,23 @@ function bitarray_xor_with(target, other) {
 	}
 }
 
+// // 64 bits only!
+// function init_simple_rng_ref(seed) {
+// 	var x = new Uint32Array([seed]);
+// 	return function () {
+// 		x[0] ^= (x[0] << 13);
+// 		x[0] ^= (x[0] >> 17);
+// 		x[0] ^= (x[0] << 5);
+// 		return x[0];
+// 	};
+// }
+
 // 64 bits only!
 function init_simple_rng_ref(seed) {
-	var x = new Uint32Array([seed]);
+	var x = seed;
 	return function () {
-		x[0] ^= (x[0] << 13);
-		x[0] ^= (x[0] >> 17);
-		x[0] ^= (x[0] << 5);
-		return x[0];
+		x = x * 16807 % 2147483647;
+		return x;
 	};
 }
 
@@ -128,20 +137,21 @@ function init_simple_rng(seed) {
 	};
 }
 
-x = 73;
-console.log("x = ", x);
-a = number_to_bitarray(x, 32);
-console.log("a = ", a);
+// x = 73;
+// console.log("x = ", x);
+// a = number_to_bitarray(x, 32);
+// console.log("a = ", a);
 
-var rng = init_simple_rng(21923123);
+// var rng = init_simple_rng(21923123);
 
-for (var i = 0; i < 30; i++) {
-	console.log(rng()[4]);
-}
+// for (var i = 0; i < 30; i++) {
+// 	console.log(rng()[4]);
+// }
 
-rng = init_simple_rng_ref(21923123);
+var rng = init_simple_rng_ref(200);
 
-for (var i = 0; i < 30; i++) {
+for (var i = 0; i < 10; i++) {
 	console.log(rng());
 }
+console.log(rng());
 
