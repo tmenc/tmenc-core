@@ -72,19 +72,19 @@ function bitarray_shift_left(bitarr, dx) {
 }
 
 // DOES NOT REPRESENT NUMBER IN BINARY!
-function number_to_bitarray64(num) {
-	const arr = bitarray_alloc(64);
+function number_to_bitarray(num, bits) {
+	const arr = bitarray_alloc(bits);
 	var i = 0;
 	while (num > 1) {
-		if (i >= 64) {
-			throw "number is bigger than 2^64";
+		if (i >= bits) {
+			throw ("number is bigger than 2^" + bits);
 		}
 		bitarray_set_bit(arr, i, num % 2);
 		i++;
 		num = Math.floor(num / 2);
 	}
 
-	while (i < 64) {
+	while (i < bits) {
 		arr[i] = 1;
 		i++;
 	}
@@ -106,24 +106,24 @@ function bitarray_xor_with(target, other) {
 
 // 64 bits only!
 function init_simple_rng_ref(seed) {
-	x = seed;
-	mask = Math.pow(2, 64) - 1;
+	var x = seed;
+	const mask = 4294967295;
 	return function () {
-		x ^= (x << 21);
-		x ^= (x >> 35);
-		x ^= (x << 4);
-		return Math.abs(x);
-	}
+		x ^= (x << 13);
+		x ^= (x >> 17);
+		x ^= (x << 5);
+		return x & 1;
+	};
 }
 
 function init_simple_rng(seed) {
-	var x = number_to_bitarray64(seed);
+	var x = number_to_bitarray(seed, 32);
 	return function () {
-		const a = bitarray_shift_left(bitarray_copy(x), 21);
+		const a = bitarray_shift_left(bitarray_copy(x), 13);
 		bitarray_xor_with(x, a);
-		const b = bitarray_shift_right(bitarray_copy(x), 35);
+		const b = bitarray_shift_right(bitarray_copy(x), 17);
 		bitarray_xor_with(x, b);
-		const c = bitarray_shift_left(bitarray_copy(x), 4);
+		const c = bitarray_shift_left(bitarray_copy(x), 5);
 		bitarray_xor_with(x, c);
 		return bitarray_copy(x);
 	};
@@ -131,11 +131,18 @@ function init_simple_rng(seed) {
 
 x = 73;
 console.log("x = ", x);
-a = number_to_bitarray64(x);
+a = number_to_bitarray(x, 32);
 console.log("a = ", a);
 
-rng = init_simple_rng(200);
-for (var i = 0; i < 100; i++) {
-	console.log(rng()[0]);
+var rng = init_simple_rng(21923123);
+
+for (var i = 0; i < 30; i++) {
+	console.log(rng()[4]);
+}
+
+rng = init_simple_rng_ref(21923123);
+
+for (var i = 0; i < 30; i++) {
+	console.log(rng());
 }
 
