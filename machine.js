@@ -11,14 +11,18 @@ function bitarray_alloc(bits) {
 	return new Array(bits);
 }
 
-function bitarr_set_bit_or_nop(bitarr, i, value) {
+function bitarray_set_bit_or_nop(bitarr, i, value) {
 	if (i >= 0 && i < bitarr.length) {
 		bitarr[i] = value;
 	}
 }
 
-function bitarr_set_bit(bitarr, i, value) {
+function bitarray_set_bit(bitarr, i, value) {
 	bitarr[i] = value;
+}
+
+function bitarray_length(bitarr) {
+	return bitarr.length;
 }
 
 // function bitarray_swap(bitarr, x, y) {
@@ -37,7 +41,7 @@ function bitarray_swap0(bitarr, x, y) {
 /// [0, 1, 0, 0, 1]
 
 function bitarray_shift_right(bitarr, dx) {
-	const len = bitarr.length;
+	const len = bitarray_length(bitarr);
 	if (dx > 0) {
 		for (var i = len - 1; i >= 0; i--) {
 			bitarray_swap0(bitarr, i, i + dx);
@@ -72,7 +76,7 @@ function number_to_bitarray64(num) {
 		i++;
 	}
 
-	console.log("COUNT =", arr.length);
+	console.log("COUNT =", biarr.length);
 
 	return arr;
 }
