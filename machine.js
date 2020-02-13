@@ -106,13 +106,12 @@ function bitarray_xor_with(target, other) {
 
 // 64 bits only!
 function init_simple_rng_ref(seed) {
-	var x = seed;
-	const mask = 4294967295;
+	var x = new Uint32Array([seed]);
 	return function () {
-		x ^= (x << 13) & mask;
-		x ^= (x >> 17) & mask;
-		x ^= (x << 5) & mask;
-		return x;
+		x[0] ^= (x[0] << 13);
+		x[0] ^= (x[0] >> 17);
+		x[0] ^= (x[0] << 5);
+		return x[0];
 	};
 }
 
