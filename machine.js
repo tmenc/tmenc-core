@@ -118,8 +118,9 @@ function bitarray_xor_with(target, other) {
 // 64 bits only!
 function init_simple_rng_ref(seed) {
 	var x = seed;
+	const mod = Math.pow(2, 32);
 	return function () {
-		x = x * 16807 % 2147483647;
+		x = (((x * 1664525) % mod) + 1013904223) % mod;
 		return x;
 	};
 }
