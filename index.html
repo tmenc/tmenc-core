@@ -1,0 +1,37 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>VPMJS</title>
+</head>
+<body>
+    <div>
+        <br></br>
+        <h1> VPM.js </h1>
+        <h2> Use from everywhere! </h2>
+        <br></br>
+    </div>
+    <div id="inputs_div" >
+        <br></br>
+        <p> Encoded file here </p>
+        <input type="file" id="encoded_input" name="files[]" title="encoded" />
+        <p> Password here </p>
+        <input type="password" id="pinput"  name="pinput" title="p" />
+        <p> Auth file here </p>
+        <input type="file" id="key_input" name="files[]" title="key" />
+        <br></br>
+        <button id="submit"> Submit </button>
+    </div>
+    <div>
+        <p id="main_out"></p>
+    </div>
+
+    <p>
+      <script src="js-sha3/src/sha3.js"></script>
+      <script src="src/util.js"></script>
+      <script src="src/cbc.js"></script>
+      <script src="src/normalizer.js"></script>
+      <script src="src/engine.js"></script>
+      <script src="src/ui-translator.js"></script>
+    </p>
+  </body>
+</html>
