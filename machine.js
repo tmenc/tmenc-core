@@ -60,13 +60,13 @@ function bitarray_shift_left(bitarr, dx) {
 
 // DOES NOT REPRESENT NUMBER IN BINARY!
 function number_to_bitarray64(num) {
-	var arr = bitarray_alloc(64);
+	const arr = bitarray_alloc(64);
 	var i = 0;
 	while (num > 1) {
 		if (i >= 64) {
 			throw "number is bigger than 2^64";
 		}
-		bitarr_set_bit(arr, i, num % 2);
+		bitarray_set_bit(arr, i, num % 2);
 		i++;
 		num = Math.floor(num / 2);
 	}
@@ -76,7 +76,7 @@ function number_to_bitarray64(num) {
 		i++;
 	}
 
-	console.log("COUNT =", biarr.length);
+	console.log("COUNT =", arr.length);
 
 	return arr;
 }
