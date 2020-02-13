@@ -7,6 +7,20 @@ function bitarray_at_or0(bitarr, at) {
 	}
 }
 
+function bitarray_alloc(bits) {
+	return new Array(bits);
+}
+
+function bitarr_set_bit_or_nop(bitarr, i, value) {
+	if (i >= 0 && i < bitarr.length) {
+		bitarr[i] = value;
+	}
+}
+
+function bitarr_set_bit(bitarr, i, value) {
+	bitarr[i] = value;
+}
+
 // function bitarray_swap(bitarr, x, y) {
 // 	const t = bitarr[x];
 // 	bitarr[x] = bitarr[y];
@@ -15,12 +29,8 @@ function bitarray_at_or0(bitarr, at) {
 
 function bitarray_swap0(bitarr, x, y) {
 	const t = bitarray_at_or0(bitarr, x);
-	if (x >= 0 && x < bitarr.length) {
-		bitarr[x] = bitarray_at_or0(bitarr, y);
-	}
-	if (y >= 0 && y < bitarr.length) {
-		bitarr[y] = t;
-	}
+	bitarray_set_or_nop(bitarr, x, bitarray_at_or0(bitarr, y))
+	bitarray_set_or_nop(bitarr, y, t);
 }
 
 /// [1, 0, 0, 1, 0] >> 1
@@ -44,23 +54,22 @@ function bitarray_shift_left(bitarr, dx) {
 	return bitarray_shift_right(bitarr, -dx);
 }
 
-// this function has specific endianess, not sure which
-// but dont care about it please
+// DOES NOT REPRESENT NUMBER IN BINARY!
 function number_to_bitarray64(num) {
-	var arr = [];
-	var count = 0;
+	var arr = bitarray_alloc(64);
+	var i = 0;
 	while (num > 1) {
-		if (count > 64) {
+		if (i >= 64) {
 			throw "number is bigger than 2^64";
 		}
-		arr.push(num % 2);
+		bitarr_set_bit(arr, i, num % 2);
+		i++;
 		num = Math.floor(num / 2);
-		count++;
 	}
 
-	while (count < 64) {
-		arr.push(1);
-		count++;
+	while (i < 64) {
+		arr[i] = 1;
+		i++;
 	}
 
 	console.log("COUNT =", arr.length);
