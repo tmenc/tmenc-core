@@ -225,7 +225,7 @@ function make_tm(machine_bits, address_size, weak_rng) {
 	return step;
 }
 
-function make_tm_env(machine_bits, address_size, input_bits, weak_rng) {
+function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tape_limit) {
 	const tm = make_tm(machine_bits, address_size, weak_rng);
 	const read_tape_len = input_bits.length;
 	const read_tape = input_bits;
@@ -239,6 +239,10 @@ function make_tm_env(machine_bits, address_size, input_bits, weak_rng) {
 		bitarray_set_bit_extend0(write_tape, write_tape_pos, ret.new_write_tape_bit);
 		read_tape_pos += ret.read_tape_direction;
 		write_tape_pos += ret.write_tape_direction;
+
+		if (write_tape_limit && write_tape_pos > write_tape_limit) {
+			write_tape_pos = write_tape_pos % write_tape_limit;
+		}
 
 		if (read_tape_pos >= read_tape_len) {
 			read_tape_pos = 0;
