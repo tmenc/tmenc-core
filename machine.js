@@ -184,8 +184,12 @@ function make_tm(machine_bits, address_size) {
 		}
 
 		machine_pos += address_diff;
+		machine_pos = machine_pos % machine_len;
 		machine_pos += diff_accumulator;
+		machine_pos = machine_pos % machine_len;
 		diff_accumulator++;
+
+		console.log('machine_pos = ', machine_pos);
 
 		return {
 			new_write_tape_bit: wt_bit, // : {0 ,1}
