@@ -159,7 +159,7 @@ function make_tm(machine_bits, address_size) {
 		return bit;
 	}
 	function read_1_bit() {
-		return read_bit_and_skip_range(0, 1);
+		return read_bit_and_skip_range(0, 0);
 	}
 	function read_chosen_bit(shift) {
 		return read_bit_and_skip_range(shift, max_shift);
