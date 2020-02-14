@@ -322,7 +322,7 @@ function test_tm_hashing() {
 		const step = env.step;
 		const write_tape = env.write_tape;
 
-		for (var i = 0; i < 1000; i++) {
+		for (var i = 0; i < 100000; i++) {
 			step();
 		}
 
@@ -340,7 +340,7 @@ function test_tm_hashing() {
 		const step2 = env2.step;
 		const write_tape2 = env2.write_tape;
 
-		for (var i = 0; i < 1000; i++) {
+		for (var i = 0; i < 100000; i++) {
 			step2();
 		}
 
@@ -352,7 +352,7 @@ function test_tm_hashing() {
 		console.log('ratio = ', ratio);
 	}
 
-	dotest(true, 1000, 1000, 1000);
+	dotest(true, 1000, 2, 512);
 }
 
 // test_tm();
