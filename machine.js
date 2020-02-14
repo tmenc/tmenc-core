@@ -118,6 +118,17 @@ function init_simple_rng_ref(seed) {
 	};
 }
 
+function make_tm(bitarr) {
+	var machine_pos = 0;
+	return function (next_input_bit) {
+		return {
+			new_bit: undefined,
+			read_tape_direction: undefined,
+			write_tape_direction: undefined,
+		};
+	};
+}
+
 var rng = init_simple_rng_ref(200);
 
 for (var i = 0; i < 10; i++) {
