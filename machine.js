@@ -325,13 +325,13 @@ function test_tm_hashing() {
 		step();
 	}
 
-	const env2 = make_default_tm_env(machine_bits, input_bits, 777, 10);
-	const step2 = env.step;
-	const write_tape2 = env.write_tape;
-
 	const input_bits2 = bitarray_copy(input_bits);
 	const change_pos = 32 % bitarray_length(input_bits);
 	bitarray_set_bit(input_bits2, change_pos, 1 ^ bitarray_at(input_bits2, change_pos));
+
+	const env2 = make_default_tm_env(machine_bits, input_bits2, 777, 10);
+	const step2 = env.step;
+	const write_tape2 = env.write_tape;
 
 	for (var i = 0; i < 1000; i++) {
 		step2();
