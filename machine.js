@@ -137,10 +137,15 @@ function init_simple_rng_ref(seed) {
 	};
 }
 
-function make_tm(bitarr) {
-	const machine_len = bitarr.length;
+function make_tm(machine_bits) {
+	const machine_len = machine_bits.length;
+	const new_bit_max_shift = 2 + 2;
 	var machine_pos = 0;
 	function step (read_tape_bit, write_tape_bit) {
+		const new_bit_shift = 1 * read_tape_bit + 2 * write_tape_bit; // first 4 bits are for the "new_bit"
+		const new_bit = bitarray_at(machine_bits, machine_pos + new_bit_shift);
+		machine_pos += new_bit_max_shift;
+		
 		return {
 			new_write_tape_bit: undefined, // : {0 ,1}
 			read_tape_direction: undefined, // : {-1, 1}
