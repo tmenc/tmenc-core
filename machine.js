@@ -141,6 +141,7 @@ function make_tm(machine_bits, address_size) {
 	const machine_len = machine_bits.length;
 	const max_shift = 1 * 1 + 2 * 1;
 	var machine_pos = 0;
+	var diff_accumulator = 1; // makes cycles less probable
 
 	function read_bit_and_skip_range(shift, range) {
 		const bit_pos = (machine_pos + shift) % machine_len;
@@ -173,6 +174,10 @@ function make_tm(machine_bits, address_size) {
 			address_diff = new_address + bit * pow;
 			pow = pow * 2;
 		}
+
+		machine_pos += address_diff;
+		machine_pos += diff_accumulator;
+		diff_accumulator++;
 
 		return {
 			new_write_tape_bit: wt_bit, // : {0 ,1}
