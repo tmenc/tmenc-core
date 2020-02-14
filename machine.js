@@ -1,9 +1,19 @@
 
+function bitarray_length(bitarr) {
+	return bitarr.length;
+}
+
 function bitarray_at_or0(bitarr, at) {
 	if (at >= 0 && at < bitarr.length) {
 		return bitarr[at];
 	} else {
 		return 0;
+	}
+}
+
+function bitarray_extend_with0(bitarr, newlen) {
+	for (var i = bitarray_length(bitarr); i < newlen; i++) {
+		bitarr.push(0);
 	}
 }
 
@@ -15,18 +25,27 @@ function bitarray_alloc(bits) {
 	return new Array(bits);
 }
 
-function bitarray_set_bit_or_nop(bitarr, i, value) {
-	if (i >= 0 && i < bitarr.length) {
-		bitarr[i] = value;
-	}
-}
-
 function bitarray_set_bit(bitarr, i, value) {
 	bitarr[i] = value;
 }
 
-function bitarray_length(bitarr) {
-	return bitarr.length;
+function bitarray_set_bit_or_nop(bitarr, i, value) {
+	if (i >= 0 && i < bitarr.length) {
+		bitarr[i] = value;
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function bitarray_set_bit_extend0(bitarr, i, value) {
+	if (bitarray_set_bit_or_nop(bitarr, i, value)) {
+		return true;
+	} else {
+		bitarray_extend_with0(bitarr, i + 1);
+		bitarray_set_bit(bitarr, i, value);
+		return false;
+	}
 }
 
 function bitarray_copy(x) {
@@ -134,10 +153,13 @@ function make_tm(bitarr) {
 function make_tm_env(machine_bits, input_bits) {
 	const tm = make_tm(machine_bits);
 	const read_tape_len = input_bits.length;
+	const write_tape = bitarray_alloc(0);
 	var read_tape_pos = 0;
 	var write_tape_pos = 0;
 	return {
 		step: function () {
+			ret = tm();
+			bitarray_set_bit(
 		},
 		collect: function () {
 		},
