@@ -227,6 +227,7 @@ function make_tm(machine_bits, address_size, weak_rng) {
 
 function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tape_limit) {
 	const tm = make_tm(machine_bits, address_size, weak_rng);
+	const write_tape_size_limit = write_tape_limit ? (write_tape_limit - 1) : false;
 	const read_tape_len = input_bits.length;
 	const read_tape = input_bits;
 	const write_tape = bitarray_alloc(0);
@@ -237,7 +238,7 @@ function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tap
 		const write_tape_bit = bitarray_at_or0(write_tape, write_tape_pos);
 		const ret = tm(read_tape_bit, write_tape_bit);
 
-		if (write_tape_limit && write_tape_pos > write_tape_limit) {
+		if (write_tape_size_limit && write_tape_pos > write_tape_size_limit) {
 			write_tape_pos = write_tape_pos % write_tape_limit;
 		}
 		if (write_tape_pos < 0) {
@@ -262,9 +263,9 @@ function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tap
 
 const DEFAULT_ADDRESS_SIZE = 10;
 
-function make_default_tm_env(machine_bits, input_bits, seed) {
+function make_default_tm_env(machine_bits, input_bits, seed, write_tape_limit) {
 	const weak_rng = init_simple_rng_ref(seed);
-	return make_tm_env(machine_bits, DEFAULT_ADDRESS_SIZE, input_bits, weak_rng);
+	return make_tm_env(machine_bits, DEFAULT_ADDRESS_SIZE, input_bits, weak_rng, write_tape_limit);
 }
 
 function test_tm() {
