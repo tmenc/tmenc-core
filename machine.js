@@ -183,6 +183,7 @@ function make_tm(machine_bits, address_size) {
 			pow = pow * 2;
 		}
 
+		// jump to new state
 		machine_pos += address_diff;
 		machine_pos = machine_pos % machine_len;
 		machine_pos += diff_accumulator;
