@@ -330,7 +330,7 @@ function test_tm_hashing() {
 	const write_tape2 = env.write_tape;
 
 	const input_bits2 = bitarray_copy(input_bits);
-	const change_pos = 32;
+	const change_pos = 32 % bitarray_length(input_bits);
 	bitarray_set_bit(input_bits2, change_pos, 1 ^ bitarray_at(input_bits2, change_pos));
 
 	for (var i = 0; i < 1000; i++) {
