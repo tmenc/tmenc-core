@@ -123,7 +123,7 @@ function make_tm(bitarr) {
 	var machine_pos = 0;
 	return function (read_tape_bit, write_tape_bit) {
 		return {
-			new_bit: undefined,
+			new_write_tape_bit: undefined,
 			read_tape_direction: undefined,
 			write_tape_direction: undefined,
 		};
