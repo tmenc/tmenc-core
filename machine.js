@@ -332,9 +332,9 @@ function test_tm_hashing() {
 		bitarray_set_bit(input_bits2, i, 1 ^ bitarray_at(input_bits2, i));
 	}
 
-	const env2 = make_default_tm_env(machine_bits, input_bits2, 777, 10);
-	const step2 = env.step;
-	const write_tape2 = env.write_tape;
+	const env2 = make_default_tm_env(machine_bits, [], 777, 10);
+	const step2 = env2.step;
+	const write_tape2 = env2.write_tape;
 
 	for (var i = 0; i < 1000; i++) {
 		step2();
