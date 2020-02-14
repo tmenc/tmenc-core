@@ -137,8 +137,17 @@ function init_simple_rng_ref(seed) {
 	};
 }
 
+function generate_n_weak_random_bits(seed, n) {
+	const rng = init_simple_rng_ref(seed);
+	const ret = bitarray_alloc(n);
+	for (var i = 0; i < n; i++) {
+		bitarray_set_bit(ret, i, rng())
+	}
+	return ret;
+}
+
 function test_rng_ref() {
-	var rng = init_simple_rng_ref(200);
+	const rng = init_simple_rng_ref(200);
 	for (var i = 0; i < 10; i++) {
 		console.log(rng());
 	}
