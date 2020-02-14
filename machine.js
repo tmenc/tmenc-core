@@ -256,5 +256,21 @@ function test_tm() {
 	}
 }
 
-test_tm();
+function test_tm2() {
+	const machine_bits = generate_n_weak_random_bits(200, 20);
+	const input_bits = generate_n_weak_random_bits(300, 1000);
+	const env = make_tm_env(machine_bits, DEFAULT_ADDRESS_SIZE, input_bits);
+	const step = env.step;
+	const write_tape = env.write_tape;
+
+	for (var i = 0; i < 100000; i++) {
+		if (i % 1000 == 0) {
+			console.log(write_tape);
+		}
+		step();
+	}
+}
+
+// test_tm();
+test_tm2();
 
