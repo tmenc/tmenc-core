@@ -268,6 +268,21 @@ function make_default_tm_env(machine_bits, input_bits, seed, write_tape_limit) {
 	return make_tm_env(machine_bits, DEFAULT_ADDRESS_SIZE, input_bits, weak_rng, write_tape_limit);
 }
 
+function vectors_same_bits_ratio(v1, v2) {
+	const l1 = bitarray_length(v1);
+	const l2 = bitarray_length(v2);
+	if (l1 != l2) {
+		throw "vectors have to be of same size";
+	}
+
+	for (var i = 0; i < l1; i++) {
+		i += bitarray_at(v1, i) ^ bitarray_at(v2, i);
+	}
+
+	const ratio = (l1 - i) / l1;
+	return ratio;
+}
+
 function test_tm() {
 	const machine_bits = [0];
 	const input_bits = generate_n_weak_random_bits(300, 1);
@@ -298,6 +313,32 @@ function test_tm2() {
 	}
 }
 
+function test_tm_hashing() {
+	const machine_bits = generate_n_weak_random_bits(200, 1 * 1000 * 1000);
+	const input_bits = generate_n_weak_random_bits(300, 1 * 1000 * 1000);
+	const env = make_default_tm_env(machine_bits, input_bits, 777, 1000);
+	const step = env.step;
+	const write_tape = env.write_tape;
+
+	for (var i = 0; i < 1000; i++) {
+		step();
+	}
+
+	const env2 = make_default_tm_env(machine_bits, input_bits, 777, 1000);
+	const step2 = env.step;
+	const write_tape2 = env.write_tape;
+
+	const input_bits2 = bitarray_copy(input_bits);
+
+	for (var i = 0; i < 1000; i++) {
+		step2();
+	}
+
+	const ratio = vectors_same_bits_ratio(write_tape, write_tape2);
+	console.log('ratio = ', ratio);
+}
+
 // test_tm();
-test_tm2();
+// test_tm2();
+test_tm_hashing();
 
