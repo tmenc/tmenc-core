@@ -176,16 +176,6 @@ function make_tm(machine_bits, address_size, weak_rng) {
 		return read_bit_and_skip_range(shift, max_shift);
 	}
 
-	var ratio = 1;
-	var count = 0;
-	function collect_avg(x) {
-		ratio = ((ratio * count) + x) / (count + 1);
-		count++;
-		if (count % 1000 == 0) {
-			console.log('ratio = ', ratio);
-		}
-	}
-
 	function read_n_collapse(ratio_a, ratio_b, shift) {
 		const s1 = ratio_a + ratio_b;
 		const sum = s1 & 1 == 0 ? s1 : (s1 + 1);
@@ -236,8 +226,8 @@ function make_tm(machine_bits, address_size, weak_rng) {
 	return step;
 }
 
-function make_tm_env(machine_bits, address_size, input_bits) {
-	const tm = make_tm(machine_bits, address_size);
+function make_tm_env(machine_bits, address_size, input_bits, weak_rng) {
+	const tm = make_tm(machine_bits, address_size, weak_rng);
 	const read_tape_len = input_bits.length;
 	const read_tape = input_bits;
 	const write_tape = bitarray_alloc(0);
@@ -268,6 +258,11 @@ function make_tm_env(machine_bits, address_size, input_bits) {
 }
 
 const DEFAULT_ADDRESS_SIZE = 10;
+
+function make_default_tm_env(machine_bits, input_bits, seed) {
+	const weak_rng = init_simple_rng_ref(seed);
+	return make_default_tm_env(machine_bits, DEFAULT_ADDRESS_SIZE, input_bits, weak_rng);
+}
 
 function test_tm() {
 	const machine_bits = [0];
