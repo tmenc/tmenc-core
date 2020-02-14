@@ -245,7 +245,7 @@ const DEFAULT_ADDRESS_SIZE = 10;
 
 function test_tm() {
 	const machine_bits = [0];
-	const input_bits = generate_n_weak_random_bits(300, 1000);
+	const input_bits = generate_n_weak_random_bits(300, 1);
 	const env = make_tm_env(machine_bits, DEFAULT_ADDRESS_SIZE, input_bits);
 	const step = env.step;
 	const write_tape = env.write_tape;
@@ -273,6 +273,6 @@ function test_tm2() {
 	}
 }
 
-// test_tm();
-test_tm2();
+test_tm();
+// test_tm2();
 
