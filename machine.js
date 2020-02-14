@@ -190,8 +190,6 @@ function make_tm(machine_bits, address_size) {
 		machine_pos = machine_pos % machine_len;
 		diff_accumulator++;
 
-		console.log('machine_pos = ', machine_pos);
-
 		return {
 			new_write_tape_bit: wt_bit, // : {0 ,1}
 			read_tape_direction: rt_direction, // : {-1, 1}
@@ -235,13 +233,13 @@ function make_tm_env(machine_bits, address_size, input_bits) {
 const DEFAULT_ADDRESS_SIZE = 10;
 
 function test_tm() {
-	const machine_bits = [0, 1];
+	const machine_bits = [0, 1, 1, 0, 1, 0, 1];
 	const input_bits = [0, 1, 1, 0, 1, 0, 1];
 	const env = make_tm_env(machine_bits, DEFAULT_ADDRESS_SIZE, input_bits);
 	const step = env.step;
 	const write_tape = env.write_tape;
 
-	for (var i = 0; i < 1000; i++) {
+	for (var i = 0; i < 10000; i++) {
 		step();
 	}
 	console.log(write_tape);
