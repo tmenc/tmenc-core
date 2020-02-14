@@ -336,7 +336,7 @@ function test_tm_hashing() {
 			}
 		}
 
-		const env2 = make_default_tm_env(machine_bits, [], 777, wr_tape_size);
+		const env2 = make_default_tm_env(machine_bits, input_bits2, 777, wr_tape_size);
 		const step2 = env2.step;
 		const write_tape2 = env2.write_tape;
 
