@@ -236,22 +236,22 @@ function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tap
 		const read_tape_bit = bitarray_at_or0(read_tape, read_tape_pos);
 		const write_tape_bit = bitarray_at_or0(write_tape, write_tape_pos);
 		const ret = tm(read_tape_bit, write_tape_bit);
-		bitarray_set_bit_extend0(write_tape, write_tape_pos, ret.new_write_tape_bit);
-		read_tape_pos += ret.read_tape_direction;
-		write_tape_pos += ret.write_tape_direction;
 
 		if (write_tape_limit && write_tape_pos > write_tape_limit) {
 			write_tape_pos = write_tape_pos % write_tape_limit;
 		}
+		if (write_tape_pos < 0) {
+			write_tape_pos = 0; // TODO: make left-infinite also!
+		}
+
+		bitarray_set_bit_extend0(write_tape, write_tape_pos, ret.new_write_tape_bit);
+		read_tape_pos += ret.read_tape_direction;
+		write_tape_pos += ret.write_tape_direction;
 
 		if (read_tape_pos >= read_tape_len) {
 			read_tape_pos = 0;
 		} else if (read_tape_pos < 0) {
 			read_tape_pos = read_tape_len - 1;
-		}
-
-		if (write_tape_pos < 0) {
-			write_tape_pos = 0; // TODO: make left-infinite also!
 		}
 	}
 	return {
@@ -285,7 +285,7 @@ function test_tm() {
 function test_tm2() {
 	const machine_bits = generate_n_weak_random_bits(200, 1 * 1000 * 1000);
 	const input_bits = generate_n_weak_random_bits(300, 1 * 1000 * 1000);
-	const env = make_default_tm_env(machine_bits, input_bits, 777);
+	const env = make_default_tm_env(machine_bits, input_bits, 777, 1000);
 	const step = env.step;
 	const write_tape = env.write_tape;
 
