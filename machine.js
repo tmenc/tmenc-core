@@ -322,7 +322,7 @@ function test_tm_hashing() {
 		const step = env.step;
 		const write_tape = env.write_tape;
 
-		for (var i = 0; i < 100000; i++) {
+		for (var i = 0; i < 10000; i++) {
 			step();
 		}
 
@@ -340,7 +340,7 @@ function test_tm_hashing() {
 		const step2 = env2.step;
 		const write_tape2 = env2.write_tape;
 
-		for (var i = 0; i < 100000; i++) {
+		for (var i = 0; i < 10000; i++) {
 			step2();
 		}
 
