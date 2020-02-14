@@ -151,7 +151,7 @@ function make_tm(machine_bits) {
 	function step (read_tape_bit, write_tape_bit) {
 		const shift = 1 * read_tape_bit + 2 * write_tape_bit; // a "chooser"
 
-		const new_bit = read_chosen_bit(shift);
+		const wt_bit = read_chosen_bit(shift);
 		const rt_direction_bit = read_chosen_bit(shift);
 		const wt_direction_bit = read_chosen_bit(shift);
 
@@ -159,7 +159,7 @@ function make_tm(machine_bits) {
 		const wt_direction = rt_direction_bit * 2 - 1;
 
 		return {
-			new_write_tape_bit: new_bit, // : {0 ,1}
+			new_write_tape_bit: wt_bit, // : {0 ,1}
 			read_tape_direction: rt_direction, // : {-1, 1}
 			write_tape_direction: wt_direction, // : {-1, 1}
 		};
