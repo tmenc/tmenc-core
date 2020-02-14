@@ -139,17 +139,29 @@ function init_simple_rng_ref(seed) {
 
 function make_tm(machine_bits) {
 	const machine_len = machine_bits.length;
-	const new_bit_max_shift = 2 + 2;
+	const max_shift = 1 * 1 + 2 * 1;
 	var machine_pos = 0;
+	function read_chosen_bit(shift) {
+		const bit_pos = (machine_pos + shift) % machine_len;
+		const bit = bitarray_at(machine_bits, bit_pos);
+		machine_pos += max_shift + 1; // skip "new_bit" bits
+		machine_pos = machine_pos % machine_len; // overflow protection
+		return bit;
+	}
 	function step (read_tape_bit, write_tape_bit) {
-		const new_bit_shift = 1 * read_tape_bit + 2 * write_tape_bit; // first 4 bits are for the "new_bit"
-		const new_bit = bitarray_at(machine_bits, machine_pos + new_bit_shift);
-		machine_pos += new_bit_max_shift;
-		
+		const shift = 1 * read_tape_bit + 2 * write_tape_bit; // a "chooser"
+
+		const new_bit = read_chosen_bit(shift);
+		const rt_direction_bit = read_chosen_bit(shift);
+		const wt_direction_bit = read_chosen_bit(shift);
+
+		const rt_direction = rt_direction_bit * 2 - 1;
+		const wt_direction = rt_direction_bit * 2 - 1;
+
 		return {
-			new_write_tape_bit: undefined, // : {0 ,1}
-			read_tape_direction: undefined, // : {-1, 1}
-			write_tape_direction: undefined, // : {-1, 1}
+			new_write_tape_bit: new_bit, // : {0 ,1}
+			read_tape_direction: rt_direction, // : {-1, 1}
+			write_tape_direction: wt_direction, // : {-1, 1}
 		};
 	}
 	return step;
