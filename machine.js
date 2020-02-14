@@ -121,13 +121,14 @@ function init_simple_rng_ref(seed) {
 function make_tm(bitarr) {
 	const machine_len = bitarr.length;
 	var machine_pos = 0;
-	return function (read_tape_bit, write_tape_bit) {
+	function step (read_tape_bit, write_tape_bit) {
 		return {
 			new_write_tape_bit: undefined,
 			read_tape_direction: undefined,
 			write_tape_direction: undefined,
 		};
-	};
+	}
+	return step;
 }
 
 function make_tm_env(machine_bits, input_bits) {
@@ -135,9 +136,11 @@ function make_tm_env(machine_bits, input_bits) {
 	const read_tape_len = input_bits.length;
 	var read_tape_pos = 0;
 	var write_tape_pos = 0;
-	return function () {
-		
-	};
+	function step () {
+	}
+	function collect() {
+	}
+	return [step, collect];
 }
 
 var rng = init_simple_rng_ref(200);
