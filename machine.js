@@ -285,7 +285,7 @@ function test_tm2() {
 	const step = env.step;
 	const write_tape = env.write_tape;
 
-	for (var i = 1; i <= 10000; i++) {
+	for (var i = 1; i <= 1000000; i++) {
 		if (i % 1000 == 0) {
 			console.log('steps: ', i, 'len: ', bitarray_length(write_tape));
 		}
