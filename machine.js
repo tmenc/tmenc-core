@@ -326,8 +326,11 @@ function test_tm_hashing() {
 	}
 
 	const input_bits2 = bitarray_copy(input_bits);
-	const change_pos = 32 % bitarray_length(input_bits);
-	bitarray_set_bit(input_bits2, change_pos, 1 ^ bitarray_at(input_bits2, change_pos));
+	const change_pos = 32 % bitarray_length(input_bits2);
+	// bitarray_set_bit(input_bits2, change_pos, 1 ^ bitarray_at(input_bits2, change_pos));
+	for (var i = 0; i < bitarray_length(input_bits2); i++) {
+		bitarray_set_bit(input_bits2, i, 1 ^ bitarray_at(input_bits2, i));
+	}
 
 	const env2 = make_default_tm_env(machine_bits, input_bits2, 777, 10);
 	const step2 = env.step;
