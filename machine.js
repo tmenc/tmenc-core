@@ -141,12 +141,19 @@ function make_tm(machine_bits, address_size) {
 	const machine_len = machine_bits.length;
 	const max_shift = 1 * 1 + 2 * 1;
 	var machine_pos = 0;
-	function read_chosen_bit(shift) {
+
+	function read_bit_and_skip_range(shift, range) {
 		const bit_pos = (machine_pos + shift) % machine_len;
 		const bit = bitarray_at(machine_bits, bit_pos);
-		machine_pos += max_shift + 1; // skip "new_bit" bits
+		machine_pos += range + 1; // skip range bits
 		machine_pos = machine_pos % machine_len; // overflow protection
 		return bit;
+	}
+	function read_1_bit() {
+		return read_bit_and_skip_range(0, 1);
+	}
+	function read_chosen_bit(shift) {
+		return read_bit_and_skip_range(shift, max_shift);
 	}
 	function step (read_tape_bit, write_tape_bit) {
 		const shift = 1 * read_tape_bit + 2 * write_tape_bit; // a "chooser"
@@ -158,7 +165,14 @@ function make_tm(machine_bits, address_size) {
 		const rt_direction = rt_direction_bit * 2 - 1;
 		const wt_direction = rt_direction_bit * 2 - 1;
 
-		
+		machine_pos += shift * address_size; // jump to chosen address field
+		var address_diff = 0;
+		var pow = 1;
+		for (var i = 0; i < address_size; i++) {
+			const bit = read_1_bit();
+			address_diff = new_address + bit * pow;
+			pow = pow * 2;
+		}
 
 		return {
 			new_write_tape_bit: wt_bit, // : {0 ,1}
