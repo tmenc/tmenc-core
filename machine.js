@@ -136,11 +136,12 @@ function make_tm_env(machine_bits, input_bits) {
 	const read_tape_len = input_bits.length;
 	var read_tape_pos = 0;
 	var write_tape_pos = 0;
-	function step () {
-	}
-	function collect() {
-	}
-	return [step, collect];
+	return {
+		step: function () {
+		},
+		collect: function () {
+		},
+	};
 }
 
 var rng = init_simple_rng_ref(200);
