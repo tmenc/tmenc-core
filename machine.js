@@ -119,7 +119,8 @@ function bitarray_xor_with(target, other) {
 	const len = lent < leno ? lent : leno;
 	for (var i = 0; i < len; i++) {
 		const x = bitarray_at(target, i);
-		bitarray_set_bit(target, i, x);
+		const y = bitarray_at(other, i);
+		bitarray_set_bit(target, i, x ^ y);
 	}
 }
 
