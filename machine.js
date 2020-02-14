@@ -265,7 +265,7 @@ function test_tm2() {
 
 	for (var i = 0; i < 100000; i++) {
 		if (i % 1000 == 0) {
-			console.log(bitarray_length(write_tape));
+			console.log('steps: ', i, 'len: ', bitarray_length(write_tape));
 		}
 		step();
 	}
