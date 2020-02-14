@@ -196,7 +196,6 @@ function make_tm(machine_bits, address_size, weak_rng) {
 		const wt_bit = read_chosen_bit(shift);
 		const rt_direction_bit = read_chosen_bit(shift);
 		const wt_direction_bit = read_n_collapse(3, 2, shift);
-		collect_avg(wt_direction_bit);
 
 		const rt_direction = rt_direction_bit * 2 - 1;
 		const wt_direction = wt_direction_bit * 2 - 1;
@@ -261,13 +260,13 @@ const DEFAULT_ADDRESS_SIZE = 10;
 
 function make_default_tm_env(machine_bits, input_bits, seed) {
 	const weak_rng = init_simple_rng_ref(seed);
-	return make_default_tm_env(machine_bits, DEFAULT_ADDRESS_SIZE, input_bits, weak_rng);
+	return make_tm_env(machine_bits, DEFAULT_ADDRESS_SIZE, input_bits, weak_rng);
 }
 
 function test_tm() {
 	const machine_bits = [0];
 	const input_bits = generate_n_weak_random_bits(300, 1);
-	const env = make_tm_env(machine_bits, DEFAULT_ADDRESS_SIZE, input_bits);
+	const env = make_default_tm_env(machine_bits, input_bits, 777);
 	const step = env.step;
 	const write_tape = env.write_tape;
 
@@ -282,7 +281,7 @@ function test_tm() {
 function test_tm2() {
 	const machine_bits = generate_n_weak_random_bits(200, 1 * 1000 * 1000);
 	const input_bits = generate_n_weak_random_bits(300, 1 * 1000 * 1000);
-	const env = make_tm_env(machine_bits, DEFAULT_ADDRESS_SIZE, input_bits);
+	const env = make_default_tm_env(machine_bits, input_bits, 777);
 	const step = env.step;
 	const write_tape = env.write_tape;
 
