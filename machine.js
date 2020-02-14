@@ -275,11 +275,12 @@ function vectors_same_bits_ratio(v1, v2) {
 		throw "vectors have to be of same size";
 	}
 
+	var count = 0;
 	for (var i = 0; i < l1; i++) {
-		i += bitarray_at(v1, i) ^ bitarray_at(v2, i);
+		count += bitarray_at(v1, i) ^ bitarray_at(v2, i);
 	}
 
-	const ratio = (l1 - i) / l1;
+	const ratio = (l1 - count) / l1;
 	return ratio;
 }
 
