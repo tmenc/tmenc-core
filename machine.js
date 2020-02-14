@@ -316,7 +316,7 @@ function test_tm2() {
 function test_tm_hashing() {
 	const machine_bits = generate_n_weak_random_bits(200, 1 * 1000 * 1000);
 	const input_bits = generate_n_weak_random_bits(300, 1 * 1000 * 1000);
-	const env = make_default_tm_env(machine_bits, input_bits, 777, 1000);
+	const env = make_default_tm_env(machine_bits, input_bits, 777, 10);
 	const step = env.step;
 	const write_tape = env.write_tape;
 
@@ -324,7 +324,7 @@ function test_tm_hashing() {
 		step();
 	}
 
-	const env2 = make_default_tm_env(machine_bits, input_bits, 777, 1000);
+	const env2 = make_default_tm_env(machine_bits, input_bits, 777, 10);
 	const step2 = env.step;
 	const write_tape2 = env.write_tape;
 
@@ -335,6 +335,8 @@ function test_tm_hashing() {
 	}
 
 	const ratio = vectors_same_bits_ratio(write_tape, write_tape2);
+	console.log('tape1 = ', write_tape);
+	console.log('tape2 = ', write_tape2);
 	console.log('ratio = ', ratio);
 }
 
