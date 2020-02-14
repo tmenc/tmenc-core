@@ -336,8 +336,6 @@ function test_tm_hashing() {
 	}
 
 	const ratio = vectors_same_bits_ratio(write_tape, write_tape2);
-	console.log('tape1 = ', write_tape);
-	console.log('tape2 = ', write_tape2);
 	console.log('ratio = ', ratio);
 }
 
