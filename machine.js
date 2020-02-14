@@ -154,18 +154,15 @@ function test_rng_ref() {
 	// console.log(rng());
 }
 
-function make_tm(machine_bits, address_size) {
+function make_tm(machine_bits, address_size, weak_rng) {
 	const machine_len = machine_bits.length;
 	const max_shift = 1 * 1 + 2 * 1;
 	var machine_pos = 0;
 	var diff_accumulator = 1; // makes cycles less probable
 
-	const kek = init_simple_rng_ref(888);
-	// const kek = () => 0;
-
 	function read_bit_and_skip_range(shift, range) {
 		const bit_pos = (machine_pos + shift) % machine_len;
-		const bit = bitarray_at(machine_bits, bit_pos) ^ kek();
+		const bit = bitarray_at(machine_bits, bit_pos) ^ weak_rng();
 		machine_pos += range + 1; // skip range bits
 		machine_pos = machine_pos % machine_len; // overflow protection
 		return bit;
@@ -195,11 +192,7 @@ function make_tm(machine_bits, address_size) {
 		var acc = 0;
 		for (var i = 0; i < sum; i++) {
 			acc += read_chosen_bit(shift);
-			// acc += kek();
 		}
-		// collect_avg(acc);
-		// collect_avg(acc > ratio_a ? 0 : 1);
-		// console.log(acc);
 		if (acc > ratio_a) {
 			return 0;
 		} else {
