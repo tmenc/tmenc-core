@@ -104,11 +104,9 @@ function number_to_bitarray(num, bits) {
 	}
 
 	while (i < bits) {
-		arr[i] = 1;
+		bitarray_set_bit(arr, i, 1);
 		i++;
 	}
-
-	console.log("COUNT =", arr.length);
 
 	return arr;
 }
