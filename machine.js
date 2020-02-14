@@ -161,6 +161,7 @@ function make_tm(machine_bits, address_size) {
 	var diff_accumulator = 1; // makes cycles less probable
 
 	const kek = init_simple_rng_ref(888);
+	// const kek = () => 0;
 
 	function read_bit_and_skip_range(shift, range) {
 		const bit_pos = (machine_pos + shift) % machine_len;
@@ -191,17 +192,22 @@ function make_tm(machine_bits, address_size) {
 		}
 	}
 
-	
+	var ratio = 1;
+	var count = 0;
 
 	function step (read_tape_bit, write_tape_bit) {
 		const shift = 1 * read_tape_bit + 2 * write_tape_bit; // a "chooser"
 
 		const wt_bit = read_chosen_bit(shift);
 		const rt_direction_bit = read_chosen_bit(shift);
-		const wt_direction_bit = read_chosen_bit(shift);
-		// const wt_direction_bit = read_n_collapse(1, 1, shift);
+		// const wt_direction_bit = read_chosen_bit(shift);
+		const wt_direction_bit = read_n_collapse(1, 1, shift);
 
-		
+		ratio = ((ratio * count) + wt_direction_bit) / (count + 1);
+		count++;
+		if (count % 1000 == 0) {
+			console.log('ratio = ', ratio);
+		}
 
 		const rt_direction = rt_direction_bit * 2 - 1;
 		const wt_direction = wt_direction_bit * 2 - 1;
