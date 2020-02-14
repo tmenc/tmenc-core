@@ -142,7 +142,7 @@ function test_rng_ref() {
 	for (var i = 0; i < 10; i++) {
 		console.log(rng());
 	}
-	console.log(rng());
+	// console.log(rng());
 }
 
 function make_tm(machine_bits, address_size) {
