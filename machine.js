@@ -317,7 +317,6 @@ function test_tm2() {
 function test_tm_hashing() {
 
 	function dotest(singleflip, input_size, machine_size) {
-
 		const machine_bits = generate_n_weak_random_bits(200, 1 * 1000 * 1000);
 		const input_bits = generate_n_weak_random_bits(300, 10);
 		const env = make_default_tm_env(machine_bits, input_bits, 777, 10);
