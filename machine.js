@@ -104,7 +104,7 @@ function bitarray_xor_with(target, other) {
 	}
 }
 
-// 64 bits only!
+// works on uint32_t
 function init_simple_rng_ref(seed) {
 	var x = seed;
 	const mod = 4294967296; // 2 ^ 32
