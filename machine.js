@@ -315,37 +315,46 @@ function test_tm2() {
 }
 
 function test_tm_hashing() {
-	const machine_bits = generate_n_weak_random_bits(200, 1 * 1000 * 1000);
-	const input_bits = generate_n_weak_random_bits(300, 10);
-	const env = make_default_tm_env(machine_bits, input_bits, 777, 10);
-	const step = env.step;
-	const write_tape = env.write_tape;
 
-	for (var i = 0; i < 1000; i++) {
-		step();
+	function dotest(singleflip, input_size, machine_size) {
+
+		const machine_bits = generate_n_weak_random_bits(200, 1 * 1000 * 1000);
+		const input_bits = generate_n_weak_random_bits(300, 10);
+		const env = make_default_tm_env(machine_bits, input_bits, 777, 10);
+		const step = env.step;
+		const write_tape = env.write_tape;
+
+		for (var i = 0; i < 1000; i++) {
+			step();
+		}
+
+		const input_bits2 = bitarray_copy(input_bits);
+		if (singleflip) {
+			const change_pos = 32 % bitarray_length(input_bits2);
+			bitarray_set_bit(input_bits2, change_pos, 1 ^ bitarray_at(input_bits2, change_pos));
+		} else {
+			for (var i = 0; i < bitarray_length(input_bits2); i++) {
+				bitarray_set_bit(input_bits2, i, 1 ^ bitarray_at(input_bits2, i));
+			}
+		}
+
+		const env2 = make_default_tm_env(machine_bits, [], 777, 10);
+		const step2 = env2.step;
+		const write_tape2 = env2.write_tape;
+
+		for (var i = 0; i < 1000; i++) {
+			step2();
+		}
+
+		console.log('input1: ', input_bits);
+		console.log('input2: ', input_bits2);
+		console.log('tape1: ', write_tape);
+		console.log('tape2: ', write_tape2);
+		const ratio = vectors_same_bits_ratio(write_tape, write_tape2);
+		console.log('ratio = ', ratio);
 	}
 
-	const input_bits2 = bitarray_copy(input_bits);
-	const change_pos = 32 % bitarray_length(input_bits2);
-	// bitarray_set_bit(input_bits2, change_pos, 1 ^ bitarray_at(input_bits2, change_pos));
-	for (var i = 0; i < bitarray_length(input_bits2); i++) {
-		bitarray_set_bit(input_bits2, i, 1 ^ bitarray_at(input_bits2, i));
-	}
-
-	const env2 = make_default_tm_env(machine_bits, [], 777, 10);
-	const step2 = env2.step;
-	const write_tape2 = env2.write_tape;
-
-	for (var i = 0; i < 1000; i++) {
-		step2();
-	}
-
-	console.log('input1: ', input_bits);
-	console.log('input2: ', input_bits2);
-	console.log('tape1: ', write_tape);
-	console.log('tape2: ', write_tape2);
-	const ratio = vectors_same_bits_ratio(write_tape, write_tape2);
-	console.log('ratio = ', ratio);
+	dotest
 }
 
 // test_tm();
