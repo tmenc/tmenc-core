@@ -164,6 +164,16 @@ function make_tm_env(machine_bits, input_bits) {
 		bitarray_set_bit(write_tape, write_tape_pos, ret.new_write_tape_bit);
 		read_tape_pos += ret.read_tape_direction;
 		write_tape_pos += ret.write_tape_direction;
+
+		if (read_tape_pos >= read_tape_len) {
+			read_tape_pos = 0;
+		} else if (read_tape_pos < 0) {
+			read_tape_pos = read_tape_len - 1;
+		}
+
+		if (write_tape_pos < 0) {
+			write_tape_pos = 0; // TODO: make left-infinite also!
+		}
 	}
 	return {
 		step: step,
