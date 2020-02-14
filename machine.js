@@ -242,8 +242,8 @@ function make_tm_env(machine_bits, address_size, input_bits) {
 const DEFAULT_ADDRESS_SIZE = 10;
 
 function test_tm() {
-	const machine_bits = [0, 1, 1, 0, 1, 0, 1, 1, 1, 1];
-	const input_bits = [0, 1, 1, 0, 1, 0, 1];
+	const machine_bits = [0, 1];
+	const input_bits = generate_n_weak_random_bits(200, 1000);
 	const env = make_tm_env(machine_bits, DEFAULT_ADDRESS_SIZE, input_bits);
 	const step = env.step;
 	const write_tape = env.write_tape;
