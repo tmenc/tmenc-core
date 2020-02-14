@@ -169,30 +169,34 @@ function make_tm(machine_bits, address_size) {
 		machine_pos = machine_pos % machine_len; // overflow protection
 		return bit;
 	}
+
 	function read_1_bit() {
 		return read_bit_and_skip_range(0, 0);
 	}
+
 	function read_chosen_bit(shift) {
 		return read_bit_and_skip_range(shift, max_shift);
 	}
+
 	function read_n_collapse(ratio_a, ratio_b, shift) {
 		const sum = ratio_a + ratio_b;
 		var acc = 0;
 		for (var i = 0; i < sum; i++) {
 			acc += read_chosen_bit(shift);
 		}
-		if (acc > ratio_a) {
-			return 0;
-		} else {
+		if (acc < ratio_a) {
 			return 1;
+		} else {
+			return 0;
 		}
 	}
+
 	function step (read_tape_bit, write_tape_bit) {
 		const shift = 1 * read_tape_bit + 2 * write_tape_bit; // a "chooser"
 
 		const wt_bit = read_chosen_bit(shift);
 		const rt_direction_bit = read_chosen_bit(shift);
-		const wt_direction_bit = read_n_collapse(2, 1, shift);
+		const wt_direction_bit = read_n_collapse(1, 1, shift);
 
 		const rt_direction = rt_direction_bit * 2 - 1;
 		const wt_direction = wt_direction_bit * 2 - 1;
