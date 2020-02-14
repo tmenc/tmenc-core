@@ -161,7 +161,7 @@ function make_tm_env(machine_bits, input_bits) {
 		const read_tape_bit = bitarray_at_or0(read_tape, read_tape_pos);
 		const write_tape_bit = bitarray_at_or0(write_tape, write_tape_pos);
 		const ret = tm(read_tape_bit, write_tape_bit);
-		bitarray_set_bit(write_tape, write_tape_pos, ret.new_write_tape_bit);
+		bitarray_set_bit_extend0(write_tape, write_tape_pos, ret.new_write_tape_bit);
 		read_tape_pos += ret.read_tape_direction;
 		write_tape_pos += ret.write_tape_direction;
 
