@@ -219,6 +219,8 @@ function make_tm_env(machine_bits, address_size, input_bits) {
 	};
 }
 
+const DEFAULT_ADDRESS_SIZE = 10;
+
 var rng = init_simple_rng_ref(200);
 
 for (var i = 0; i < 10; i++) {
