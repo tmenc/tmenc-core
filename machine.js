@@ -330,11 +330,17 @@ function test_tm_hashing() {
 	const write_tape2 = env.write_tape;
 
 	const input_bits2 = bitarray_copy(input_bits);
+	const change_pos = 32;
+	bitarray_set_bit(input_bits2, change_pos, 1 ^ bitarray_at(input_bits2, change_pos));
 
 	for (var i = 0; i < 1000; i++) {
 		step2();
 	}
 
+	console.log('input1: ', input_bits);
+	console.log('input2: ', input_bits2);
+	console.log('tape1: ', write_tape);
+	console.log('tape2: ', write_tape2);
 	const ratio = vectors_same_bits_ratio(write_tape, write_tape2);
 	console.log('ratio = ', ratio);
 }
