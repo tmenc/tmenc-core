@@ -137,6 +137,14 @@ function init_simple_rng_ref(seed) {
 	};
 }
 
+function test_rng_ref() {
+	var rng = init_simple_rng_ref(200);
+	for (var i = 0; i < 10; i++) {
+		console.log(rng());
+	}
+	console.log(rng());
+}
+
 function make_tm(machine_bits, address_size) {
 	const machine_len = machine_bits.length;
 	const max_shift = 1 * 1 + 2 * 1;
@@ -220,11 +228,4 @@ function make_tm_env(machine_bits, address_size, input_bits) {
 }
 
 const DEFAULT_ADDRESS_SIZE = 10;
-
-var rng = init_simple_rng_ref(200);
-
-for (var i = 0; i < 10; i++) {
-	console.log(rng());
-}
-console.log(rng());
 
