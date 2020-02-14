@@ -195,7 +195,7 @@ function make_tm(machine_bits, address_size, weak_rng) {
 
 		const wt_bit = read_chosen_bit(shift);
 		const rt_direction_bit = read_chosen_bit(shift);
-		const wt_direction_bit = read_n_collapse(1, 1, shift);
+		const wt_direction_bit = read_n_collapse(2, 1, shift);
 
 		const rt_direction = rt_direction_bit * 2 - 1;
 		const wt_direction = wt_direction_bit * 2 - 1;
