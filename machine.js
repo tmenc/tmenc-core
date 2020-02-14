@@ -160,9 +160,11 @@ function make_tm(machine_bits, address_size) {
 	var machine_pos = 0;
 	var diff_accumulator = 1; // makes cycles less probable
 
+	const kek = init_simple_rng_ref(888);
+
 	function read_bit_and_skip_range(shift, range) {
 		const bit_pos = (machine_pos + shift) % machine_len;
-		const bit = bitarray_at(machine_bits, bit_pos);
+		const bit = bitarray_at(machine_bits, bit_pos) ^ kek();
 		machine_pos += range + 1; // skip range bits
 		machine_pos = machine_pos % machine_len; // overflow protection
 		return bit;
