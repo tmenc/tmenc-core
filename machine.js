@@ -352,7 +352,7 @@ function test_tm_hashing() {
 		console.log('ratio = ', ratio);
 	}
 
-	dotest(true, 1000, 2, 512);
+	dotest(true, 1000, 1000, 512);
 }
 
 // test_tm();
