@@ -236,12 +236,12 @@ const DEFAULT_ADDRESS_SIZE = 10;
 
 function test_tm() {
 	const machine_bits = [0, 1];
-	const input_bits = [0, 1];
+	const input_bits = [0, 1, 1, 0, 1, 0, 1];
 	const env = make_tm_env(machine_bits, DEFAULT_ADDRESS_SIZE, input_bits);
 	const step = env.step;
 	const write_tape = env.write_tape;
 
-	for (var i = 0; i < 100; i++) {
+	for (var i = 0; i < 1000; i++) {
 		step();
 	}
 	console.log(write_tape);
