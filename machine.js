@@ -315,11 +315,10 @@ function test_tm2() {
 }
 
 function test_tm_hashing() {
-
-	function dotest(singleflip, input_size, machine_size) {
-		const machine_bits = generate_n_weak_random_bits(200, 1 * 1000 * 1000);
-		const input_bits = generate_n_weak_random_bits(300, 10);
-		const env = make_default_tm_env(machine_bits, input_bits, 777, 10);
+	function dotest(singleflip, input_size, machine_size, wr_tape_size) {
+		const machine_bits = generate_n_weak_random_bits(200, machine_size);
+		const input_bits = generate_n_weak_random_bits(300, input_size);
+		const env = make_default_tm_env(machine_bits, input_bits, 777, wr_tape_size);
 		const step = env.step;
 		const write_tape = env.write_tape;
 
@@ -337,7 +336,7 @@ function test_tm_hashing() {
 			}
 		}
 
-		const env2 = make_default_tm_env(machine_bits, [], 777, 10);
+		const env2 = make_default_tm_env(machine_bits, [], 777, wr_tape_size);
 		const step2 = env2.step;
 		const write_tape2 = env2.write_tape;
 
@@ -353,7 +352,7 @@ function test_tm_hashing() {
 		console.log('ratio = ', ratio);
 	}
 
-	dotest
+	dotest(true, 
 }
 
 // test_tm();
