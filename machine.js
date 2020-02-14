@@ -137,7 +137,7 @@ function init_simple_rng_ref(seed) {
 	};
 }
 
-function make_tm(machine_bits) {
+function make_tm(machine_bits, address_size) {
 	const machine_len = machine_bits.length;
 	const max_shift = 1 * 1 + 2 * 1;
 	var machine_pos = 0;
@@ -158,6 +158,8 @@ function make_tm(machine_bits) {
 		const rt_direction = rt_direction_bit * 2 - 1;
 		const wt_direction = rt_direction_bit * 2 - 1;
 
+		
+
 		return {
 			new_write_tape_bit: wt_bit, // : {0 ,1}
 			read_tape_direction: rt_direction, // : {-1, 1}
@@ -167,8 +169,8 @@ function make_tm(machine_bits) {
 	return step;
 }
 
-function make_tm_env(machine_bits, input_bits) {
-	const tm = make_tm(machine_bits);
+function make_tm_env(machine_bits, address_size, input_bits) {
+	const tm = make_tm(machine_bits, address_size);
 	const read_tape_len = input_bits.length;
 	const read_tape = input_bits;
 	const write_tape = bitarray_alloc(0);
