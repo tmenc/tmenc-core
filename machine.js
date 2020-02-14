@@ -179,7 +179,7 @@ function make_tm(machine_bits, address_size) {
 		var pow = 1;
 		for (var i = 0; i < address_size; i++) {
 			const bit = read_1_bit();
-			address_diff = new_address + bit * pow;
+			address_diff += bit * pow;
 			pow = pow * 2;
 		}
 
