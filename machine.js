@@ -175,12 +175,24 @@ function make_tm(machine_bits, address_size) {
 	function read_chosen_bit(shift) {
 		return read_bit_and_skip_range(shift, max_shift);
 	}
+	function read_n_collapse(ratio_a, ratio_b, shift) {
+		const sum = ratio_a + ratio_b;
+		var acc = 0;
+		for (var i = 0; i < sum; i++) {
+			acc += read_chosen_bit(shift);
+		}
+		if (acc > ratio_a) {
+			return 0;
+		} else {
+			return 1;
+		}
+	}
 	function step (read_tape_bit, write_tape_bit) {
 		const shift = 1 * read_tape_bit + 2 * write_tape_bit; // a "chooser"
 
 		const wt_bit = read_chosen_bit(shift);
 		const rt_direction_bit = read_chosen_bit(shift);
-		const wt_direction_bit = read_chosen_bit(shift);
+		const wt_direction_bit = read_n_collapse(20, 1, shift);
 
 		const rt_direction = rt_direction_bit * 2 - 1;
 		const wt_direction = rt_direction_bit * 2 - 1;
@@ -265,7 +277,7 @@ function test_tm2() {
 	const step = env.step;
 	const write_tape = env.write_tape;
 
-	for (var i = 0; i < 100000000; i++) {
+	for (var i = 1; i <= 10000; i++) {
 		if (i % 1000 == 0) {
 			console.log('steps: ', i, 'len: ', bitarray_length(write_tape));
 		}
@@ -273,6 +285,6 @@ function test_tm2() {
 	}
 }
 
-test_tm();
-// test_tm2();
+// test_tm();
+test_tm2();
 
