@@ -107,10 +107,14 @@ function bitarray_xor_with(target, other) {
 // 64 bits only!
 function init_simple_rng_ref(seed) {
 	var x = seed;
-	const mod = Math.pow(2, 32);
+	const mod = 4294967296; // 2 ^ 32
+	function to1bit (z) {
+		if (z > 2147483648) { return 1; }
+		else { return 0; }
+	}
 	return function () {
 		x = (((x * 1664525) % mod) + 1013904223) % mod;
-		return x;
+		return to1bit(x);
 	};
 }
 
