@@ -229,7 +229,7 @@ function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tap
 	const read_tape_len = bitarray_length(input_bits);
 	const read_tape = input_bits;
 	const write_tape = bitarray_alloc(0);
-	var wrte_tape_wrap_count = 0;
+	var write_tape_wrap_count = 0;
 	var read_tape_pos = 0;
 	var write_tape_pos = 0;
 	function step() {
@@ -262,7 +262,7 @@ function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tap
 	return {
 		step: step,
 		write_tape: write_tape,
-		get_wrap_count: function () { return wrap_count; },
+		get_wrap_count: function () { return write_tape_wrap_count; },
 	};
 }
 
