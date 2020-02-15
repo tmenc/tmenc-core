@@ -229,9 +229,10 @@ function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tap
 	const read_tape_len = bitarray_length(input_bits);
 	const read_tape = input_bits;
 	const write_tape = bitarray_alloc(0);
-	var write_tape_wrap_count = 0;
 	var read_tape_pos = 0;
 	var write_tape_pos = 0;
+	var write_tape_wrap_count = 0;
+	var read_tape_wrap_count = 0;
 	function step() {
 		const read_tape_bit = bitarray_at_or0(read_tape, read_tape_pos);
 		const write_tape_bit = bitarray_at_or0(write_tape, write_tape_pos);
@@ -255,14 +256,17 @@ function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tap
 
 		if (read_tape_pos >= read_tape_len) {
 			read_tape_pos = 0;
+			read_tape_wrap_count++;
 		} else if (read_tape_pos < 0) {
 			read_tape_pos = read_tape_len - 1;
+			read_tape_wrap_count--;
 		}
 	}
 	return {
 		step: step,
 		write_tape: write_tape,
-		get_wrap_count: function () { return write_tape_wrap_count; },
+		write_tape_wrap_count: function () { return write_tape_wrap_count; },
+		read_tape_wrap_count: function () { return read_tape_wrap_count; },
 	};
 }
 
@@ -326,7 +330,7 @@ function test_tm_hashing() {
 		const env = make_default_tm_env(machine_bits, input_bits, 777, wr_tape_size);
 		const step = env.step;
 		const write_tape = env.write_tape;
-		const wcf = env.get_wrap_count;
+		const wcf = env.read_tape_wrap_count;
 
 		while (wcf() < wrap_count) {
 			step();
@@ -345,7 +349,7 @@ function test_tm_hashing() {
 		const env2 = make_default_tm_env(machine_bits, input_bits2, 777, wr_tape_size);
 		const step2 = env2.step;
 		const write_tape2 = env2.write_tape;
-		const wcf2 = env2.get_wrap_count;
+		const wcf2 = env2.read_tape_wrap_count;
 
 		while (wcf2() < wrap_count) {
 			step2();
