@@ -154,7 +154,7 @@ function test_rng_ref() {
 }
 
 function make_tm(machine_bits, address_size, weak_rng) {
-	const machine_len = machine_bits.length;
+	const machine_len = bitarray_length(machine_bits);
 	const max_shift = 1 * 1 + 2 * 1;
 	var machine_pos = 0;
 	var diff_accumulator = 1; // makes cycles less probable
