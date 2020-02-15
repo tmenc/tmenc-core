@@ -324,7 +324,7 @@ function test_tm2() {
 
 function test_tm_hashing() {
 	function finished(env, wc) {
-		return env.read_tape_wrap_count() > 0 && env.write_tape_wrap_count() > wc;
+		return env.read_tape_read_all() && env.write_tape_wrap_count() > wc;
 	}
 	function dotest(singleflip, input_size, machine_size, wr_tape_size, wrap_count) {
 		const machine_bits = generate_n_weak_random_bits(200, machine_size);
