@@ -224,13 +224,12 @@ function make_tm(machine_bits, address_size, weak_rng) {
 	return step;
 }
 
-function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tape_limit) {
+function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tape_size_limit) {
 	const tm = make_tm(machine_bits, address_size, weak_rng);
-	const write_tape_size_limit = write_tape_limit ? (write_tape_limit - 1) : false;
 	const read_tape_len = bitarray_length(input_bits);
 	const read_tape = input_bits;
 	const write_tape = bitarray_alloc(0);
-	var wrap_count = 0;
+	var wrte_tape_wrap_count = 0;
 	var read_tape_pos = 0;
 	var write_tape_pos = 0;
 	function step() {
@@ -239,12 +238,12 @@ function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tap
 		const ret = tm(read_tape_bit, write_tape_bit);
 
 		if (write_tape_size_limit) {
-			if (write_tape_pos > write_tape_size_limit) {  // ASSUMPTION: write_tape_pos changes by 1 on each step
+			if (write_tape_pos >= write_tape_size_limit) {  // ASSUMPTION: write_tape_pos changes by 1 on each step
 				write_tape_pos = 0;
-				wrap_count++;
+				write_tape_wrap_count++;
 			} else if (write_tape_pos < 0) {
 				write_tape_pos = write_tape_limit - 1;
-				wrap_count--;
+				write_tape_wrap_count--;
 			}
 		} else if (write_tape_pos < 0) {
 			write_tape_pos = 0; // TODO: make left-infinite also!
