@@ -352,15 +352,15 @@ function test_tm_hashing() {
 			step2();
 		}
 
-		console.log('input1: ', input_bits);
-		console.log('input2: ', input_bits2);
+		// console.log('input1: ', input_bits);
+		// console.log('input2: ', input_bits2);
 		console.log('tape1: ', write_tape);
 		console.log('tape2: ', write_tape2);
 		const ratio = vectors_same_bits_ratio(write_tape, write_tape2);
 		console.log('ratio = ', ratio);
 	}
 
-	dotest(true, 9000000, 1000, 1000, 2);
+	dotest(true, 9000000, 1000, 100, 2);
 }
 
 // test_tm();
