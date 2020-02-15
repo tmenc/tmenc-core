@@ -227,7 +227,7 @@ function make_tm(machine_bits, address_size, weak_rng) {
 function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tape_limit) {
 	const tm = make_tm(machine_bits, address_size, weak_rng);
 	const write_tape_size_limit = write_tape_limit ? (write_tape_limit - 1) : false;
-	const read_tape_len = input_bits.length;
+	const read_tape_len = bitarray_length(input_bits);
 	const read_tape = input_bits;
 	const write_tape = bitarray_alloc(0);
 	var read_tape_pos = 0;
