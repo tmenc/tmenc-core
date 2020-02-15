@@ -242,7 +242,7 @@ function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tap
 				write_tape_pos = 0;
 				write_tape_wrap_count++;
 			} else if (write_tape_pos < 0) {
-				write_tape_pos = write_tape_limit - 1;
+				write_tape_pos = write_tape_size_limit - 1;
 				write_tape_wrap_count--;
 			}
 		} else if (write_tape_pos < 0) {
