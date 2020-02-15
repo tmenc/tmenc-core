@@ -263,6 +263,7 @@ function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tap
 	return {
 		step: step,
 		write_tape: write_tape,
+		get_wrap_count: function () { return wrap_count; },
 	};
 }
 
@@ -320,14 +321,15 @@ function test_tm2() {
 }
 
 function test_tm_hashing() {
-	function dotest(singleflip, input_size, machine_size, wr_tape_size) {
+	function dotest(singleflip, input_size, machine_size, wr_tape_size, wrap_count) {
 		const machine_bits = generate_n_weak_random_bits(200, machine_size);
 		const input_bits = generate_n_weak_random_bits(300, input_size);
 		const env = make_default_tm_env(machine_bits, input_bits, 777, wr_tape_size);
 		const step = env.step;
 		const write_tape = env.write_tape;
+		const wcf = env.get_wrap_count;
 
-		for (var i = 0; i < 10000; i++) {
+		while (wcf() < wrap_count) {
 			step();
 		}
 
@@ -344,8 +346,9 @@ function test_tm_hashing() {
 		const env2 = make_default_tm_env(machine_bits, input_bits2, 777, wr_tape_size);
 		const step2 = env2.step;
 		const write_tape2 = env2.write_tape;
+		const wcf2 = env2.get_wrap_count;
 
-		for (var i = 0; i < 10000; i++) {
+		while (wcf2() < wrap_count) {
 			step2();
 		}
 
@@ -357,7 +360,7 @@ function test_tm_hashing() {
 		console.log('ratio = ', ratio);
 	}
 
-	dotest(true, 1000, 1000, 1000);
+	dotest(true, 1000, 1000, 1000, 2);
 }
 
 // test_tm();
