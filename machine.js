@@ -232,7 +232,7 @@ function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tap
 	var read_tape_pos = 0;
 	var write_tape_pos = 0;
 	var write_tape_wrap_count = 0;
-	var read_tape_wrap_count = 0;
+	var read_tape_read_all = false;
 	function step() {
 		const read_tape_bit = bitarray_at_or0(read_tape, read_tape_pos);
 		const write_tape_bit = bitarray_at_or0(write_tape, write_tape_pos);
@@ -256,17 +256,16 @@ function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tap
 
 		if (read_tape_pos >= read_tape_len) {
 			read_tape_pos = 0;
-			read_tape_wrap_count++;
+			read_tape_read_all = true;
 		} else if (read_tape_pos < 0) {
 			read_tape_pos = read_tape_len - 1;
-			read_tape_wrap_count--;
 		}
 	}
 	return {
 		step: step,
 		write_tape: write_tape,
 		write_tape_wrap_count: function () { return write_tape_wrap_count; },
-		read_tape_wrap_count: function () { return read_tape_wrap_count; },
+		read_tape_read_all: function () { return read_tape_read_all; },
 	};
 }
 
