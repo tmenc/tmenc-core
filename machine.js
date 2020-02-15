@@ -324,15 +324,17 @@ function test_tm2() {
 }
 
 function test_tm_hashing() {
+	function finished(env, wc) {
+		return env.read_tape_wrap_count() > 0 && env.write_tape_wrap_count() > wc;
+	}
 	function dotest(singleflip, input_size, machine_size, wr_tape_size, wrap_count) {
 		const machine_bits = generate_n_weak_random_bits(200, machine_size);
 		const input_bits = generate_n_weak_random_bits(300, input_size);
 		const env = make_default_tm_env(machine_bits, input_bits, 777, wr_tape_size);
 		const step = env.step;
 		const write_tape = env.write_tape;
-		const wcf = env.read_tape_wrap_count;
 
-		while (wcf() < wrap_count) {
+		while (!(finished(env, wrap_count))) {
 			step();
 		}
 
@@ -349,9 +351,8 @@ function test_tm_hashing() {
 		const env2 = make_default_tm_env(machine_bits, input_bits2, 777, wr_tape_size);
 		const step2 = env2.step;
 		const write_tape2 = env2.write_tape;
-		const wcf2 = env2.read_tape_wrap_count;
 
-		while (wcf2() < wrap_count) {
+		while (!(finished(env2, wrap_count))) {
 			step2();
 		}
 
