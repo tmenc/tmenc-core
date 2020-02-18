@@ -200,16 +200,13 @@ function make_tm(machine_bits, address_size, weak_rng) {
 	var current_jump_high = 0 + current_jump_size;
 
 	function calc_next_jumps() {
-		// if (current_jump_high >= machine_len) {
 		if (current_jump_size <= state_size) {
 			current_jump_size = floor(machine_len / 2);
 			current_jump_low = 0;
-			// throw "LOL";
 		} else {
 			current_jump_size = floor(current_jump_size / 2);
 			current_jump_low = machine_pos;
 		}
-		console.log((machine_pos / machine_len), current_jump_size);
 		current_jump_high = current_jump_low + current_jump_size;
 	}
 
@@ -231,26 +228,6 @@ function make_tm(machine_bits, address_size, weak_rng) {
 		}
 
 		calc_next_jumps();
-
-		if (machine_pos >= machine_len) {
-			throw "WTF";
-		}
-
-		// machine_pos += shift * address_size; // jump to chosen address field
-		// var address_diff = 0;
-		// var pow = 1;
-		// for (var i = 0; i < address_size; i++) {
-		// 	const bit = read_1_bit();
-		// 	address_diff += bit * pow;
-		// 	pow = pow * 2;
-		// }
-
-		// // jump to new state
-		// machine_pos += address_diff;
-		// machine_pos = machine_pos % machine_len;
-		// machine_pos += diff_accumulator;
-		// machine_pos = machine_pos % machine_len;
-		// diff_accumulator++;
 
 		return {
 			new_write_tape_bit: wt_bit, // : {0 ,1}
