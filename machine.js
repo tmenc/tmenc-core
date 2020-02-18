@@ -274,7 +274,7 @@ function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tap
 	};
 }
 
-const DEFAULT_ADDRESS_SIZE = 8;
+const DEFAULT_ADDRESS_SIZE = 32;
 
 function make_default_tm_env(machine_bits, input_bits, seed, write_tape_limit) {
 	const weak_rng = init_simple_rng_ref(seed);
@@ -370,7 +370,7 @@ function test_tm_hashing() {
 		console.log('ratio = ', ratio);
 	}
 
-	dotest(true, 10000000, 98000, 30, 1000);
+	dotest(true, 10000000, 98000, 100, 1000);
 }
 
 // test_tm();
