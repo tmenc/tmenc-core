@@ -162,7 +162,6 @@ function make_tm(machine_bits, address_size, weak_rng) {
 	function read_bit_and_skip_range(shift, range) {
 		const bit_pos = (machine_pos + shift) % machine_len;
 		const bit = bitarray_at(machine_bits, bit_pos) ^ weak_rng();
-		// const bit = bitarray_at(machine_bits, bit_pos);
 		machine_pos += range + 1; // skip range bits
 		machine_pos = machine_pos % machine_len; // overflow protection
 		return bit;
@@ -180,8 +179,6 @@ function make_tm(machine_bits, address_size, weak_rng) {
 		var acc = 0;
 		for (var i = 0; i < sum; i++) {
 			acc += read_chosen_bit(shift);
-			// read_chosen_bit(shift);
-			// acc += weak_rng();
 		}
 
 		if (acc >= ratio_a) {
@@ -190,9 +187,6 @@ function make_tm(machine_bits, address_size, weak_rng) {
 			return 0;
 		}
 	}
-
-	var avg = 0;
-	var count = 0;
 
 	function step (read_tape_bit, write_tape_bit) {
 		const shift = 1 * read_tape_bit + 2 * write_tape_bit; // a "chooser"
