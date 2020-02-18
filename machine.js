@@ -195,18 +195,21 @@ function make_tm(machine_bits, address_size, weak_rng) {
 		}
 	}
 
-	var current_jump_size = floor(machine_len / 4);
+	var current_jump_size = floor(machine_len / 2);
 	var current_jump_low = 0;
 	var current_jump_high = 0 + current_jump_size;
 
 	function calc_next_jumps() {
+		// if (current_jump_high >= machine_len) {
 		if (current_jump_size <= state_size) {
 			current_jump_size = floor(machine_len / 2);
 			current_jump_low = 0;
+			// throw "LOL";
 		} else {
 			current_jump_size = floor(current_jump_size / 2);
 			current_jump_low = machine_pos;
 		}
+		console.log((machine_pos / machine_len), current_jump_size);
 		current_jump_high = current_jump_low + current_jump_size;
 	}
 
@@ -220,12 +223,17 @@ function make_tm(machine_bits, address_size, weak_rng) {
 		const rt_direction = rt_direction_bit * 2 - 1;
 		const wt_direction = wt_direction_bit * 2 - 1;
 
-		calc_next_jumps();
 		const jump_direction = read_chosen_bit(shift);
 		if (jump_direction == 0) {
 			machine_pos = current_jump_low;
 		} else {
 			machine_pos = current_jump_high;
+		}
+
+		calc_next_jumps();
+
+		if (machine_pos >= machine_len) {
+			throw "WTF";
 		}
 
 		// machine_pos += shift * address_size; // jump to chosen address field
