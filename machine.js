@@ -183,7 +183,7 @@ function make_tm(machine_bits, address_size, weak_rng) {
 		for (var i = 0; i < sum; i++) {
 			acc += read_chosen_bit(shift);
 		}
-		if (acc > ratio_a) {
+		if (acc >= ratio_a) {
 			return 0;
 		} else {
 			return 1;
