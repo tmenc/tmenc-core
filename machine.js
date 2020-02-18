@@ -182,7 +182,7 @@ function make_tm(machine_bits, address_size, weak_rng) {
 			acc += read_chosen_bit(shift);
 		}
 
-		if (acc <= ratio_a) {
+		if (acc >= ratio_a) {
 			return 1;
 		} else {
 			return 0;
@@ -197,7 +197,7 @@ function make_tm(machine_bits, address_size, weak_rng) {
 
 		const wt_bit = read_chosen_bit(shift);
 		const rt_direction_bit = read_chosen_bit(shift);
-		const wt_direction_bit = read_n_collapse(0, 1, shift);
+		const wt_direction_bit = read_n_collapse(1, 1, shift);
 
 		avg = ((avg * count) + wt_direction_bit) / (count + 1)
 		count++;
