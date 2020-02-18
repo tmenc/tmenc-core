@@ -178,7 +178,7 @@ function make_tm(machine_bits, address_size, weak_rng) {
 
 	function read_n_collapse(ratio_a, ratio_b, shift) {
 		const s1 = ratio_a + ratio_b;
-		const sum = s1 & 1 == 0 ? s1 : (s1 + 1);
+		const sum = s1 & 1 == 0 ? s1 : (s1 - 1);
 		var acc = 0;
 		for (var i = 0; i < sum; i++) {
 			acc += read_chosen_bit(shift);
@@ -190,12 +190,21 @@ function make_tm(machine_bits, address_size, weak_rng) {
 		}
 	}
 
+	var avg = 0;
+	var count = 0;
+
 	function step (read_tape_bit, write_tape_bit) {
 		const shift = 1 * read_tape_bit + 2 * write_tape_bit; // a "chooser"
 
 		const wt_bit = read_chosen_bit(shift);
 		const rt_direction_bit = read_chosen_bit(shift);
-		const wt_direction_bit = read_n_collapse(0, 1, shift);
+		const wt_direction_bit = read_n_collapse(1, 1, shift);
+
+		avg = ((avg * count) + wt_direction_bit) / (count + 1)
+		count++;
+		if (count % 1000 == 0) {
+			console.log('avg = ', avg);
+		}
 
 		const rt_direction = rt_direction_bit * 2 - 1;
 		const wt_direction = wt_direction_bit * 2 - 1;
