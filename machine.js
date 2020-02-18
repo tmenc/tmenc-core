@@ -189,12 +189,21 @@ function make_tm(machine_bits, address_size, weak_rng) {
 		}
 	}
 
+	var avg = 0;
+	var count = 0;
+
 	function step (read_tape_bit, write_tape_bit) {
 		const shift = 1 * read_tape_bit + 2 * write_tape_bit; // a "chooser"
 
 		const wt_bit = read_chosen_bit(shift);
 		const rt_direction_bit = read_chosen_bit(shift);
-		const wt_direction_bit = read_n_collapse(1, 2, shift); // 1,1 = 50%, 1,2 = 75%, 2,3 = 87%
+		const wt_direction_bit = read_n_collapse(1,3, shift); // 1,1 = 50% | 1,2 = 75% | 1,3 = 87% | 2,2 = 25% | 2,3 = 50% | 3,3 = 12%
+
+		avg = ((avg * count) + wt_direction_bit) / (count + 1)
+		count++;
+		if (count % 1000 == 0) {
+			console.log('avg = ', avg);
+		}
 
 		const rt_direction = rt_direction_bit * 2 - 1;
 		const wt_direction = wt_direction_bit * 2 - 1;
