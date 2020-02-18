@@ -153,16 +153,9 @@ function test_rng_ref() {
 	// console.log(rng());
 }
 
-function floor(x) {
-	return Math.floor(x);
-}
-
 function make_tm(machine_bits, address_size, weak_rng) {
 	const machine_len = bitarray_length(machine_bits);
-	const prob_wt_left = 1;
-	const prob_wt_all = 2;
 	const max_shift = 1 * 1 + 2 * 1;
-	const state_size = max_shift + max_shift + prob_wt_all + max_shift;
 	var machine_pos = 0;
 	var diff_accumulator = 1; // makes cycles less probable
 
@@ -195,39 +188,31 @@ function make_tm(machine_bits, address_size, weak_rng) {
 		}
 	}
 
-	var current_jump_size = floor(machine_len / 2);
-	var current_jump_low = 0;
-	var current_jump_high = 0 + current_jump_size;
-
-	function calc_next_jumps() {
-		if (current_jump_size <= state_size) {
-			current_jump_size = floor(machine_len / 2);
-			current_jump_low = 0;
-		} else {
-			current_jump_size = floor(current_jump_size / 2);
-			current_jump_low = machine_pos;
-		}
-		current_jump_high = current_jump_low + current_jump_size;
-	}
-
 	function step (read_tape_bit, write_tape_bit) {
 		const shift = 1 * read_tape_bit + 2 * write_tape_bit; // a "chooser"
 
 		const wt_bit = read_chosen_bit(shift);
 		const rt_direction_bit = read_chosen_bit(shift);
-		const wt_direction_bit = read_n_collapse(prob_wt_left, prob_wt_all, shift); // 1,1 = 50% | 1,2 = 75% | 1,3 = 87% | 2,2 = 25% | 2,3 = 50% | 3,3 = 12%
+		const wt_direction_bit = read_n_collapse(1, 2, shift); // 1,1 = 50% | 1,2 = 75% | 1,3 = 87% | 2,2 = 25% | 2,3 = 50% | 3,3 = 12%
 
 		const rt_direction = rt_direction_bit * 2 - 1;
 		const wt_direction = wt_direction_bit * 2 - 1;
 
-		const jump_direction = read_chosen_bit(shift);
-		if (jump_direction == 0) {
-			machine_pos = current_jump_low;
-		} else {
-			machine_pos = current_jump_high;
+		machine_pos += shift * address_size; // jump to chosen address field
+		var address_diff = 0;
+		var pow = 1;
+		for (var i = 0; i < address_size; i++) {
+			const bit = read_1_bit();
+			address_diff += bit * pow;
+			pow = pow * 2;
 		}
 
-		calc_next_jumps();
+		// jump to new state
+		machine_pos += address_diff;
+		machine_pos = machine_pos % machine_len;
+		machine_pos += diff_accumulator;
+		machine_pos = machine_pos % machine_len;
+		diff_accumulator++;
 
 		return {
 			new_write_tape_bit: wt_bit, // : {0 ,1}
