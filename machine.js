@@ -161,8 +161,8 @@ function make_tm(machine_bits, address_size, weak_rng) {
 
 	function read_bit_and_skip_range(shift, range) {
 		const bit_pos = (machine_pos + shift) % machine_len;
-		// const bit = bitarray_at(machine_bits, bit_pos) ^ weak_rng();
-		const bit = bitarray_at(machine_bits, bit_pos);
+		const bit = bitarray_at(machine_bits, bit_pos) ^ weak_rng();
+		// const bit = bitarray_at(machine_bits, bit_pos);
 		machine_pos += range + 1; // skip range bits
 		machine_pos = machine_pos % machine_len; // overflow protection
 		return bit;
@@ -200,12 +200,6 @@ function make_tm(machine_bits, address_size, weak_rng) {
 		const wt_bit = read_chosen_bit(shift);
 		const rt_direction_bit = read_chosen_bit(shift);
 		const wt_direction_bit = read_n_collapse(1, 2, shift); // 1,1 = 50% | 1,2 = 75% | 1,3 = 87% | 2,2 = 25% | 2,3 = 50% | 3,3 = 12%
-
-		avg = ((avg * count) + wt_direction_bit) / (count + 1)
-		count++;
-		if (count % 1000 == 0) {
-			console.log('avg = ', avg);
-		}
 
 		const rt_direction = rt_direction_bit * 2 - 1;
 		const wt_direction = wt_direction_bit * 2 - 1;
@@ -376,7 +370,7 @@ function test_tm_hashing() {
 		console.log('ratio = ', ratio);
 	}
 
-	dotest(true, 10000000, 98000, 30, 1000);
+	dotest(true, 10000000, 98000, 31, 1000);
 }
 
 // test_tm();
