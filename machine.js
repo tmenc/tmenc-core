@@ -194,7 +194,7 @@ function make_tm(machine_bits, address_size, weak_rng) {
 
 		const wt_bit = read_chosen_bit(shift);
 		const rt_direction_bit = read_chosen_bit(shift);
-		const wt_direction_bit = read_n_collapse(2, 1, shift);
+		const wt_direction_bit = read_n_collapse(1, 1, shift);
 
 		const rt_direction = rt_direction_bit * 2 - 1;
 		const wt_direction = wt_direction_bit * 2 - 1;
@@ -334,7 +334,7 @@ function test_tm_hashing() {
 		const write_tape = env.write_tape;
 
 		// while (!(finished(env, wrap_count))) {
-		for (var i = 0; i < 1000000; i++) {
+		for (var i = 0; i < 100000; i++) {
 			step();
 		}
 
@@ -353,7 +353,7 @@ function test_tm_hashing() {
 		const write_tape2 = env2.write_tape;
 
 		// while (!(finished(env2, wrap_count))) {
-		for (var i = 0; i < 1000000; i++) {
+		for (var i = 0; i < 100000; i++) {
 			step2();
 		}
 
