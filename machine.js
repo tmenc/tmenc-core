@@ -272,9 +272,10 @@ function make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_si
 }
 
 function default_key_tape() {
-	return function () {
-		return 1;
-	};
+	return init_simple_rng_ref(72731);
+	// return function () {
+	// 	return 1;
+	// };
 }
 
 function make_default_tm_env(machine_bits, input_bits, seed, write_tape_limit) {
@@ -365,6 +366,10 @@ function test_tm_hashing() {
 			step2();
 		}
 
+		for (var i = 0; i < bitarray_length(write_tape); i++) {
+			console.log(bitarray_at(write_tape, i));
+		}
+
 		// console.log('input1: ', input_bits);
 		// console.log('input2: ', input_bits2);
 		// console.log('tape1: ', write_tape);
@@ -372,12 +377,12 @@ function test_tm_hashing() {
 		return vectors_same_bits_ratio(write_tape, write_tape2);
 	}
 
-	const start = 20;
-	const times = 300;
+	const start = 10000 + 20;
+	const times = 1;
 	var sum = 0;
 	for (var i = 0; i < times; i++) {
 		console.log('wt size = ', start + i);
-		const ratio = dotest(true, 10000, 1000, start + i, 1);
+		const ratio = dotest(true, 10000, 1000, start + i, 1000);
 		const dd = ratio > 0.9 ? 1 : 0;
 		sum += dd;
 		console.log('ratio = ', ratio);
