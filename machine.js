@@ -337,7 +337,7 @@ function test_tm_hashing() {
 		const input_bits2 = bitarray_copy(input_bits);
 		if (singleflip) {
 			const len = bitarray_length(input_bits2);
-			const change_pos = 32;
+			const change_pos = len - 32;
 			bitarray_set_bit(input_bits2, change_pos, 1 ^ bitarray_at(input_bits2, change_pos));
 		} else {
 			for (var i = 0; i < bitarray_length(input_bits2); i++) {
@@ -356,17 +356,26 @@ function test_tm_hashing() {
 
 		// console.log('input1: ', input_bits);
 		// console.log('input2: ', input_bits2);
-		console.log('tape1: ', write_tape);
-		console.log('tape2: ', write_tape2);
-		const ratio = vectors_same_bits_ratio(write_tape, write_tape2);
-		console.log('ratio = ', ratio);
+		// console.log('tape1: ', write_tape);
+		// console.log('tape2: ', write_tape2);
+		return vectors_same_bits_ratio(write_tape, write_tape2);
 	}
 
 	const start = 1000;
-	for (var i = 0; i < 100; i++) {
+	const times = 100;
+	var sum = 0;
+	const pow = 1 / 20;
+	const max = Math.pow(0.5, pow);
+	for (var i = 0; i < times; i++) {
 		console.log('wt size = ', start + i);
-		dotest(true, 10000000, 1000, start + i, 1000);
+		const ratio = dotest(true, 10000, 1000, start + i, 10);
+		// const ratio = 0.3;
+		const dev = Math.abs(0.5 - ratio);
+		const dd = Math.pow(dev, pow) / max;
+		sum += dd;
+		console.log('ratio = ', ratio);
 	}
+	console.log('avg ratio^2 = ', sum / times);
 }
 
 // test_tm();
