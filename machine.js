@@ -369,7 +369,7 @@ function test_tm_hashing() {
 	var sum = 0;
 	for (var i = 0; i < times; i++) {
 		console.log('wt size = ', start + i);
-		const ratio = dotest(true, 10000000, 1000, start + i, 1);
+		const ratio = dotest(true, 10000, 1000, start + i, 1);
 		const dd = ratio > 0.9 ? 1 : 0;
 		sum += dd;
 		console.log('ratio = ', ratio);
