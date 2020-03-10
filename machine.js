@@ -361,7 +361,7 @@ function test_tm_hashing() {
 		return vectors_same_bits_ratio(write_tape, write_tape2);
 	}
 
-	const start = 1000;
+	const start = 20;
 	const times = 300;
 	var sum = 0;
 	for (var i = 0; i < times; i++) {
