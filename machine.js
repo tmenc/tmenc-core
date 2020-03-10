@@ -153,7 +153,7 @@ function test_rng_ref() {
 	// console.log(rng());
 }
 
-function make_tm(machine_bits, address_size, weak_rng) {
+function make_tm(machine_bits, weak_rng) {
 	const machine_len = bitarray_length(machine_bits);
 	const max_shift = 1 * 1 + 2 * 1;
 	var machine_pos = 0;
@@ -210,8 +210,8 @@ function make_tm(machine_bits, address_size, weak_rng) {
 	return step;
 }
 
-function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tape_size_limit) {
-	const tm = make_tm(machine_bits, address_size, weak_rng);
+function make_tm_env(machine_bits, input_bits, weak_rng, write_tape_size_limit) {
+	const tm = make_tm(machine_bits, weak_rng);
 	const read_tape_len = bitarray_length(input_bits);
 	const read_tape = input_bits;
 	const write_tape = bitarray_alloc(0);
@@ -255,11 +255,9 @@ function make_tm_env(machine_bits, address_size, input_bits, weak_rng, write_tap
 	};
 }
 
-const DEFAULT_ADDRESS_SIZE = 8;
-
 function make_default_tm_env(machine_bits, input_bits, seed, write_tape_limit) {
 	const weak_rng = init_simple_rng_ref(seed);
-	return make_tm_env(machine_bits, DEFAULT_ADDRESS_SIZE, input_bits, weak_rng, write_tape_limit);
+	return make_tm_env(machine_bits, input_bits, weak_rng, write_tape_limit);
 }
 
 function vectors_same_bits_ratio(v1, v2) {
