@@ -198,20 +198,7 @@ function make_tm(machine_bits, address_size, weak_rng) {
 		const rt_direction = rt_direction_bit * 2 - 1;
 		const wt_direction = wt_direction_bit * 2 - 1;
 
-		machine_pos += shift * address_size; // jump to chosen address field
-		var address_diff = 0;
-		var pow = 1;
-		for (var i = 0; i < address_size; i++) {
-			const bit = read_1_bit();
-			address_diff += bit * pow;
-			pow = pow * 2;
-		}
-
-		// jump to new state
-		machine_pos += address_diff;
-		machine_pos = machine_pos % machine_len;
-		machine_pos += diff_accumulator;
-		machine_pos = machine_pos % machine_len;
+		machine_pos = (machine_pos + diff_accumulator) % machine_len;
 		diff_accumulator++;
 
 		return {
