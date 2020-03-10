@@ -351,7 +351,7 @@ function test_tm_hashing() {
 
 	for (var i = 3; i < 100; i++) {
 		console.log('wt size = ', i);
-		dotest(true, 10000000, 98000, i, 1000);
+		dotest(true, 10000000, 1000, i, 1000);
 	}
 }
 
