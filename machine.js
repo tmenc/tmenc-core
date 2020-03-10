@@ -192,7 +192,7 @@ function make_tm(machine_bits, weak_rng) {
 		const shift = 1 * read_tape_bit + 2 * write_tape_bit; // a "chooser"
 
 		const wt_bit = read_chosen_bit(shift);
-		const rt_direction_bit = read_chosen_bit(shift);
+		const rt_direction_bit = read_n_collapse(1, 2, shift); // 1,1 = 50% | 1,2 = 75% | 1,3 = 87% | 2,2 = 25% | 2,3 = 50% | 3,3 = 12%
 		const wt_direction_bit = read_n_collapse(1, 2, shift); // 1,1 = 50% | 1,2 = 75% | 1,3 = 87% | 2,2 = 25% | 2,3 = 50% | 3,3 = 12%
 
 		const rt_direction = rt_direction_bit * 2 - 1;
@@ -329,7 +329,7 @@ function test_tm_hashing() {
 		const input_bits2 = bitarray_copy(input_bits);
 		if (singleflip) {
 			const len = bitarray_length(input_bits2);
-			const change_pos = (len - 32);
+			const change_pos = 32;
 			bitarray_set_bit(input_bits2, change_pos, 1 ^ bitarray_at(input_bits2, change_pos));
 		} else {
 			for (var i = 0; i < bitarray_length(input_bits2); i++) {
@@ -354,9 +354,10 @@ function test_tm_hashing() {
 		console.log('ratio = ', ratio);
 	}
 
-	for (var i = 3; i < 100; i++) {
-		console.log('wt size = ', i);
-		dotest(true, 10000000, 1000, i, 1000);
+	const start = 1000;
+	for (var i = 0; i < 100; i++) {
+		console.log('wt size = ', start + i);
+		dotest(true, 10000000, 1000, start + i, 1000);
 	}
 }
 
