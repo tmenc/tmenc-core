@@ -153,9 +153,9 @@ function test_rng_ref() {
 	// console.log(rng());
 }
 
-function make_tm(machine_bits, weak_rng) {
+function make_tm(machine_bits, weak_rng, key_tape) {
 	const machine_len = bitarray_length(machine_bits);
-	const max_shift = 1 * 1 + 2 * 1;
+	const max_shift = 1 * 1 + 2 * 1 + 4 * 1;
 	var machine_pos = 0;
 	var diff_accumulator = 1; // makes cycles less probable
 
@@ -189,7 +189,7 @@ function make_tm(machine_bits, weak_rng) {
 	}
 
 	function step (read_tape_bit, write_tape_bit) {
-		const shift = 1 * read_tape_bit + 2 * write_tape_bit; // a "chooser"
+		const shift = 1 * read_tape_bit + 2 * write_tape_bit + 4 * key_tape(); // a "chooser"
 
 		const wt_bit = read_chosen_bit(shift);
 		const rt_direction_bit = read_n_collapse(1, 2, shift); // 1,1 = 50% | 1,2 = 75% | 1,3 = 87% | 2,2 = 25% | 2,3 = 50% | 3,3 = 12%
@@ -214,8 +214,8 @@ function make_tm(machine_bits, weak_rng) {
 	return step;
 }
 
-function make_tm_env(machine_bits, input_bits, weak_rng, write_tape_size_limit) {
-	const tm = make_tm(machine_bits, weak_rng);
+function make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_size_limit) {
+	const tm = make_tm(machine_bits, weak_rng, key_tape);
 	const read_tape_len = bitarray_length(input_bits);
 	const read_tape = input_bits;
 	const write_tape = bitarray_alloc(0);
@@ -271,9 +271,16 @@ function make_tm_env(machine_bits, input_bits, weak_rng, write_tape_size_limit) 
 	};
 }
 
+function default_key_tape() {
+	return function () {
+		return 1;
+	};
+}
+
 function make_default_tm_env(machine_bits, input_bits, seed, write_tape_limit) {
 	const weak_rng = init_simple_rng_ref(seed);
-	return make_tm_env(machine_bits, input_bits, weak_rng, write_tape_limit);
+	const key_tape = default_key_tape();
+	return make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_limit);
 }
 
 function vectors_same_bits_ratio(v1, v2) {
