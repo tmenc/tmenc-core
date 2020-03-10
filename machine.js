@@ -369,7 +369,6 @@ function test_tm_hashing() {
 	for (var i = 0; i < times; i++) {
 		console.log('wt size = ', start + i);
 		const ratio = dotest(true, 10000, 1000, start + i, 10);
-		// const ratio = 0.3;
 		const dev = Math.abs(0.5 - ratio);
 		const dd = Math.pow(dev, pow) / max;
 		sum += dd;
