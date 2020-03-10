@@ -199,12 +199,11 @@ function make_tm(machine_bits, weak_rng) {
 		const wt_direction = wt_direction_bit * 2 - 1;
 
 		machine_pos = (machine_pos + shift * diff_accumulator) % machine_len;
-		if (diff_accumulator > 2 && weak_rng() == 0) {
-			diff_accumulator -= 3;
+		if (diff_accumulator > max_shift && shift == 0) {
+			diff_accumulator -= max_shift;
+		} else {
+			diff_accumulator++;
 		}
-		diff_accumulator++;
-
-		console.log(diff_accumulator);
 
 		return {
 			new_write_tape_bit: wt_bit, // : {0 ,1}
