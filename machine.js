@@ -246,9 +246,16 @@ function make_tm_env(machine_bits, input_bits, weak_rng, write_tape_size_limit) 
 
 		if (read_tape_pos >= read_tape_len) {
 			read_tape_pos = 0;
-			read_tape_read_all = true;
+			read_tape_wrap_count++;
+			if (read_tape_wrap_count == 1) {
+				read_tape_read_all = true;
+			}
 		} else if (read_tape_pos < 0) {
 			read_tape_pos = read_tape_len - 1;
+			read_tape_wrap_count--;
+			if (read_tape_wrap_count == -2) {
+				read_tape_read_all = true;
+			}
 		}
 	}
 	return {
