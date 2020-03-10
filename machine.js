@@ -362,11 +362,11 @@ function test_tm_hashing() {
 	}
 
 	const start = 1000;
-	const times = 100;
+	const times = 300;
 	var sum = 0;
 	for (var i = 0; i < times; i++) {
 		console.log('wt size = ', start + i);
-		const ratio = dotest(true, 10000, 1000, start + i, 10);
+		const ratio = dotest(true, 10000, 1000, start + i, 3);
 		const dd = ratio > 0.9 ? 1 : 0;
 		sum += dd;
 		console.log('ratio = ', ratio);
