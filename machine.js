@@ -364,17 +364,14 @@ function test_tm_hashing() {
 	const start = 1000;
 	const times = 100;
 	var sum = 0;
-	const pow = 1 / 20;
-	const max = Math.pow(0.5, pow);
 	for (var i = 0; i < times; i++) {
 		console.log('wt size = ', start + i);
 		const ratio = dotest(true, 10000, 1000, start + i, 10);
-		const dev = Math.abs(0.5 - ratio);
-		const dd = Math.pow(dev, pow) / max;
+		const dd = ratio > 0.9 ? 1 : 0;
 		sum += dd;
 		console.log('ratio = ', ratio);
 	}
-	console.log('avg ratio^2 = ', sum / times);
+	console.log('score = ', sum / times);
 }
 
 // test_tm();
