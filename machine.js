@@ -123,7 +123,7 @@ function bitarray_xor_with(target, other) {
 }
 
 // works on uint32_t
-function init_simple_rng_ref_0(seed) {
+function init_simple_rng_ref(seed) {
 	var x = seed;
 	const mod = 4294967296; // 2 ^ 32
 	function to1bit (z) {
@@ -134,41 +134,6 @@ function init_simple_rng_ref_0(seed) {
 		x = (((x * 1664525) % mod) + 1013904223) % mod;
 		return to1bit(x);
 	};
-}
-
-function init_simple_rng_ref(seed) {
-	var x_3 = seed;
-	var x_2 = 1;
-	var x_1 = 1;
-	var y_3 = 1;
-	var y_2 = 1;
-	var y_1 = 1;
-	const m1 = 4294967087; // 2 ^ 32 - 209
-	const m2 = 4294944443; // 2 ^ 32 - 22853
-	const a11 = 0;
-	const a12 = 1403580;
-	const a13 = -810728;
-	const a21 = 527612;
-	const a22 = 0;
-	const a23 = -1370589;
-	const m1_div_2 = 2147483543; // floor ((2 ^ 32 - 209) / 2)
-
-	return function () {
-		const xn = (((a11 * x_1) % m1) + ((a12 * x_2) % m1) + ((a13 * x_3) % m1)) % m1;
-		const yn = (((a21 * y_1) % m2) + ((a22 * y_2) % m2) + ((a23 * y_3) % m2)) % m2;
-		const ret = Math.abs(xn - yn) % m1;
-		x_3 = x_2;
-		x_2 = x_1;
-		x_1 = xn;
-		y_3 = y_2;
-		y_2 = y_1;
-		y_1 = yn;
-		if (ret < m1_div_2) {
-			return 0;
-		} else {
-			return 1;
-		}
-	}
 }
 
 function generate_n_weak_random_bits(seed, n) {
@@ -364,7 +329,7 @@ function test_tm_hashing() {
 		const input_bits2 = bitarray_copy(input_bits);
 		if (singleflip) {
 			const len = bitarray_length(input_bits2);
-			const change_pos = 32;
+			const change_pos = (len - 32);
 			bitarray_set_bit(input_bits2, change_pos, 1 ^ bitarray_at(input_bits2, change_pos));
 		} else {
 			for (var i = 0; i < bitarray_length(input_bits2); i++) {
@@ -391,7 +356,7 @@ function test_tm_hashing() {
 
 	for (var i = 3; i < 100; i++) {
 		console.log('wt size = ', i);
-		dotest(true, 10000000, 1000, i, 1);
+		dotest(true, 10000000, 1000, i, 1000);
 	}
 }
 
