@@ -227,10 +227,14 @@ function make_tm_env(machine_bits, input_bits, weak_rng, write_tape_size_limit) 
 		if (write_tape_size_limit) {
 			if (write_tape_pos >= write_tape_size_limit) {  // ASSUMPTION: write_tape_pos changes by 1 on each step
 				write_tape_pos = 0;
-				write_tape_wrap_count++;
+				if (read_tape_read_all) {
+					write_tape_wrap_count++;
+				}
 			} else if (write_tape_pos < 0) {
 				write_tape_pos = write_tape_size_limit - 1;
-				write_tape_wrap_count--;
+				if (read_tape_read_all) {
+					write_tape_wrap_count--;
+				}
 			}
 		} else if (write_tape_pos < 0) {
 			write_tape_pos = 0; // TODO: make left-infinite also!
@@ -324,7 +328,8 @@ function test_tm_hashing() {
 
 		const input_bits2 = bitarray_copy(input_bits);
 		if (singleflip) {
-			const change_pos = 32 % bitarray_length(input_bits2);
+			const len = bitarray_length(input_bits2);
+			const change_pos = (len - 32);
 			bitarray_set_bit(input_bits2, change_pos, 1 ^ bitarray_at(input_bits2, change_pos));
 		} else {
 			for (var i = 0; i < bitarray_length(input_bits2); i++) {
