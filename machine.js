@@ -155,7 +155,7 @@ function test_rng_ref() {
 
 function make_tm(machine_bits, weak_rng) {
 	const machine_len = bitarray_length(machine_bits);
-	const max_shift = 1 * 1 + 2 * 1 + 4 * 1;
+	const max_shift = 1 * 1 + 2 * 1;
 	var machine_pos = 0;
 	var diff_accumulator = 1; // makes cycles less probable
 
@@ -189,7 +189,7 @@ function make_tm(machine_bits, weak_rng) {
 	}
 
 	function step (read_tape_bit, write_tape_bit) {
-		const shift = 1 * read_tape_bit + 2 * write_tape_bit + 4 * weak_rng(); // a "chooser"
+		const shift = 1 * read_tape_bit + 2 * write_tape_bit; // a "chooser"
 
 		const wt_bit = read_chosen_bit(shift);
 		const rt_direction_bit = read_n_collapse(1, 2, shift); // 1,1 = 50% | 1,2 = 75% | 1,3 = 87% | 2,2 = 25% | 2,3 = 50% | 3,3 = 12%
@@ -198,7 +198,10 @@ function make_tm(machine_bits, weak_rng) {
 		const rt_direction = rt_direction_bit * 2 - 1;
 		const wt_direction = wt_direction_bit * 2 - 1;
 
-		machine_pos = (machine_pos + read_tape_bit * diff_accumulator) % machine_len;
+		machine_pos = (machine_pos + shift * diff_accumulator) % machine_len;
+		if (diff_accumulator > 2 && weak_rng() == 0) {
+			diff_accumulator -= 2;
+		}
 		diff_accumulator++;
 
 		return {
