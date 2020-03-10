@@ -188,8 +188,8 @@ function make_tm(machine_bits, weak_rng) {
 		}
 	}
 
-	function step (read_tape_bit, write_tape_bit, rand_tape_bit) {
-		const shift = 1 * read_tape_bit + 2 * write_tape_bit + 4 * 0; // a "chooser"
+	function step (read_tape_bit, write_tape_bit) {
+		const shift = 1 * read_tape_bit + 2 * write_tape_bit + 4 * weak_rng(); // a "chooser"
 
 		const wt_bit = read_chosen_bit(shift);
 		const rt_direction_bit = read_n_collapse(1, 2, shift); // 1,1 = 50% | 1,2 = 75% | 1,3 = 87% | 2,2 = 25% | 2,3 = 50% | 3,3 = 12%
@@ -198,8 +198,6 @@ function make_tm(machine_bits, weak_rng) {
 		const rt_direction = rt_direction_bit * 2 - 1;
 		const wt_direction = wt_direction_bit * 2 - 1;
 
-		const rand_shift = shift;
-
 		machine_pos = (machine_pos + read_tape_bit * diff_accumulator) % machine_len;
 		diff_accumulator++;
 
@@ -207,7 +205,6 @@ function make_tm(machine_bits, weak_rng) {
 			new_write_tape_bit: wt_bit, // : {0 ,1}
 			read_tape_direction: rt_direction, // : {-1, 1}
 			write_tape_direction: wt_direction, // : {-1, 1}
-			rand_tape_shift: rand_shift, // : {-1, 1}
 		};
 	}
 	return step;
@@ -218,7 +215,6 @@ function make_tm_env(machine_bits, input_bits, weak_rng, write_tape_size_limit) 
 	const read_tape_len = bitarray_length(input_bits);
 	const read_tape = input_bits;
 	const write_tape = bitarray_alloc(0);
-	const rand_tape = init_simple_rng_ref(72727);
 	var read_tape_pos = 0;
 	var write_tape_pos = 0;
 	var write_tape_wrap_count = 0;
@@ -227,12 +223,7 @@ function make_tm_env(machine_bits, input_bits, weak_rng, write_tape_size_limit) 
 	function step() {
 		const read_tape_bit = bitarray_at_or0(read_tape, read_tape_pos);
 		const write_tape_bit = bitarray_at_or0(write_tape, write_tape_pos);
-		const ret = tm(read_tape_bit, write_tape_bit, rand_tape());
-
-		const rand_shift = ret.rand_shift;
-		for (var i = 0; i < rand_shift; i++) {
-			rand_tape();
-		}
+		const ret = tm(read_tape_bit, write_tape_bit);
 
 		if (write_tape_size_limit) {
 			if (write_tape_pos >= write_tape_size_limit) {  // ASSUMPTION: write_tape_pos changes by 1 on each step
