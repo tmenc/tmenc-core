@@ -218,6 +218,7 @@ function make_tm_env(machine_bits, input_bits, weak_rng, write_tape_size_limit) 
 	var read_tape_pos = 0;
 	var write_tape_pos = 0;
 	var write_tape_wrap_count = 0;
+	var read_tape_wrap_count = 0;
 	var read_tape_read_all = false;
 	function step() {
 		const read_tape_bit = bitarray_at_or0(read_tape, read_tape_pos);
