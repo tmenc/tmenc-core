@@ -405,15 +405,17 @@ function generate_example_key() {
 	var wr_tape_size = 100000;
 	var wrap_count = 2;
 
-	
+	var env_x = make_random_tm_env(input_size, machine_size, wr_tape_size);
+	var env = env_x.env;
+	tm_env_generate_output(env, wrap_count);
 
-	for (var i = 0; i < bitarray_length(write_tape); i++) {
-		console.log(bitarray_at(write_tape, i));
+	for (var i = 0; i < bitarray_length(env.write_tape); i++) {
+		console.log(bitarray_at(env.write_tape, i));
 	}
 }
 
 // test_tm();
 // test_tm2();
-test_tm_hashing();
-// generate_example_key();
+// test_tm_hashing();
+generate_example_key();
 
