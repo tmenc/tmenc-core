@@ -180,8 +180,6 @@ function test_rng_ref() {
 	// console.log(rng());
 }
 
-var MAX_MEM = 0;
-
 function make_tm(machine_bits, weak_rng, key_tape) {
 	var machine_len = bitarray_length(machine_bits);
 	var max_shift = 1 * 1 + 2 * 1 + 4 * 1 + 8 * 1;
@@ -229,10 +227,6 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 			diff_accumulator -= max_shift + 1;
 		} else {
 			diff_accumulator++;
-		}
-
-		if (Math.abs(diff_accumulator) > Math.abs(MAX_MEM)) {
-			MAX_MEM = diff_accumulator;
 		}
 
 		return {
@@ -419,7 +413,6 @@ function test_tm_hashing() {
 		var dd = ratio > 0.9 ? 1 : 0;
 		sum += dd;
 		console.log('ratio = ', ratio);
-		console.log('max mem: ', MAX_MEM);
 	}
 	console.log('score = ', sum / times);
 }
