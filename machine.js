@@ -330,23 +330,38 @@ function test_tm2() {
 	}
 }
 
-function test_tm_hashing() {
-	function finished(env, wc) {
-		return env.read_tape_read_all() && env.write_tape_wrap_count() > wc;
-	}
-	function dotest(singleflip, input_size, machine_size, wr_tape_size, wrap_count) {
-		var machine_bits = generate_n_weak_random_bits(200, machine_size);
-		var input_bits = generate_n_weak_random_bits(300, input_size);
-		var env = make_default_tm_env(machine_bits, input_bits, 777, wr_tape_size);
-		var step = env.step;
-		var write_tape = env.write_tape;
+function is_tm_finished(env, wc) {
+	return env.read_tape_read_all() && env.write_tape_wrap_count() > wc;
+}
 
-		while (!(finished(env, wrap_count))) {
+function tm_env_generate_output(env, wrap_count) {
+	var step = env.step;
+
+	while (!(is_tm_finished(env, wrap_count))) {
 		// for (var i = 0; i < 100000; i++) {
-			step();
-		}
+		step();
+	}
+}
 
-		var input_bits2 = bitarray_copy(input_bits);
+function make_random_tm_env(input_size, machine_size, wr_tape_size) {
+	var machine_bits = generate_n_weak_random_bits(200, machine_size);
+	var input_bits = generate_n_weak_random_bits(300, input_size);
+	var env = make_default_tm_env(machine_bits, input_bits, 777, wr_tape_size);
+
+	return {
+		machine_bits: machine_bits,
+		input_bits: input_bits,
+		env: env,
+	};
+}
+
+function test_tm_hashing() {
+	function dotest(singleflip, input_size, machine_size, wr_tape_size, wrap_count) {
+		var first = make_random_tm_env(input_size, machine_size, wr_tape_size);
+		var env1 = first.env;
+		tm_env_generate_output(env1, wrap_count);
+
+		var input_bits2 = bitarray_copy(first.input_bits);
 		if (singleflip) {
 			var len = bitarray_length(input_bits2);
 			var change_pos = len - 32;
@@ -357,14 +372,8 @@ function test_tm_hashing() {
 			}
 		}
 
-		var env2 = make_default_tm_env(machine_bits, input_bits2, 777, wr_tape_size);
-		var step2 = env2.step;
-		var write_tape2 = env2.write_tape;
-
-		while (!(finished(env2, wrap_count))) {
-		// for (var i = 0; i < 100000; i++) {
-			step2();
-		}
+		var env2 = make_default_tm_env(first.machine_bits, input_bits2, 777, wr_tape_size);
+		tm_env_generate_output(env2, wrap_count);
 
 		// for (var i = 0; i < bitarray_length(write_tape); i++) {
 		// 	console.log(bitarray_at(write_tape, i));
@@ -374,15 +383,15 @@ function test_tm_hashing() {
 		// console.log('input2: ', input_bits2);
 		// console.log('tape1: ', write_tape);
 		// console.log('tape2: ', write_tape2);
-		return vectors_same_bits_ratio(write_tape, write_tape2);
+		return vectors_same_bits_ratio(env1.write_tape, env2.write_tape);
 	}
 
 	var start = 1000009;
-	var times = 1;
+	var times = 100;
 	var sum = 0;
 	for (var i = 0; i < times; i++) {
 		console.log('wt size = ', start + i);
-		var ratio = dotest(true, 10000, 1000, start + i, 1);
+		var ratio = dotest(true, 100, 3, 512 + i, 1);
 		var dd = ratio > 0.9 ? 1 : 0;
 		sum += dd;
 		console.log('ratio = ', ratio);
@@ -396,19 +405,7 @@ function generate_example_key() {
 	var wr_tape_size = 100000;
 	var wrap_count = 2;
 
-	function finished(env, wc) {
-		return env.read_tape_read_all() && env.write_tape_wrap_count() > wc;
-	}
-
-	var machine_bits = generate_n_weak_random_bits(200, machine_size);
-	var input_bits = generate_n_weak_random_bits(300, input_size);
-	var env = make_default_tm_env(machine_bits, input_bits, 777, wr_tape_size);
-	var step = env.step;
-	var write_tape = env.write_tape;
-
-	while (!(finished(env, wrap_count))) {
-		step();
-	}
+	
 
 	for (var i = 0; i < bitarray_length(write_tape); i++) {
 		console.log(bitarray_at(write_tape, i));
