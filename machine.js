@@ -11,6 +11,14 @@ function bitarray_at_or0(bitarr, at) {
 	}
 }
 
+function bitarray_at_or_x(bitarr, at, x) {
+	if (at >= 0 && at < bitarr.length) {
+		return bitarr[at];
+	} else {
+		return x;
+	}
+}
+
 function bitarray_extend_with0(bitarr, newlen) {
 	for (var i = bitarray_length(bitarr); i < newlen; i++) {
 		bitarr.push(0);
@@ -122,6 +130,25 @@ function bitarray_xor_with(target, other) {
 	}
 }
 
+function double_bitarray_create() {
+	return {
+		left_part: bitarray_alloc(0),
+		right_part: bitarray_alloc(0),
+	};
+}
+
+function double_bitarray_at_or_x(dbitarr, at, x) {
+	var target = at < 0 ? dbitarr.left_part : dbitarr.right_part;
+	var abs_at = at < 0 ? -at : at;
+	return bitarray_at_or_x(target, abs_at, x);
+}
+
+function double_bitarray_set_bit_extend0(dbitarr, at, value) {
+	var target = at < 0 ? dbitarr.left_part : dbitarr.right_part;
+	var abs_at = at < 0 ? -at : at;
+	return bitarray_set_bit_extend0(target, abs_at, value);
+}
+
 // works on uint32_t
 function init_simple_rng_ref(seed) {
 	var x = seed;
@@ -155,7 +182,7 @@ function test_rng_ref() {
 
 function make_tm(machine_bits, weak_rng, key_tape) {
 	var machine_len = bitarray_length(machine_bits);
-	var max_shift = 1 * 1 + 2 * 1 + 4 * 1;
+	var max_shift = 1 * 1 + 2 * 1 + 4 * 1 + 8 * 1;
 	var machine_pos = 0;
 	var diff_accumulator = 1; // makes cycles less probable
 
@@ -188,15 +215,12 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 		}
 	}
 
-	function step (read_tape_bit, write_tape_bit) {
-		var shift = 1 * read_tape_bit + 2 * write_tape_bit + 4 * key_tape(); // a "chooser"
+	function step (read_tape_bit, write_tape_bit, memory_tape_bit) {
+		var shift = 1 * read_tape_bit + 2 * write_tape_bit + 4 * memory_tape_bit + 8 * key_tape(); // a "chooser"
 
 		var wt_bit = read_chosen_bit(shift);
-		var rt_direction_bit = read_n_collapse(1, 2, shift); // 1,1 = 50% | 1,2 = 75% | 1,3 = 87% | 2,2 = 25% | 2,3 = 50% | 3,3 = 12%
-		var wt_direction_bit = read_n_collapse(1, 2, shift); // 1,1 = 50% | 1,2 = 75% | 1,3 = 87% | 2,2 = 25% | 2,3 = 50% | 3,3 = 12%
-
-		var rt_direction = rt_direction_bit * 2 - 1;
-		var wt_direction = wt_direction_bit * 2 - 1;
+		var mem_bit = read_chosen_bit(shift);
+		var mem_direction_bit = read_chosen_bit(shift);
 
 		machine_pos = (machine_pos + shift * diff_accumulator) % machine_len;
 		if (diff_accumulator > max_shift && shift == 0) {
@@ -207,58 +231,58 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 
 		return {
 			new_write_tape_bit: wt_bit, // : {0 ,1}
-			read_tape_direction: rt_direction, // : {-1, 1}
-			write_tape_direction: wt_direction, // : {-1, 1}
+			new_memory_tape_bit: mem_bit, // : {0 ,1}
+			memory_tape_direction_bit: mem_direction_bit, // : {0, 1}
 		};
 	}
 	return step;
 }
 
+var MAX_MEM = 0;
+
 function make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_size_limit) {
 	var tm = make_tm(machine_bits, weak_rng, key_tape);
+
+	var memory_tape = double_bitarray_create();
 	var read_tape_len = bitarray_length(input_bits);
 	var read_tape = input_bits;
 	var write_tape = bitarray_alloc(0);
+	var memory_tape_pos = 0;
 	var read_tape_pos = 0;
 	var write_tape_pos = 0;
+
 	var write_tape_wrap_count = 0;
 	var read_tape_wrap_count = 0;
 	var read_tape_read_all = false;
 	function step() {
-		var read_tape_bit = bitarray_at_or0(read_tape, read_tape_pos);
-		var write_tape_bit = bitarray_at_or0(write_tape, write_tape_pos);
-		var ret = tm(read_tape_bit, write_tape_bit);
+		var read_tape_bit = bitarray_at(read_tape, read_tape_pos);
+		var write_tape_bit = bitarray_at_or_x(write_tape, write_tape_pos, weak_rng());
+		var memory_tape_bit = double_bitarray_at_or_x(memory_tape, memory_tape_pos, weak_rng());
+		var ret = tm(read_tape_bit, write_tape_bit, memory_tape_bit);
 
 		if (write_tape_size_limit) {
-			if (write_tape_pos >= write_tape_size_limit) {  // ASSUMPTION: write_tape_pos changes by 1 on each step
+			if (write_tape_pos >= write_tape_size_limit) {
 				write_tape_pos = 0;
 				if (read_tape_read_all) {
 					write_tape_wrap_count++;
 				}
-			} else if (write_tape_pos < 0) {
-				write_tape_pos = write_tape_size_limit - 1;
-				if (read_tape_read_all) {
-					write_tape_wrap_count--;
-				}
 			}
-		} else if (write_tape_pos < 0) {
-			write_tape_pos = 0; // TODO: make left-infinite also!
 		}
 
 		bitarray_set_bit_extend0(write_tape, write_tape_pos, ret.new_write_tape_bit);
-		read_tape_pos += ret.read_tape_direction;
-		write_tape_pos += ret.write_tape_direction;
+		double_bitarray_set_bit_extend0(memory_tape, memory_tape_pos, ret.new_memory_tape_bit);
+		read_tape_pos++;
+		write_tape_pos++;
+		memory_tape_pos += ret.memory_tape_direction_bit * 2 - 1;
+
+		if (Math.abs(memory_tape_pos) > Math.abs(MAX_MEM)) {
+			MAX_MEM = memory_tape_pos;
+		}
 
 		if (read_tape_pos >= read_tape_len) {
 			read_tape_pos = 0;
 			read_tape_wrap_count++;
 			if (read_tape_wrap_count == 1) {
-				read_tape_read_all = true;
-			}
-		} else if (read_tape_pos < 0) {
-			read_tape_pos = read_tape_len - 1;
-			read_tape_wrap_count--;
-			if (read_tape_wrap_count == -2) {
 				read_tape_read_all = true;
 			}
 		}
@@ -386,22 +410,23 @@ function test_tm_hashing() {
 		return vectors_same_bits_ratio(env1.write_tape, env2.write_tape);
 	}
 
-	var start = 1000009;
+	var start = 512;
 	var times = 100;
 	var sum = 0;
 	for (var i = 0; i < times; i++) {
 		console.log('wt size = ', start + i);
-		var ratio = dotest(true, 100, 3, 512 + i, 1);
+		var ratio = dotest(true, 1000000, 1000, start + i, 10);
 		var dd = ratio > 0.9 ? 1 : 0;
 		sum += dd;
 		console.log('ratio = ', ratio);
+		console.log('max mem: ', MAX_MEM);
 	}
 	console.log('score = ', sum / times);
 }
 
 function generate_example_key() {
 	var machine_size = 1000;
-	var input_size = 10000;
+	var input_size = 1000000;
 	var wr_tape_size = 100000;
 	var wrap_count = 2;
 
@@ -416,6 +441,6 @@ function generate_example_key() {
 
 // test_tm();
 // test_tm2();
-// test_tm_hashing();
-generate_example_key();
+test_tm_hashing();
+// generate_example_key();
 
