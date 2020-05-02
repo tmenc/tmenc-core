@@ -180,6 +180,8 @@ function test_rng_ref() {
 	// console.log(rng());
 }
 
+var MAX_MEM = 0;
+
 function make_tm(machine_bits, weak_rng, key_tape) {
 	var machine_len = bitarray_length(machine_bits);
 	var max_shift = 1 * 1 + 2 * 1 + 4 * 1 + 8 * 1;
@@ -223,10 +225,14 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 		var mem_direction_bit = read_chosen_bit(shift);
 
 		machine_pos = (machine_pos + shift * diff_accumulator) % machine_len;
-		if (diff_accumulator > max_shift && shift == 0) {
-			diff_accumulator -= max_shift;
+		if (diff_accumulator > (max_shift + 1) && shift == 0) {
+			diff_accumulator -= max_shift + 1;
 		} else {
 			diff_accumulator++;
+		}
+
+		if (Math.abs(diff_accumulator) > Math.abs(MAX_MEM)) {
+			MAX_MEM = diff_accumulator;
 		}
 
 		return {
@@ -237,8 +243,6 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 	}
 	return step;
 }
-
-var MAX_MEM = 0;
 
 function make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_size_limit) {
 	var tm = make_tm(machine_bits, weak_rng, key_tape);
@@ -274,10 +278,6 @@ function make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_si
 		read_tape_pos++;
 		write_tape_pos++;
 		memory_tape_pos += ret.memory_tape_direction_bit * 2 - 1;
-
-		if (Math.abs(memory_tape_pos) > Math.abs(MAX_MEM)) {
-			MAX_MEM = memory_tape_pos;
-		}
 
 		if (read_tape_pos >= read_tape_len) {
 			read_tape_pos = 0;
