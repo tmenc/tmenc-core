@@ -418,10 +418,10 @@ function test_tm_hashing() {
 }
 
 function generate_example_key() {
-	var machine_size = 1000;
-	var input_size = 1000000;
-	var wr_tape_size = 100000;
-	var wrap_count = 2;
+	var machine_size   =    100000;
+	var input_size     =    100000;
+	var wr_tape_size   =   1000000;
+	var wrap_count     =         3;
 
 	var env_x = make_random_tm_env(input_size, machine_size, wr_tape_size);
 	var env = env_x.env;
