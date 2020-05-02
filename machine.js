@@ -49,8 +49,8 @@ function bitarray_set_bit_extend0(bitarr, i, value) {
 }
 
 function bitarray_copy(x) {
-	const len = bitarray_length(x);
-	const ret = bitarray_alloc(len);
+	var len = bitarray_length(x);
+	var ret = bitarray_alloc(len);
 	for (var i = 0; i < len; i++) {
 		bitarray_set_bit(ret, i, bitarray_at(x, i));
 	}
@@ -58,13 +58,13 @@ function bitarray_copy(x) {
 }
 
 // function bitarray_swap(bitarr, x, y) {
-// 	const t = bitarr[x];
+// 	var t = bitarr[x];
 // 	bitarr[x] = bitarr[y];
 // 	bitarr[y] = t;
 // }
 
 function bitarray_swap0(bitarr, x, y) {
-	const t = bitarray_at_or0(bitarr, x);
+	var t = bitarray_at_or0(bitarr, x);
 	bitarray_set_bit_or_nop(bitarr, x, bitarray_at_or0(bitarr, y))
 	bitarray_set_bit_or_nop(bitarr, y, t);
 }
@@ -73,7 +73,7 @@ function bitarray_swap0(bitarr, x, y) {
 /// [0, 1, 0, 0, 1]
 
 function bitarray_shift_right(bitarr, dx) {
-	const len = bitarray_length(bitarr);
+	var len = bitarray_length(bitarr);
 	if (dx > 0) {
 		for (var i = len - 1; i >= 0; i--) {
 			bitarray_swap0(bitarr, i, i + dx);
@@ -92,7 +92,7 @@ function bitarray_shift_left(bitarr, dx) {
 
 // DOES NOT REPRESENT NUMBER IN BINARY!
 function number_to_bitarray(num, bits) {
-	const arr = bitarray_alloc(bits);
+	var arr = bitarray_alloc(bits);
 	var i = 0;
 	while (num > 1) {
 		if (i >= bits) {
@@ -112,12 +112,12 @@ function number_to_bitarray(num, bits) {
 }
 
 function bitarray_xor_with(target, other) {
-	const lent = bitarray_length(target);
-	const leno = bitarray_length(other);
-	const len = lent < leno ? lent : leno;
+	var lent = bitarray_length(target);
+	var leno = bitarray_length(other);
+	var len = lent < leno ? lent : leno;
 	for (var i = 0; i < len; i++) {
-		const x = bitarray_at(target, i);
-		const y = bitarray_at(other, i);
+		var x = bitarray_at(target, i);
+		var y = bitarray_at(other, i);
 		bitarray_set_bit(target, i, x ^ y);
 	}
 }
@@ -125,7 +125,7 @@ function bitarray_xor_with(target, other) {
 // works on uint32_t
 function init_simple_rng_ref(seed) {
 	var x = seed;
-	const mod = 4294967296; // 2 ^ 32
+	var mod = 4294967296; // 2 ^ 32
 	function to1bit (z) {
 		if (z > 2147483648) { return 1; }
 		else { return 0; }
@@ -137,8 +137,8 @@ function init_simple_rng_ref(seed) {
 }
 
 function generate_n_weak_random_bits(seed, n) {
-	const rng = init_simple_rng_ref(seed);
-	const ret = bitarray_alloc(n);
+	var rng = init_simple_rng_ref(seed);
+	var ret = bitarray_alloc(n);
 	for (var i = 0; i < n; i++) {
 		bitarray_set_bit(ret, i, rng())
 	}
@@ -146,7 +146,7 @@ function generate_n_weak_random_bits(seed, n) {
 }
 
 function test_rng_ref() {
-	const rng = init_simple_rng_ref(200);
+	var rng = init_simple_rng_ref(200);
 	for (var i = 0; i < 10; i++) {
 		console.log(rng());
 	}
@@ -154,14 +154,14 @@ function test_rng_ref() {
 }
 
 function make_tm(machine_bits, weak_rng, key_tape) {
-	const machine_len = bitarray_length(machine_bits);
-	const max_shift = 1 * 1 + 2 * 1 + 4 * 1;
+	var machine_len = bitarray_length(machine_bits);
+	var max_shift = 1 * 1 + 2 * 1 + 4 * 1;
 	var machine_pos = 0;
 	var diff_accumulator = 1; // makes cycles less probable
 
 	function read_bit_and_skip_range(shift, range) {
-		const bit_pos = (machine_pos + shift) % machine_len;
-		const bit = bitarray_at(machine_bits, bit_pos) ^ weak_rng();
+		var bit_pos = (machine_pos + shift) % machine_len;
+		var bit = bitarray_at(machine_bits, bit_pos) ^ weak_rng();
 		machine_pos += range + 1; // skip range bits
 		machine_pos = machine_pos % machine_len; // overflow protection
 		return bit;
@@ -189,14 +189,14 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 	}
 
 	function step (read_tape_bit, write_tape_bit) {
-		const shift = 1 * read_tape_bit + 2 * write_tape_bit + 4 * key_tape(); // a "chooser"
+		var shift = 1 * read_tape_bit + 2 * write_tape_bit + 4 * key_tape(); // a "chooser"
 
-		const wt_bit = read_chosen_bit(shift);
-		const rt_direction_bit = read_n_collapse(1, 2, shift); // 1,1 = 50% | 1,2 = 75% | 1,3 = 87% | 2,2 = 25% | 2,3 = 50% | 3,3 = 12%
-		const wt_direction_bit = read_n_collapse(1, 2, shift); // 1,1 = 50% | 1,2 = 75% | 1,3 = 87% | 2,2 = 25% | 2,3 = 50% | 3,3 = 12%
+		var wt_bit = read_chosen_bit(shift);
+		var rt_direction_bit = read_n_collapse(1, 2, shift); // 1,1 = 50% | 1,2 = 75% | 1,3 = 87% | 2,2 = 25% | 2,3 = 50% | 3,3 = 12%
+		var wt_direction_bit = read_n_collapse(1, 2, shift); // 1,1 = 50% | 1,2 = 75% | 1,3 = 87% | 2,2 = 25% | 2,3 = 50% | 3,3 = 12%
 
-		const rt_direction = rt_direction_bit * 2 - 1;
-		const wt_direction = wt_direction_bit * 2 - 1;
+		var rt_direction = rt_direction_bit * 2 - 1;
+		var wt_direction = wt_direction_bit * 2 - 1;
 
 		machine_pos = (machine_pos + shift * diff_accumulator) % machine_len;
 		if (diff_accumulator > max_shift && shift == 0) {
@@ -215,19 +215,19 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 }
 
 function make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_size_limit) {
-	const tm = make_tm(machine_bits, weak_rng, key_tape);
-	const read_tape_len = bitarray_length(input_bits);
-	const read_tape = input_bits;
-	const write_tape = bitarray_alloc(0);
+	var tm = make_tm(machine_bits, weak_rng, key_tape);
+	var read_tape_len = bitarray_length(input_bits);
+	var read_tape = input_bits;
+	var write_tape = bitarray_alloc(0);
 	var read_tape_pos = 0;
 	var write_tape_pos = 0;
 	var write_tape_wrap_count = 0;
 	var read_tape_wrap_count = 0;
 	var read_tape_read_all = false;
 	function step() {
-		const read_tape_bit = bitarray_at_or0(read_tape, read_tape_pos);
-		const write_tape_bit = bitarray_at_or0(write_tape, write_tape_pos);
-		const ret = tm(read_tape_bit, write_tape_bit);
+		var read_tape_bit = bitarray_at_or0(read_tape, read_tape_pos);
+		var write_tape_bit = bitarray_at_or0(write_tape, write_tape_pos);
+		var ret = tm(read_tape_bit, write_tape_bit);
 
 		if (write_tape_size_limit) {
 			if (write_tape_pos >= write_tape_size_limit) {  // ASSUMPTION: write_tape_pos changes by 1 on each step
@@ -279,14 +279,14 @@ function default_key_tape() {
 }
 
 function make_default_tm_env(machine_bits, input_bits, seed, write_tape_limit) {
-	const weak_rng = init_simple_rng_ref(seed);
-	const key_tape = default_key_tape();
+	var weak_rng = init_simple_rng_ref(seed);
+	var key_tape = default_key_tape();
 	return make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_limit);
 }
 
 function vectors_same_bits_ratio(v1, v2) {
-	const l1 = bitarray_length(v1);
-	const l2 = bitarray_length(v2);
+	var l1 = bitarray_length(v1);
+	var l2 = bitarray_length(v2);
 	if (l1 != l2) {
 		throw "vectors have to be of same size";
 	}
@@ -296,16 +296,16 @@ function vectors_same_bits_ratio(v1, v2) {
 		count += bitarray_at(v1, i) ^ bitarray_at(v2, i);
 	}
 
-	const ratio = (l1 - count) / l1;
+	var ratio = (l1 - count) / l1;
 	return ratio;
 }
 
 function test_tm() {
-	const machine_bits = [0];
-	const input_bits = generate_n_weak_random_bits(300, 1);
-	const env = make_default_tm_env(machine_bits, input_bits, 777);
-	const step = env.step;
-	const write_tape = env.write_tape;
+	var machine_bits = [0];
+	var input_bits = generate_n_weak_random_bits(300, 1);
+	var env = make_default_tm_env(machine_bits, input_bits, 777);
+	var step = env.step;
+	var write_tape = env.write_tape;
 
 	for (var i = 0; i < 100000; i++) {
 		if (i % 1000 == 0) {
@@ -316,11 +316,11 @@ function test_tm() {
 }
 
 function test_tm2() {
-	const machine_bits = generate_n_weak_random_bits(200, 1 * 1000 * 1000);
-	const input_bits = generate_n_weak_random_bits(300, 1 * 1000 * 1000);
-	const env = make_default_tm_env(machine_bits, input_bits, 777, 1000);
-	const step = env.step;
-	const write_tape = env.write_tape;
+	var machine_bits = generate_n_weak_random_bits(200, 1 * 1000 * 1000);
+	var input_bits = generate_n_weak_random_bits(300, 1 * 1000 * 1000);
+	var env = make_default_tm_env(machine_bits, input_bits, 777, 1000);
+	var step = env.step;
+	var write_tape = env.write_tape;
 
 	for (var i = 1; i <= 1000000; i++) {
 		if (i % 1000 == 0) {
@@ -335,21 +335,21 @@ function test_tm_hashing() {
 		return env.read_tape_read_all() && env.write_tape_wrap_count() > wc;
 	}
 	function dotest(singleflip, input_size, machine_size, wr_tape_size, wrap_count) {
-		const machine_bits = generate_n_weak_random_bits(200, machine_size);
-		const input_bits = generate_n_weak_random_bits(300, input_size);
-		const env = make_default_tm_env(machine_bits, input_bits, 777, wr_tape_size);
-		const step = env.step;
-		const write_tape = env.write_tape;
+		var machine_bits = generate_n_weak_random_bits(200, machine_size);
+		var input_bits = generate_n_weak_random_bits(300, input_size);
+		var env = make_default_tm_env(machine_bits, input_bits, 777, wr_tape_size);
+		var step = env.step;
+		var write_tape = env.write_tape;
 
 		while (!(finished(env, wrap_count))) {
 		// for (var i = 0; i < 100000; i++) {
 			step();
 		}
 
-		const input_bits2 = bitarray_copy(input_bits);
+		var input_bits2 = bitarray_copy(input_bits);
 		if (singleflip) {
-			const len = bitarray_length(input_bits2);
-			const change_pos = len - 32;
+			var len = bitarray_length(input_bits2);
+			var change_pos = len - 32;
 			bitarray_set_bit(input_bits2, change_pos, 1 ^ bitarray_at(input_bits2, change_pos));
 		} else {
 			for (var i = 0; i < bitarray_length(input_bits2); i++) {
@@ -357,9 +357,9 @@ function test_tm_hashing() {
 			}
 		}
 
-		const env2 = make_default_tm_env(machine_bits, input_bits2, 777, wr_tape_size);
-		const step2 = env2.step;
-		const write_tape2 = env2.write_tape;
+		var env2 = make_default_tm_env(machine_bits, input_bits2, 777, wr_tape_size);
+		var step2 = env2.step;
+		var write_tape2 = env2.write_tape;
 
 		while (!(finished(env2, wrap_count))) {
 		// for (var i = 0; i < 100000; i++) {
@@ -377,13 +377,13 @@ function test_tm_hashing() {
 		return vectors_same_bits_ratio(write_tape, write_tape2);
 	}
 
-	const start = 1000009;
-	const times = 1;
+	var start = 1000009;
+	var times = 1;
 	var sum = 0;
 	for (var i = 0; i < times; i++) {
 		console.log('wt size = ', start + i);
-		const ratio = dotest(true, 10000, 1000, start + i, 1);
-		const dd = ratio > 0.9 ? 1 : 0;
+		var ratio = dotest(true, 10000, 1000, start + i, 1);
+		var dd = ratio > 0.9 ? 1 : 0;
 		sum += dd;
 		console.log('ratio = ', ratio);
 	}
