@@ -390,7 +390,33 @@ function test_tm_hashing() {
 	console.log('score = ', sum / times);
 }
 
+function generate_example_key() {
+	var machine_size = 1000;
+	var input_size = 10000;
+	var wr_tape_size = 100000;
+	var wrap_count = 2;
+
+	function finished(env, wc) {
+		return env.read_tape_read_all() && env.write_tape_wrap_count() > wc;
+	}
+
+	var machine_bits = generate_n_weak_random_bits(200, machine_size);
+	var input_bits = generate_n_weak_random_bits(300, input_size);
+	var env = make_default_tm_env(machine_bits, input_bits, 777, wr_tape_size);
+	var step = env.step;
+	var write_tape = env.write_tape;
+
+	while (!(finished(env, wrap_count))) {
+		step();
+	}
+
+	for (var i = 0; i < bitarray_length(write_tape); i++) {
+		console.log(bitarray_at(write_tape, i));
+	}
+}
+
 // test_tm();
 // test_tm2();
-test_tm_hashing();
+// test_tm_hashing();
+generate_example_key();
 
