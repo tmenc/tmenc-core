@@ -366,9 +366,9 @@ function test_tm_hashing() {
 			step2();
 		}
 
-		for (var i = 0; i < bitarray_length(write_tape); i++) {
-			console.log(bitarray_at(write_tape, i));
-		}
+		// for (var i = 0; i < bitarray_length(write_tape); i++) {
+		// 	console.log(bitarray_at(write_tape, i));
+		// }
 
 		// console.log('input1: ', input_bits);
 		// console.log('input2: ', input_bits2);
@@ -417,6 +417,6 @@ function generate_example_key() {
 
 // test_tm();
 // test_tm2();
-// test_tm_hashing();
-generate_example_key();
+test_tm_hashing();
+// generate_example_key();
 
