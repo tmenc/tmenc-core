@@ -65,60 +65,6 @@ function bitarray_copy(x) {
 	return ret;
 }
 
-// function bitarray_swap(bitarr, x, y) {
-// 	var t = bitarr[x];
-// 	bitarr[x] = bitarr[y];
-// 	bitarr[y] = t;
-// }
-
-function bitarray_swap0(bitarr, x, y) {
-	var t = bitarray_at_or0(bitarr, x);
-	bitarray_set_bit_or_nop(bitarr, x, bitarray_at_or0(bitarr, y))
-	bitarray_set_bit_or_nop(bitarr, y, t);
-}
-
-/// [1, 0, 0, 1, 0] >> 1
-/// [0, 1, 0, 0, 1]
-
-function bitarray_shift_right(bitarr, dx) {
-	var len = bitarray_length(bitarr);
-	if (dx > 0) {
-		for (var i = len - 1; i >= 0; i--) {
-			bitarray_swap0(bitarr, i, i + dx);
-		}
-	} else {
-		for (var i = 0; i < len; i++) {
-			bitarray_swap0(bitarr, i, i + dx);
-		}
-	}
-	return bitarr;
-}
-
-function bitarray_shift_left(bitarr, dx) {
-	return bitarray_shift_right(bitarr, -dx);
-}
-
-// DOES NOT REPRESENT NUMBER IN BINARY!
-function number_to_bitarray(num, bits) {
-	var arr = bitarray_alloc(bits);
-	var i = 0;
-	while (num > 1) {
-		if (i >= bits) {
-			throw ("number is bigger than 2^" + bits);
-		}
-		bitarray_set_bit(arr, i, num % 2);
-		i++;
-		num = Math.floor(num / 2);
-	}
-
-	while (i < bits) {
-		bitarray_set_bit(arr, i, 1);
-		i++;
-	}
-
-	return arr;
-}
-
 function bitarray_xor_with(target, other) {
 	var lent = bitarray_length(target);
 	var leno = bitarray_length(other);
@@ -172,14 +118,6 @@ function generate_n_weak_random_bits(seed, n) {
 	return ret;
 }
 
-function test_rng_ref() {
-	var rng = init_simple_rng_ref(200);
-	for (var i = 0; i < 10; i++) {
-		console.log(rng());
-	}
-	// console.log(rng());
-}
-
 function make_tm(machine_bits, weak_rng, key_tape) {
 	var machine_len = bitarray_length(machine_bits);
 	var max_shift = 1 * 1 + 2 * 1 + 4 * 1 + 8 * 1;
@@ -194,25 +132,8 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 		return bit;
 	}
 
-	function read_1_bit() {
-		return read_bit_and_skip_range(0, 0);
-	}
-
 	function read_chosen_bit(shift) {
 		return read_bit_and_skip_range(shift, max_shift);
-	}
-
-	function read_n_collapse(ratio_a, sum, shift) {
-		var acc = 0;
-		for (var i = 0; i < sum; i++) {
-			acc += read_chosen_bit(shift);
-		}
-
-		if (acc >= ratio_a) {
-			return 1;
-		} else {
-			return 0;
-		}
 	}
 
 	function step (read_tape_bit, write_tape_bit, memory_tape_bit) {

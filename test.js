@@ -1,4 +1,12 @@
 
+function test_rng_ref() {
+	var rng = init_simple_rng_ref(200);
+	for (var i = 0; i < 10; i++) {
+		console.log(rng());
+	}
+	// console.log(rng());
+}
+
 function default_key_tape() {
 	return init_simple_rng_ref(72731);
 	// return function () {
