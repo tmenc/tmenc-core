@@ -145,14 +145,23 @@ function generate_example_key() {
 	var env = env_x.env;
 	tm_env_generate_output(env, wrap_count);
 
-	for (var i = 0; i < bitarray_length(env.write_tape); i++) {
+	var n = bitarray_length(env.write_tape);
+	for (var i = 0; i < n; i++) {
 		console.log(bitarray_at(env.write_tape, i));
+	}
+}
+
+function generate_weak_rng_test() {
+	var rng = init_simple_rng_ref(777);
+	var n = 5 * 1000 * 1000;
+	for (var i = 0; i < n; i++) {
+		console.log(rng());
 	}
 }
 
 // test_tm();
 // test_tm2();
-test_tm_hashing();
+// test_tm_hashing();
 // generate_example_key();
-
+generate_weak_rng_test();
 
