@@ -23,3 +23,5 @@ build/cli.js: machine.js cli.js util.js
 clean:
 	rm -rf build
 
+.PHONY: all test cli clean
+
