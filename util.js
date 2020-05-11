@@ -12,6 +12,22 @@ function stream_to_vector(pop) {
 	}
 }
 
+function append_streams(pop1, pop2) {
+	var first = true;
+	var cur = pop1;
+	return function () {
+		var x = cur();
+		if (x === END_OF_STREAM_TOKEN) {
+			if (first) {
+				first = false;
+				cur = pop2;
+				x = cur();
+			}
+		}
+		return x;
+	}
+}
+
 // LITTLE ENDIAN?
 function integer_to_binary_stream(n, size) {
 	var i = -1;
