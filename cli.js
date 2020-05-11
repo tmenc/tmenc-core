@@ -8,12 +8,20 @@ var rl = readline.createInterface({
 
 var END_OF_STREAM_TOKEN = "end-of-stream-lol";
 
-function integer_to_binary_stream(push, n) {
+// LITTLE ENDIAN?
+function integer_to_binary_stream(push, n, size) {
+	var i = 0;
 	while (n > 0)
 	{
+		i = i + 1;
 		var x = n % 2;
 		push(x);
 		n = Math.floor(n / 2);
+	}
+
+	while (i < size) {
+		i = i + 1;
+		push(0);
 	}
 }
 
@@ -21,7 +29,7 @@ function ppp(x) {
 	console.log(x)
 }
 
-console.log(integer_to_binary_stream(ppp, 10));
+console.log(integer_to_binary_stream(ppp, kek, 8));
 exit(1);
 
 function integer_stream_to_binary_stream(push, pop) {
@@ -33,7 +41,7 @@ function integer_stream_to_binary_stream(push, pop) {
 		if (n === END_OF_STREAM_TOKEN) {
 			return;
 		}
-		integer_to_binary_stream(push, n);
+		integer_to_binary_stream(push, n, 8);
 	}
 }
 
