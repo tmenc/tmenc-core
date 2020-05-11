@@ -29,9 +29,6 @@ function ppp(x) {
 	console.log(x)
 }
 
-console.log(integer_to_binary_stream(ppp, 10, 8));
-exit(1);
-
 function integer_stream_to_binary_stream(push, pop) {
 	var i = 0;
 
