@@ -75,7 +75,6 @@ function ascii_to_numbers(ascii) {
 
 function ascii_to_binary_s(ascii) {
 	var pop = ascii_to_numbers(ascii);
-	console.log('pop: ', pop);
 	return integer_stream_to_binary_stream(pop);
 }
 
