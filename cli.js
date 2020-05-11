@@ -13,13 +13,16 @@ function integer_to_binary_stream(push, n) {
 	{
 		var x = n % 2;
 		push(x);
-		n = n / 2;
+		n = Math.floor(n / 2);
 	}
 }
 
 function integer_stream_to_binary_stream(push, pop) {
+	var i = 0;
+
 	while (true) {
 		var n = pop();
+
 		if (n === END_OF_STREAM_TOKEN) {
 			return;
 		}
@@ -42,8 +45,9 @@ function ascii_to_numbers(ascii) {
 function ascii_to_binary(ascii) {
 	var vec = ascii_to_numbers(ascii);
 
-	var i = 0;
+	var i = -1;
 	function pop() {
+		i = i + 1;
 		if (i == vec.length) {
 			return END_OF_STREAM_TOKEN;
 		}
