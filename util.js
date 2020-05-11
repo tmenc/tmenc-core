@@ -98,7 +98,7 @@ function ascii_to_binary(ascii) {
 	return stream_to_vector(ascii_to_binary_s(ascii));
 }
 
-function generate_new_randomized_input_vector(pass_stream, file_stream) {
+function generate_new_randomized_input_stream(pass_stream, file_stream) {
 	var seedr = Math.floor(Math.random() * Math.pow(2, 32));
 
 	// TODO: Make not related to seedr
@@ -107,8 +107,7 @@ function generate_new_randomized_input_vector(pass_stream, file_stream) {
 	var rs = integer_to_binary_stream(r, 32);
 	var seedrs = integer_to_binary_stream(seedr, 32);
 
-	var s = append_streams(seedrs, append_streams(rs, append_streams(pass_stream, file_stream)));
-	return stream_to_vector(s);
+	return append_streams(seedrs, append_streams(rs, append_streams(pass_stream, file_stream)));
 }
 
 module.exports = {
