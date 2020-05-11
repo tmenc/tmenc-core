@@ -8,24 +8,12 @@ var rl = readline.createInterface({
 
 var END_OF_STREAM_TOKEN = "end-of-stream-lol";
 
-// may be used instead of Math.floor()
-function simple_floor(x) {
-	var I = 0;
-
-	while (I <= x) {
-		I = I + 1;
-	}
-
-	return I - 1;
-}
-
 function integer_to_binary_stream(push, n) {
 	while (n > 0)
 	{
 		var x = n % 2;
 		push(x);
 		n = Math.floor(n / 2);
-		// n = simple_floor(n / 2);
 	}
 }
 
