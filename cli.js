@@ -15,7 +15,6 @@ function integer_to_binary_stream(push, n) {
 		push(x);
 		n = n / 2;
 	}
-	return s;
 }
 
 function integer_stream_to_binary_stream(push, pop) {
@@ -24,7 +23,7 @@ function integer_stream_to_binary_stream(push, pop) {
 		if (n === END_OF_STREAM_TOKEN) {
 			return;
 		}
-		integer_stream_to_binary_stream(push, n);
+		integer_to_binary_stream(push, n);
 	}
 }
 
