@@ -25,10 +25,6 @@ function integer_to_binary_stream(push, n, size) {
 	}
 }
 
-function ppp(x) {
-	console.log(x)
-}
-
 function integer_stream_to_binary_stream(push, pop) {
 	var i = 0;
 
