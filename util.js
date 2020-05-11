@@ -10,6 +10,8 @@ function stream_to_vector(pop) {
 		}
 		vec.push(x);
 	}
+
+	return vec;
 }
 
 // LITTLE ENDIAN?
@@ -39,9 +41,13 @@ function integer_stream_to_binary_stream(pop) {
 	var finished = true;
 	var r = undefined;
 
+	console.log('im here kek');
+
 	function ret() {
 		if (finished) {
+			console.log('im here 2');
 			var n = pop();
+			console.log('im here 3');
 			if (n === END_OF_STREAM_TOKEN) {
 				return END_OF_STREAM_TOKEN;
 			}
@@ -72,8 +78,15 @@ function ascii_to_numbers(ascii) {
 		}
 	}
 
+	console.log('im here haha');
+
 	return pop;
 }
+
+console.log('what is this');
+var pp = ascii_to_binary_s("haha");
+console.log('pp = ', pp);
+exit(1);
 
 function ascii_to_binary_s(ascii) {
 	var pop = ascii_to_numbers(ascii);
