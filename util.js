@@ -10,8 +10,6 @@ function stream_to_vector(pop) {
 		}
 		vec.push(x);
 	}
-
-	return vec;
 }
 
 // LITTLE ENDIAN?
