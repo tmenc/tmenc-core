@@ -32,28 +32,21 @@ function integer_stream_to_binary_stream(push, pop) {
 }
 
 function ascii_to_numbers(ascii) {
-	var vec = [];
-
-	for (var i = 0; i < ascii.length; i++) {
-		var integ = ascii.charCodeAt(i);
-		console.log(`ascii[${i}] = ${integ}`);
-		vec.push(integ);
-	}
-
-	return vec;
-}
-
-function ascii_to_binary(ascii) {
-	var vec = ascii_to_numbers(ascii);
-
 	var i = -1;
 	function pop() {
 		i = i + 1;
-		if (i == vec.length) {
+		if (i < ascii.length) {
+			return ascii.charCodeAt(i);
+		} else {
 			return END_OF_STREAM_TOKEN;
 		}
-		return vec[i];
 	}
+
+	return pop;
+}
+
+function ascii_to_binary(ascii) {
+	var pop = ascii_to_numbers(ascii);
 
 	var ret = [];
 	function push(x) {
