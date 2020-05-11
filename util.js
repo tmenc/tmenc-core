@@ -37,7 +37,7 @@ function integer_stream_to_binary_stream(pop) {
 
 		var x = r();
 		if (x === END_OF_STREAM_TOKEN) {
-			finished = false;
+			finished = true;
 			return ret();
 		} else {
 			return x;
