@@ -1,8 +1,11 @@
 
-node: all
+all: builds
+
+test: all
 	node build/test.js
 
-all: builds
+cli: all
+	printf 'haha\nhere\nlol' | node build/cli.js
 
 builds: | build builds2
 
