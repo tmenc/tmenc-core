@@ -98,6 +98,11 @@ function ascii_to_binary(ascii) {
 	return stream_to_vector(ascii_to_binary_s(ascii));
 }
 
+function generate_new_randomized_input_vector(pass_stream, file_stream) {
+	var r = Math.floor(Math.random() * Math.pow(2, 32));
+	var rs = integer_to_binary_stream(r, 32);
+}
+
 module.exports = {
 	ascii_to_binary: ascii_to_binary
 };
