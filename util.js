@@ -1,6 +1,17 @@
 
 var END_OF_STREAM_TOKEN = "end-of-stream-lol";
 
+function stream_to_vector(pop) {
+	var vec = [];
+	while (true) {
+		var x = pop();
+		if (x === END_OF_STREAM_TOKEN) {
+			return vec;
+		}
+		vec.push(x);
+	}
+}
+
 // LITTLE ENDIAN?
 function integer_to_binary_stream(n, size) {
 	var i = -1;
@@ -62,17 +73,13 @@ function ascii_to_numbers(ascii) {
 	return pop;
 }
 
-function ascii_to_binary(ascii) {
+function ascii_to_binary_s(ascii) {
 	var pop = ascii_to_numbers(ascii);
+	return integer_stream_to_binary_stream(pop);
+}
 
-	var ret = [];
-	function push(x) {
-		ret.push(x);
-	}
-
-	integer_stream_to_binary_stream(push, pop);
-
-	return ret;
+function ascii_to_binary(ascii) {
+	return stream_to_vector(ascii_to_binary_s(ascii));
 }
 
 module.exports = {
