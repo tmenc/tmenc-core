@@ -33,6 +33,7 @@ function integer_stream_to_binary_stream(pop) {
 				return END_OF_STREAM_TOKEN;
 			}
 			r = integer_to_binary_stream(n, 8);
+			finished = false;
 		}
 
 		var x = r();
