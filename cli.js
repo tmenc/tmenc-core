@@ -24,8 +24,8 @@ function integer_to_binary_stream(push, n) {
 	{
 		var x = n % 2;
 		push(x);
-		// n = Math.floor(n / 2);
-		n = simple_floor(n / 2);
+		n = Math.floor(n / 2);
+		// n = simple_floor(n / 2);
 	}
 }
 
