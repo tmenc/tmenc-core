@@ -109,8 +109,3 @@ function generate_new_randomized_input_stream(pass_stream, file_stream) {
 
 	return append_streams(seedrs, append_streams(rs, append_streams(pass_stream, file_stream)));
 }
-
-module.exports = {
-	ascii_to_binary: ascii_to_binary,
-	generate_new_randomized_input_vector: generate_new_randomized_input_vector,
-};

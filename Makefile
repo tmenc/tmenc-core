@@ -1,8 +1,12 @@
 
-node: builds
+node: all
 	node build/test.js
 
-builds: | build build/test.js
+all: builds
+
+builds: | build builds2
+
+builds2: build/test.js
 
 build:
 	mkdir -p $@
