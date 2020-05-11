@@ -16,6 +16,8 @@ function stream_to_vector(pop) {
 function integer_to_binary_stream(n, size) {
 	var i = -1;
 
+	console.log('im here');
+
 	function pop() {
 		i = i + 1;
 		if (n > 0)
