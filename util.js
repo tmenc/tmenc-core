@@ -2,33 +2,49 @@
 var END_OF_STREAM_TOKEN = "end-of-stream-lol";
 
 // LITTLE ENDIAN?
-function integer_to_binary_stream(push, n, size) {
-	var i = 0;
-	while (n > 0)
-	{
+function integer_to_binary_stream(n, size) {
+	var i = -1;
+
+	function pop() {
 		i = i + 1;
-		var x = n % 2;
-		push(x);
-		n = Math.floor(n / 2);
+		if (n > 0)
+		{
+			var x = n % 2;
+			n = Math.floor(n / 2);
+			return x;
+		}
+		if (i < size) {
+			return 0;
+		}
+		return END_OF_STREAM_TOKEN;
 	}
 
-	while (i < size) {
-		i = i + 1;
-		push(0);
-	}
+	return pop;
 }
 
-function integer_stream_to_binary_stream(push, pop) {
-	var i = 0;
+function integer_stream_to_binary_stream(pop) {
+	var finished = true;
+	var r = undefined;
 
-	while (true) {
-		var n = pop();
-
-		if (n === END_OF_STREAM_TOKEN) {
-			return;
+	function ret() {
+		if (finished) {
+			var n = pop();
+			if (n === END_OF_STREAM_TOKEN) {
+				return END_OF_STREAM_TOKEN;
+			}
+			r = integer_to_binary_stream(n, 8);
 		}
-		integer_to_binary_stream(push, n, 8);
+
+		var x = r();
+		if (x === END_OF_STREAM_TOKEN) {
+			finished = false;
+			return ret();
+		} else {
+			return x;
+		}
 	}
+
+	ret;
 }
 
 function ascii_to_numbers(ascii) {
