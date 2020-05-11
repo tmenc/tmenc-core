@@ -33,7 +33,7 @@ function integer_to_binary_stream(n, size) {
 	return pop;
 }
 
-function integer_stream_to_binary_stream(pop) {
+function byte_stream_to_binary_stream(pop) {
 	var finished = true;
 	var r = undefined;
 
@@ -75,7 +75,7 @@ function ascii_to_numbers(ascii) {
 
 function ascii_to_binary_s(ascii) {
 	var pop = ascii_to_numbers(ascii);
-	return integer_stream_to_binary_stream(pop);
+	return byte_stream_to_binary_stream(pop);
 }
 
 function ascii_to_binary(ascii) {
