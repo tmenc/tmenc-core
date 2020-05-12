@@ -136,26 +136,47 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 		return read_bit_and_skip_range(shift, max_shift);
 	}
 
-	function step (read_tape_bit, memory_tape_bit) {
-		var shift = 1 * read_tape_bit + 2 * memory_tape_bit + 4 * key_tape(); // a "chooser"
+	function machine_advance(by) {
+		machine_pos = (machine_pos + by) % machine_len;
+	}
 
-		var wt_bit = read_chosen_bit(shift);
-		var wt_skip = read_chosen_bit(shift);
-		var mem_bit = read_chosen_bit(shift);
-		var mem_direction_bit = read_chosen_bit(shift);
+	function machine_read() {
+		return bitarray_at(machine_bits, machine_pos);
+	}
 
-		machine_pos = (machine_pos + shift * diff_accumulator) % machine_len;
-		if (diff_accumulator > (max_shift + 1) && shift == 0) {
-			diff_accumulator -= max_shift + 1;
-		} else {
-			diff_accumulator++;
-		}
+	function machine_flip_current_bit() {
+		var new_bit = 1 ^ machine_read();
+		return bitarray_set_bit(machine_bits, machine_pos, new_bit);
+	}
+
+	function machine_flip_and_read() {
+		machine_flip_current_bit();
+		return machine_read();
+	}
+
+	function step (read_tape_bit, memory_tape_register) {
+		// var shift = 1 * read_tape_bit + 2 * memory_tape_bit + 4 * key_tape(); // a "chooser"
+
+		var jump_size = (1 + read_tape_bit) * memory_tape_register;
+
+		var wt_skip = machine_flip_and_read();
+		machine_advance(wt_skip * jump_size);
+
+		var wt_bit = machine_flip_and_read();
+		machine_advance(jump_size);
+
+		var increment_bit = machine_flip_and_read();
+		machine_advance(jump_size);
+		var direction_bit = machine_flip_and_read();
+		machine_advance(jump_size);
+
+		// TODOD: read read_tape_bit and jump
 
 		return {
-			new_write_tape_bit: wt_bit, // : {0 ,1}
-			skip_write: wt_skip, // : {0 ,1}
-			new_memory_tape_bit: mem_bit, // : {0 ,1}
-			memory_tape_direction_bit: mem_direction_bit, // : {0, 1}
+			wt_bit: wt_bit,
+			wt_skip: wt_skip,
+			increment_bit: increment_bit,
+			direction_bit: direction_bit,
 		};
 	}
 	return step;
