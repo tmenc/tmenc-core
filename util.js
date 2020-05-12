@@ -69,7 +69,7 @@ function byte_stream_to_binary_stream(pop) {
 				return END_OF_STREAM_TOKEN;
 			}
 			conv(n);
-			return ret();
+			return conv();
 		} else {
 			return x;
 		}
