@@ -5,7 +5,7 @@ test: all
 	node build/test.js
 
 cli: all
-	printf 'haha\nhere\nlol' | node build/cli.js
+	printf 'haha\nMakefile\nlol' | node build/cli.js
 
 builds: | build builds2
 

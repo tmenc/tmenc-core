@@ -109,3 +109,18 @@ function generate_new_randomized_input_stream(pass_stream, file_stream) {
 
 	return append_streams(seedrs, append_streams(rs, append_streams(pass_stream, file_stream)));
 }
+
+function buffer_to_byte_stream(js_Buffer) {
+	var i = -1;
+
+	function pop() {
+		i = i + 1;
+		if (i < js_Buffer.length) {
+			return js_Buffer[i];
+		} else {
+			return END_OF_STREAM_TOKEN;
+		}
+	}
+
+	return pop;
+}
