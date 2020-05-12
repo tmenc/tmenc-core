@@ -21,20 +21,20 @@ $(NIST_TEST_DATA_FILE): tests
 	node build/test.js > $(NIST_TEST_DATA_FILE)
 
 test-nist-small: tests $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
-	cd test/nist-sts && scripts/run-on-file.sh $(NIST_TEST_DATA_FILE)
+	cd $(NIST_DIR) && scripts/run-on-file.sh $(NIST_TEST_DATA_FILE)
 
 test-nist-big: tests $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
-	cd test/nist-sts && STREAM_LEN=1000000 scripts/run-on-file.sh $(NIST_TEST_DATA_FILE)
+	cd $(NIST_DIR) && STREAM_LEN=1000000 scripts/run-on-file.sh $(NIST_TEST_DATA_FILE)
+
+test-hash: tests $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
+	node build/test/test-hash.js
 
 build/test: build
 	mkdir $@
 
-# TODO
-test-hash:
-
 $(NIST_EXECUTABLE):
 	git submodule update --init
-	cd nist-sts && $(MAKE)
+	cd $(NIST_DIR) && $(MAKE)
 
 cli: all
 	printf 'haha\nMakefile\nlol' | node build/cli.js
