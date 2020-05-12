@@ -73,16 +73,9 @@ function is_tm_finished(env, wc) {
 function tm_env_generate_output(env, wrap_count) {
 	var step = env.step;
 
-	var i = 0;
 	while (!(is_tm_finished(env, wrap_count))) {
 		// for (var i = 0; i < 100000; i++) {
 		step();
-
-		i = i + 1;
-		if (i % 10000 == 0) {
-			console.log("read =", env.read_tape_read_all());
-			console.log("wrap =", env.write_tape_wrap_count());
-		}
 	}
 }
 
@@ -100,14 +93,9 @@ function make_random_tm_env(input_size, machine_size, wr_tape_size) {
 
 function test_tm_hashing() {
 	function dotest(singleflip, input_size, machine_size, wr_tape_size, wrap_count) {
-
-		console.log("HERE 1");
-
 		var first = make_random_tm_env(input_size, machine_size, wr_tape_size);
 		var env1 = first.env;
 		tm_env_generate_output(env1, wrap_count);
-
-		console.log("HERE 2");
 
 		var input_bits2 = bitarray_copy(first.input_bits);
 		if (singleflip) {
@@ -139,7 +127,7 @@ function test_tm_hashing() {
 	var sum = 0;
 	for (var i = 0; i < times; i++) {
 		console.log('wt size = ', start + i);
-		var ratio = dotest(true, 1000, 1000, start + i, 10);
+		var ratio = dotest(true, 100000, 1000, start + i, 10);
 		var dd = ratio > 0.9 ? 1 : 0;
 		sum += dd;
 		console.log('ratio = ', ratio);
