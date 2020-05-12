@@ -52,7 +52,7 @@ build/cli.js: machine.js cli.js util.js
 
 clean:
 	rm -rf build
-	cd nist-sts ; $(MAKE) clean ; true
+	cd $(NIST_DIR) && $(MAKE) clean ; true
 
 .PHONY: all test cli clean nist-executable test-all
 
