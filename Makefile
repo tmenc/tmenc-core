@@ -1,8 +1,22 @@
 
+NIST_TEST_DATA_FILE = $(PWD)/test-data~
+
 all: builds
 
-test: all
-	node build/test.js
+test-all: test-nist test-hash
+
+test-nist: all nist-executable
+	# node build/test.js > $(NIST_TEST_DATA_FILE)
+	cd nist-sts && scripts/run-on-file.sh $(NIST_TEST_DATA_FILE)
+
+# TODO
+test-hash:
+
+nist-executable: nist-sts/assess
+
+nist-sts/assess:
+	git submodule update --init
+	cd nist-sts && $(MAKE)
 
 cli: all
 	printf 'haha\nMakefile\nlol' | node build/cli.js
@@ -22,6 +36,7 @@ build/cli.js: machine.js cli.js util.js
 
 clean:
 	rm -rf build
+	cd nist-sts ; $(MAKE) clean ; true
 
-.PHONY: all test cli clean
+.PHONY: all test cli clean nist-executable test-all
 

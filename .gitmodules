@@ -1,0 +1,3 @@
+[submodule "nist-sts"]
+	path = nist-sts
+	url = https://github.com/a/nist-sts.git
