@@ -32,7 +32,7 @@ function append_streams(pop1, pop2) {
 
 // LITTLE ENDIAN?
 function integer_to_binary_stream(size) {
-	var i = -1;
+	var i = size;
 	var n = -1;
 
 	function pop(new_n) {
@@ -59,22 +59,16 @@ function integer_to_binary_stream(size) {
 }
 
 function byte_stream_to_binary_stream(pop) {
-	var finished = true;
 	var conv = integer_to_binary_stream(8);
 
 	function ret() {
-		if (finished) {
+		var x = conv();
+		if (x === END_OF_STREAM_TOKEN) {
 			var n = pop();
 			if (n === END_OF_STREAM_TOKEN) {
 				return END_OF_STREAM_TOKEN;
 			}
 			conv(n);
-			finished = false;
-		}
-
-		var x = conv();
-		if (x === END_OF_STREAM_TOKEN) {
-			finished = true;
 			return ret();
 		} else {
 			return x;
