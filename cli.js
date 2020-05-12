@@ -21,9 +21,10 @@ rl.question('pass: ', (pass) => {
 			var pass_stream = ascii_to_binary_stream(pass);
 			var salt_stream = ascii_to_binary_stream(salt); // usually get from prev version
 
-			// var combined = append_streams([salt_stream, pass_stream, file_stream]);
+			var combined = append_streams([salt_stream, pass_stream, file_stream]);
 
-			debug_vec(stream_to_vector(file_stream));
+			// debug_vec(stream_to_vector(file_stream));
+			debug_vec(stream_to_vector(combined));
 
 			rl.close();
 		});
