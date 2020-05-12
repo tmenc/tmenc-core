@@ -133,6 +133,10 @@ function test_tm_hashing() {
 		console.log('ratio = ', ratio);
 	}
 	console.log('score = ', sum / times);
+
+	if (score !== 0) {
+		throw "TEST FAILED";
+	}
 }
 
 function generate_example_key() {
