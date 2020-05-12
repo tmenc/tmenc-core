@@ -6,7 +6,7 @@ NIST_EXECUTABLE = $(NIST_DIR)/assess
 TEST_FILES = $(shell ls -d -1 test/*.js)
 TEST_SRCS = $(addprefix build/,$(TEST_FILES))
 
-all: builds tests
+all: builds
 builds: | build builds-srcs
 tests: | tests-builds-srcs
 
