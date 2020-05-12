@@ -8,13 +8,13 @@ TEST_SRCS = $(addprefix build/,$(TEST_FILES))
 
 all: builds tests
 builds: | build builds-srcs
-tests: | build/test tests-builds-srcs
+tests: | tests-builds-srcs
 
 test-all: test-nist-big test-nist-small test-hash
 
 tests-builds-srcs: $(TEST_SRCS)
 
-$(TEST_SRCS):
+$(TEST_SRCS): build/test
 	cat test/test-util.js $($@:build/%s=%) > $@
 
 $(NIST_TEST_DATA_FILE): build/test/test-nist.js
@@ -26,7 +26,7 @@ test-nist-small: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 test-nist-big: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 	cd $(NIST_DIR) && STREAM_LEN=1000000 scripts/run-on-file.sh $(NIST_TEST_DATA_FILE)
 
-test-hash: build/test/test-hash.js
+test-hash: build/test build/test/test-hash.js
 	node build/test/test-hash.js
 
 build/test: build
