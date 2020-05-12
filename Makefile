@@ -54,5 +54,5 @@ clean:
 	rm -rf build
 	cd $(NIST_DIR) && $(MAKE) clean ; true
 
-.PHONY: all test cli clean nist-executable test-all
+.PHONY: all test cli clean nist-executable test-all test-builds-srcs
 
