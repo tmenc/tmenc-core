@@ -109,6 +109,46 @@ function ascii_to_numbers(ascii) {
 	return pop;
 }
 
+function hex_to_numbers(ascii) {
+	var i = -1;
+
+	var hex_table = {
+		'0': 0,
+		'1': 1,
+		'2': 2,
+		'3': 3,
+		'4': 4,
+		'5': 5,
+		'6': 6,
+		'7': 7,
+		'8': 8,
+		'9': 9,
+		'a': 10,
+		'A': 10,
+		'b': 11,
+		'B': 11,
+		'c': 12,
+		'C': 12,
+		'd': 13,
+		'D': 13,
+		'e': 14,
+		'E': 14,
+		'f': 15,
+		'F': 15,
+	};
+
+	function pop() {
+		i = i + 1;
+		if (i < ascii.length) {
+			return hex_table[ascii[i]];
+		} else {
+			return END_OF_STREAM_TOKEN;
+		}
+	}
+
+	return pop;
+}
+
 function ascii_to_binary_stream(ascii) {
 	var pop = ascii_to_numbers(ascii);
 	return byte_stream_to_binary_stream(pop);
