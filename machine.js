@@ -180,9 +180,10 @@ function make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_si
 		var memory_tape_bit = double_bitarray_at_or_x(memory_tape, memory_tape_pos, weak_rng());
 		var ret = tm(read_tape_bit, memory_tape_bit);
 
+		read_tape_pos++;
+
 		double_bitarray_set_bit_extend0(memory_tape, memory_tape_pos, ret.new_memory_tape_bit);
 		memory_tape_pos += ret.memory_tape_direction_bit * 2 - 1;
-		read_tape_pos++;
 
 		if (ret.skip_write == 0) {
 			bitarray_set_bit_extend0(write_tape, write_tape_pos, ret.new_write_tape_bit);
