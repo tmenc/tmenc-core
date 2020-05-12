@@ -14,7 +14,7 @@ test-all: test-nist-big test-nist-small test-hash
 
 tests-builds-srcs: $(TEST_SRCS)
 
-$(TEST_SRCS): build/test
+$(TEST_SRCS): build/test machine.js $(@:build/%=%)
 	cat machine.js test/test-util.js $(@:build/%=%) > $@
 
 $(NIST_TEST_DATA_FILE): build/test/test-nist.js
