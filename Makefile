@@ -1,5 +1,7 @@
 
-NIST_TEST_DATA_FILE = $(PWD)/build/test/test-data~
+HERE = $(PWD)
+
+NIST_TEST_DATA_FILE = $(HERE)/build/test/test-data~
 NIST_DIR = test/nist-sts
 NIST_EXECUTABLE = $(NIST_DIR)/assess
 
@@ -21,16 +23,22 @@ $(NIST_TEST_DATA_FILE): build/test/test-nist.js
 	node build/test/test-nist.js > $(NIST_TEST_DATA_FILE)
 
 test-nist-small: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
-	cd $(NIST_DIR) && scripts/run-on-file.sh $(NIST_TEST_DATA_FILE)
+	cd $(NIST_DIR) && \
+		scripts/run-on-file.sh $(NIST_TEST_DATA_FILE) 2>&1 | \
+		tee "$(HERE)/build/$@-result"
+	test/check-nist-result.sh "10" "$(HERE)/build/$@-result"
 
 test-nist-big: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
-	cd $(NIST_DIR) && STREAM_LEN=1000000 scripts/run-on-file.sh $(NIST_TEST_DATA_FILE)
+	cd $(NIST_DIR) && \
+		STREAM_LEN=1000000 scripts/run-on-file.sh $(NIST_TEST_DATA_FILE) 2>&1 | \
+		tee "$(HERE)/build/$@-result"
+	test/check-nist-result.sh "0" "$(HERE)/build/$@-result"
 
 test-hash: build/test build/test/test-hash.js
 	node build/test/test-hash.js
 
 build/test: build
-	mkdir $@
+	-mkdir $@
 
 $(NIST_EXECUTABLE):
 	git submodule update --init
@@ -54,5 +62,5 @@ clean:
 	rm -rf build
 	cd $(NIST_DIR) && $(MAKE) clean ; true
 
-.PHONY: all test cli clean nist-executable test-all test-builds-srcs
+.PHONY: all cli clean nist-executable
 
