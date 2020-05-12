@@ -1,5 +1,7 @@
 
-var END_OF_STREAM_TOKEN = "end-of-stream-lol";
+function END_OF_STREAM_TOKEN() {
+	return END_OF_STREAM_TOKEN;
+}
 
 function stream_to_vector(pop) {
 	var vec = [];
