@@ -20,10 +20,10 @@ $(TEST_SRCS):
 $(NIST_TEST_DATA_FILE): tests
 	node build/test.js > $(NIST_TEST_DATA_FILE)
 
-test-nist-small: tests $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
+test-nist-small: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 	cd $(NIST_DIR) && scripts/run-on-file.sh $(NIST_TEST_DATA_FILE)
 
-test-nist-big: tests $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
+test-nist-big: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 	cd $(NIST_DIR) && STREAM_LEN=1000000 scripts/run-on-file.sh $(NIST_TEST_DATA_FILE)
 
 test-hash: build/test/test-hash.js
