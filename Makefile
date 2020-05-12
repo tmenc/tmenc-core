@@ -1,32 +1,48 @@
 
-NIST_TEST_DATA_FILE = $(PWD)/test-data~
+NIST_TEST_DATA_FILE = $(PWD)/build/test/test-data~
+NIST_DIR = test/nist-sts
+NIST_EXECUTABLE = $(NIST_DIR)/assess
 
-all: builds
+TEST_FILES = $(shell ls -d -1 test/*.js)
+TEST_SRCS = $(addprefix build/,$(TEST_FILES))
 
-test-all: test-nist test-hash
+all: builds tests
+builds: | build builds-srcs
+tests: | build/test tests-builds-srcs
 
-test-nist: all nist-executable
-	# node build/test.js > $(NIST_TEST_DATA_FILE)
-	cd nist-sts && scripts/run-on-file.sh $(NIST_TEST_DATA_FILE)
+test-all: test-nist-big test-nist-small test-hash
+
+tests-builds-srcs: $(TEST_SRCS)
+
+$(TEST_SRCS):
+	cat test/test-util.js $($@:build/%s=%) > $@
+
+$(NIST_TEST_DATA_FILE): tests
+	node build/test.js > $(NIST_TEST_DATA_FILE)
+
+test-nist-small: tests $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
+	cd test/nist-sts && scripts/run-on-file.sh $(NIST_TEST_DATA_FILE)
+
+test-nist-big: tests $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
+	cd test/nist-sts && STREAM_LEN=1000000 scripts/run-on-file.sh $(NIST_TEST_DATA_FILE)
+
+build/test: build
+	mkdir $@
 
 # TODO
 test-hash:
 
-nist-executable: nist-sts/assess
-
-nist-sts/assess:
+$(NIST_EXECUTABLE):
 	git submodule update --init
 	cd nist-sts && $(MAKE)
 
 cli: all
 	printf 'haha\nMakefile\nlol' | node build/cli.js
 
-builds: | build builds2
-
-builds2: build/test.js build/cli.js
+builds-srcs: build/cli.js
 
 build:
-	mkdir -p $@
+	mkdir $@
 
 build/test.js: machine.js test.js
 	cat $^ > $@

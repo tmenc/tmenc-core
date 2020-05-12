@@ -158,10 +158,3 @@ function generate_weak_rng_test() {
 		console.log(rng());
 	}
 }
-
-// test_tm();
-// test_tm2();
-// test_tm_hashing();
-// generate_example_key();
-generate_weak_rng_test();
-
