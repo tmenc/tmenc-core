@@ -73,9 +73,16 @@ function is_tm_finished(env, wc) {
 function tm_env_generate_output(env, wrap_count) {
 	var step = env.step;
 
+	var i = 0;
 	while (!(is_tm_finished(env, wrap_count))) {
 		// for (var i = 0; i < 100000; i++) {
 		step();
+
+		i = i + 1;
+		if (i % 10000 == 0) {
+			console.log("read =", env.read_tape_read_all());
+			console.log("wrap =", env.write_tape_wrap_count());
+		}
 	}
 }
 

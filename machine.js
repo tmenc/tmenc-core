@@ -187,7 +187,7 @@ function make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_si
 
 		if (ret.skip_write == 0) {
 			bitarray_set_bit_extend0(write_tape, write_tape_pos, ret.new_write_tape_bit);
-			write_tape_pos += ret.skip_write_tape_bit;
+			write_tape_pos++;
 		}
 
 		if (read_tape_pos >= read_tape_len) {
