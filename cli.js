@@ -13,7 +13,7 @@ function debug_vec(v) {
 }
 
 rl.question('pass: ', (pass) => {
-	rl.question("file: ", (file) => {
+	rl.question("keyfile: ", (file) => {
 		rl.question("salt: ", (salt) => {
 
 			var file_buffer = fs.readFileSync(file);
