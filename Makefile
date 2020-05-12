@@ -17,8 +17,8 @@ tests-builds-srcs: $(TEST_SRCS)
 $(TEST_SRCS):
 	cat test/test-util.js $($@:build/%s=%) > $@
 
-$(NIST_TEST_DATA_FILE): tests
-	node build/test.js > $(NIST_TEST_DATA_FILE)
+$(NIST_TEST_DATA_FILE): build/test/test-nist.js
+	node build/test/test-nist.js > $(NIST_TEST_DATA_FILE)
 
 test-nist-small: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 	cd $(NIST_DIR) && scripts/run-on-file.sh $(NIST_TEST_DATA_FILE)
