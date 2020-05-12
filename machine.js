@@ -155,9 +155,7 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 	}
 
 	function step (read_tape_bit, memory_tape_register) {
-		// var shift = 1 * read_tape_bit + 2 * memory_tape_bit + 4 * key_tape(); // a "chooser"
-
-		var jump_size = (1 + read_tape_bit) * memory_tape_register;
+		var jump_size = 1 + (1 + read_tape_bit) * memory_tape_register;
 
 		var wt_skip = machine_flip_and_read();
 		machine_advance(wt_skip * jump_size);
