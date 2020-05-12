@@ -132,7 +132,9 @@ function test_tm_hashing() {
 		sum += dd;
 		console.log('ratio = ', ratio);
 	}
-	console.log('score = ', sum / times);
+
+	var score = sum / times;
+	console.log('score = ', score);
 
 	if (score !== 0) {
 		throw "TEST FAILED";
