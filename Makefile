@@ -38,7 +38,7 @@ test-hash: build/test build/test/test-hash.js
 	node build/test/test-hash.js
 
 "build/test": build
-	mkdir $@
+	mkdir -p $@
 
 $(NIST_EXECUTABLE):
 	git submodule update --init
