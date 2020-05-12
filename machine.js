@@ -168,8 +168,6 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 		var direction_bit = machine_flip_and_read();
 		machine_advance(jump_size);
 
-		// TODOD: read read_tape_bit and jump
-
 		return {
 			wt_bit: wt_bit,
 			wt_skip: wt_skip,
