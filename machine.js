@@ -1,4 +1,6 @@
 
+var MAX = 0;
+
 function bitarray_length(bitarr) {
 	return bitarr.length;
 }
@@ -157,8 +159,11 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 	function step (read_tape_bit, memory_tape_register) {
 		var jump_size = 1 + (1 + read_tape_bit) * memory_tape_register;
 
+		// console.log('read:', read_tape_bit);
+		console.log('jump:', jump_size);
+
 		var wt_skip = machine_flip_and_read();
-		machine_advance(wt_skip * jump_size);
+		machine_advance(jump_size);
 
 		var wt_bit = machine_flip_and_read();
 		machine_advance(jump_size);
@@ -205,6 +210,19 @@ function make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_si
 			memory_tape_pos,
 			new_register_value);
 		memory_tape_pos += ret.direction_bit * 2 - 1;
+
+		// console.log('wt_bit:', ret.wt_bit);
+		// console.log('wt_skip:', ret.wt_skip);
+
+		if (MAX < memory_tape_register) {
+			MAX = memory_tape_register;
+			console.log("MAX:", MAX);
+		}
+
+		// if (MAX < memory_tape_pos) {
+		// 	MAX = memory_tape_pos;
+		// 	console.log("MAX:", MAX);
+		// }
 
 		if (ret.wt_skip == 0) {
 			bitarray_set_bit_extend0(write_tape, write_tape_pos, ret.new_write_tape_bit);
