@@ -26,7 +26,7 @@ test-nist-small: tests $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 test-nist-big: tests $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 	cd $(NIST_DIR) && STREAM_LEN=1000000 scripts/run-on-file.sh $(NIST_TEST_DATA_FILE)
 
-test-hash: tests $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
+test-hash: build/test/test-hash.js
 	node build/test/test-hash.js
 
 build/test: build
