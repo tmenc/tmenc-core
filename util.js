@@ -89,13 +89,13 @@ function ascii_to_numbers(ascii) {
 	return pop;
 }
 
-function ascii_to_binary_s(ascii) {
+function ascii_to_binary_stream(ascii) {
 	var pop = ascii_to_numbers(ascii);
 	return byte_stream_to_binary_stream(pop);
 }
 
 function ascii_to_binary(ascii) {
-	return stream_to_vector(ascii_to_binary_s(ascii));
+	return stream_to_vector(ascii_to_binary_stream(ascii));
 }
 
 function generate_new_randomized_input_stream(pass_stream, file_stream) {
