@@ -120,7 +120,7 @@ function generate_n_weak_random_bits(seed, n) {
 
 function make_tm(machine_bits, weak_rng, key_tape) {
 	var machine_len = bitarray_length(machine_bits);
-	var max_shift = 1 * 1 + 2 * 1 + 4 * 1 + 8 * 1;
+	var max_shift = 1 * 1 + 2 * 1 + 4 * 1;
 	var machine_pos = 0;
 	var diff_accumulator = 1; // makes cycles less probable
 
@@ -136,8 +136,8 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 		return read_bit_and_skip_range(shift, max_shift);
 	}
 
-	function step (read_tape_bit, write_tape_bit, memory_tape_bit) {
-		var shift = 1 * read_tape_bit + 2 * write_tape_bit + 4 * memory_tape_bit + 8 * key_tape(); // a "chooser"
+	function step (read_tape_bit, memory_tape_bit) {
+		var shift = 1 * read_tape_bit + 2 * memory_tape_bit + 4 * key_tape(); // a "chooser"
 
 		var wt_bit = read_chosen_bit(shift);
 		var mem_bit = read_chosen_bit(shift);
@@ -175,9 +175,8 @@ function make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_si
 	var read_tape_read_all = false;
 	function step() {
 		var read_tape_bit = bitarray_at(read_tape, read_tape_pos);
-		var write_tape_bit = bitarray_at_or_x(write_tape, write_tape_pos, weak_rng());
 		var memory_tape_bit = double_bitarray_at_or_x(memory_tape, memory_tape_pos, weak_rng());
-		var ret = tm(read_tape_bit, write_tape_bit, memory_tape_bit);
+		var ret = tm(read_tape_bit, memory_tape_bit);
 
 		if (write_tape_size_limit) {
 			if (write_tape_pos >= write_tape_size_limit) {
