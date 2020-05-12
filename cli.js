@@ -10,15 +10,18 @@ var rl = readline.createInterface({
 
 rl.question('pass: ', (pass) => {
 	rl.question("file: ", (file) => {
+		rl.question("salt: " (salt) => {
 
-		var file_buffer = fs.readFileSync(file);
-		var file_stream = byte_stream_to_binary_stream(buffer_to_byte_stream(file_buffer));
-		var file_vector = stream_to_vector(file_stream);
-		console.log("len:", file_vector.length, "bytes:", file_vector);
-		// var nums = ascii_to_binary(pass);
-		// console.log(nums);
+			var file_buffer = fs.readFileSync(file);
+			var file_stream = byte_stream_to_binary_stream(buffer_to_byte_stream(file_buffer));
+			var pass_stream = ascii_to_binary_stream(ascii);
+			var salt_stream = ascii_to_binary_stream(ascii); // usually get from prev version
 
-		rl.close();
+			var combined = append_streams([salt_stream, pass_stream, file_stream]);
+			
+
+			rl.close();
+		});
 	});
 });
 

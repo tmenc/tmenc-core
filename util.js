@@ -14,7 +14,7 @@ function stream_to_vector(pop) {
 	}
 }
 
-function append_streams(pop1, pop2) {
+function append_2_streams(pop1, pop2) {
 	var first = true;
 	var cur = pop1;
 	return function () {
@@ -30,12 +30,31 @@ function append_streams(pop1, pop2) {
 	}
 }
 
+function append_streams(streams_vector) {
+	var pos = 0;
+	var cur = streams_vector[0];
+	var len = streams_vector.length;
+	return function () {
+		var x = cur();
+		while (x === END_OF_STREAM_TOKEN) {
+			pos = pos + 1;
+			if (pos < len) {
+				cur = streams_vector[pos];
+				x = cur();
+			} else {
+				return END_OF_STREAM_TOKEN;
+			}
+		}
+		return x;
+	}
+}
+
 // LITTLE ENDIAN?
 function integer_to_binary_stream(size) {
 	var i = size;
 	var n = -1;
 
-	function pop(new_n) {
+	return function(new_n) {
 		if (new_n) {
 			i = -1;
 			n = new_n;
@@ -54,8 +73,6 @@ function integer_to_binary_stream(size) {
 		}
 		return END_OF_STREAM_TOKEN;
 	}
-
-	return pop;
 }
 
 function byte_stream_to_binary_stream(pop) {
@@ -99,18 +116,6 @@ function ascii_to_binary_stream(ascii) {
 
 function ascii_to_binary(ascii) {
 	return stream_to_vector(ascii_to_binary_stream(ascii));
-}
-
-function generate_new_randomized_input_stream(pass_stream, file_stream) {
-	var seedr = Math.floor(Math.random() * Math.pow(2, 32));
-
-	// TODO: Make not related to seedr
-	var r = Math.floor(Math.random() * Math.pow(2, 32));
-
-	var rs = integer_to_binary_stream(r, 32);
-	var seedrs = integer_to_binary_stream(seedr, 32);
-
-	return append_streams(seedrs, append_streams(rs, append_streams(pass_stream, file_stream)));
 }
 
 function buffer_to_byte_stream(js_Buffer) {
