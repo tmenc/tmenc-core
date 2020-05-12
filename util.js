@@ -140,13 +140,23 @@ function hex_to_numbers(ascii) {
 	function pop() {
 		i = i + 1;
 		if (i < ascii.length) {
-			return hex_table[ascii[i]];
+			var x = hex_table[ascii[i]];
+			if (x == undefined) {
+				throw "Expected hex character!";
+			} else {
+				return x;
+			}
 		} else {
 			return END_OF_STREAM_TOKEN;
 		}
 	}
 
 	return pop;
+}
+
+function hex_to_binary_stream(ascii) {
+	var pop = hex_to_numbers(ascii);
+	return byte_stream_to_binary_stream(pop);
 }
 
 function ascii_to_binary_stream(ascii) {

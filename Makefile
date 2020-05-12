@@ -45,7 +45,7 @@ $(NIST_EXECUTABLE):
 	cd $(NIST_DIR) && $(MAKE)
 
 cli: all
-	printf 'haha\nMakefile\nlol\nEND' | node build/cli.js
+	printf '0a0bff\n0a0b00\nMakefile\nEND' | node build/cli.js
 
 builds-srcs: build/cli.js
 

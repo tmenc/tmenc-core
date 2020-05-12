@@ -13,13 +13,13 @@ function debug_vec(v) {
 }
 
 rl.question('pass: ', (pass) => {
-	rl.question("keyfile: ", (file) => {
-		rl.question("salt: ", (salt) => {
+	rl.question("salt: ", (salt) => {
+		rl.question("keyfile: ", (file) => {
 
 			var file_buffer = fs.readFileSync(file);
 			var file_stream = byte_stream_to_binary_stream(buffer_to_byte_stream(file_buffer));
-			var pass_stream = ascii_to_binary_stream(pass);
-			var salt_stream = ascii_to_binary_stream(salt); // usually get from prev version
+			var pass_stream = hex_to_binary_stream(pass);
+			var salt_stream = hex_to_binary_stream(salt); // usually get from prev version
 
 			var combined = append_streams([salt_stream, pass_stream, file_stream]);
 
