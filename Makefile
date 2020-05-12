@@ -16,7 +16,7 @@ test-all: test-nist-big test-nist-small test-hash
 
 tests-builds-srcs: $(TEST_SRCS)
 
-$(TEST_SRCS): build/test machine.js test/test-util.js $(TEST_FILES)
+$(TEST_SRCS): "build/test" machine.js test/test-util.js $(TEST_FILES)
 	cat machine.js test/test-util.js $(@:build/%=%) > $@
 
 $(NIST_TEST_DATA_FILE): build/test/test-nist.js
@@ -37,8 +37,8 @@ test-nist-big: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 test-hash: build/test build/test/test-hash.js
 	node build/test/test-hash.js
 
-build/test: build
-	-mkdir $@
+"build/test": build
+	mkdir $@
 
 $(NIST_EXECUTABLE):
 	git submodule update --init
