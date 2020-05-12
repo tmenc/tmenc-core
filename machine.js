@@ -194,15 +194,19 @@ function make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_si
 	var read_tape_read_all = false;
 	function step() {
 		var read_tape_bit = bitarray_at(read_tape, read_tape_pos);
-		var memory_tape_bit = double_bitarray_at_or_x(memory_tape, memory_tape_pos, weak_rng());
-		var ret = tm(read_tape_bit, memory_tape_bit);
+		var memory_tape_register = double_bitarray_at_or_x(memory_tape, memory_tape_pos, 0);
+		var ret = tm(read_tape_bit, memory_tape_register);
 
 		read_tape_pos++;
 
-		double_bitarray_set_bit_extend0(memory_tape, memory_tape_pos, ret.new_memory_tape_bit);
-		memory_tape_pos += ret.memory_tape_direction_bit * 2 - 1;
+		var new_register_value = memory_tape_register + ret.increment_bit;
+		double_bitarray_set_bit_extend0(
+			memory_tape,
+			memory_tape_pos,
+			new_register_value);
+		memory_tape_pos += ret.direction_bit * 2 - 1;
 
-		if (ret.skip_write == 0) {
+		if (ret.wt_skip == 0) {
 			bitarray_set_bit_extend0(write_tape, write_tape_pos, ret.new_write_tape_bit);
 			write_tape_pos++;
 		}
