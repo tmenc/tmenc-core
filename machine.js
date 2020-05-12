@@ -140,6 +140,7 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 		var shift = 1 * read_tape_bit + 2 * memory_tape_bit + 4 * key_tape(); // a "chooser"
 
 		var wt_bit = read_chosen_bit(shift);
+		var wt_skip = read_chosen_bit(shift);
 		var mem_bit = read_chosen_bit(shift);
 		var mem_direction_bit = read_chosen_bit(shift);
 
@@ -152,6 +153,7 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 
 		return {
 			new_write_tape_bit: wt_bit, // : {0 ,1}
+			skip_write: wt_skip, // : {0 ,1}
 			new_memory_tape_bit: mem_bit, // : {0 ,1}
 			memory_tape_direction_bit: mem_direction_bit, // : {0, 1}
 		};
@@ -178,26 +180,29 @@ function make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_si
 		var memory_tape_bit = double_bitarray_at_or_x(memory_tape, memory_tape_pos, weak_rng());
 		var ret = tm(read_tape_bit, memory_tape_bit);
 
-		if (write_tape_size_limit) {
-			if (write_tape_pos >= write_tape_size_limit) {
-				write_tape_pos = 0;
-				if (read_tape_read_all) {
-					write_tape_wrap_count++;
-				}
-			}
-		}
-
-		bitarray_set_bit_extend0(write_tape, write_tape_pos, ret.new_write_tape_bit);
 		double_bitarray_set_bit_extend0(memory_tape, memory_tape_pos, ret.new_memory_tape_bit);
 		read_tape_pos++;
-		write_tape_pos++;
 		memory_tape_pos += ret.memory_tape_direction_bit * 2 - 1;
+
+		if (ret.skip_write == 0) {
+			write_tape_pos += ret.skip_write_tape_bit;
+			bitarray_set_bit_extend0(write_tape, write_tape_pos, ret.new_write_tape_bit);
+		}
 
 		if (read_tape_pos >= read_tape_len) {
 			read_tape_pos = 0;
 			read_tape_wrap_count++;
 			if (read_tape_wrap_count == 1) {
 				read_tape_read_all = true;
+			}
+		}
+
+		if (write_tape_size_limit) {
+			if (write_tape_pos >= write_tape_size_limit) {
+				write_tape_pos = 0;
+				if (read_tape_read_all) {
+					write_tape_wrap_count++;
+				}
 			}
 		}
 	}
