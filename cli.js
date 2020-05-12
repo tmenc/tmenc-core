@@ -19,7 +19,7 @@ rl.question('pass: ', (pass) => {
 
 			var combined = append_streams([salt_stream, pass_stream, file_stream]);
 
-			console.log('vec:', stream_to_vector(combined));
+			console.log('vec:', stream_to_vector(file_stream));
 
 			rl.close();
 		});
