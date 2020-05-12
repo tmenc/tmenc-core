@@ -160,7 +160,7 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 		var jump_size = 1 + (1 + read_tape_bit) * memory_tape_register;
 
 		// console.log('read:', read_tape_bit);
-		console.log('jump:', jump_size);
+		// console.log('jump:', jump_size);
 
 		var wt_skip = machine_flip_and_read();
 		machine_advance(jump_size);
