@@ -225,7 +225,7 @@ function make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_si
 		// }
 
 		if (ret.wt_skip == 0) {
-			bitarray_set_bit_extend0(write_tape, write_tape_pos, ret.new_write_tape_bit);
+			bitarray_set_bit_extend0(write_tape, write_tape_pos, ret.wt_bit);
 			write_tape_pos++;
 		}
 
