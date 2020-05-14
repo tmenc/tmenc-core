@@ -123,23 +123,24 @@ function generate_n_weak_random_bits(seed, n) {
 function make_tm(machine_bits, weak_rng, key_tape) {
 	var machine_len = bitarray_length(machine_bits);
 	var machine_pos = 0;
+	var flip_flop = 0;
 
 	function machine_advance(by) {
 		machine_pos = (machine_pos + by) % machine_len;
 	}
 
 	function machine_read() {
-		return bitarray_at(machine_bits, machine_pos) ^ weak_rng();
+		return bitarray_at(machine_bits, machine_pos) ^ flip_flop;
 	}
 
 	function machine_flip_current_bit() {
 		var new_bit = 1 ^ machine_read();
-		return bitarray_set_bit(machine_bits, machine_pos, new_bit);
+		bitarray_set_bit(machine_bits, machine_pos, new_bit);
+		return new_bit;
 	}
 
 	function machine_flip_and_read() {
-		machine_flip_current_bit();
-		return machine_read();
+		return machine_flip_current_bit();
 	}
 
 	function step (read_tape_bit, memory_tape_register) {
