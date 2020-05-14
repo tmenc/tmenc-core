@@ -15,9 +15,9 @@ function default_key_tape() {
 }
 
 function make_default_tm_env(machine_bits, input_bits, seed, write_tape_limit) {
-	var weak_rng = init_simple_rng_ref(seed);
-	var key_tape = default_key_tape();
-	return make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_limit);
+	// var weak_rng = init_simple_rng_ref(seed);
+	// var key_tape = default_key_tape();
+	return make_tm_env(machine_bits, input_bits, write_tape_limit);
 }
 
 function vectors_same_bits_ratio(v1, v2) {

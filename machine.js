@@ -120,7 +120,7 @@ function generate_n_weak_random_bits(seed, n) {
 	return ret;
 }
 
-function make_tm(machine_bits, weak_rng, key_tape) {
+function make_tm(machine_bits) {
 	var machine_len = bitarray_length(machine_bits);
 	var machine_pos = 0;
 
@@ -172,8 +172,8 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 	return step;
 }
 
-function make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_size_limit) {
-	var tm = make_tm(machine_bits, weak_rng, key_tape);
+function make_tm_env(machine_bits, input_bits, write_tape_size_limit) {
+	var tm = make_tm(machine_bits);
 
 	var memory_tape = double_bitarray_create();
 	var read_tape_len = bitarray_length(input_bits);
