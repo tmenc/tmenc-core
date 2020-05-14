@@ -156,6 +156,8 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 
 		var increment_bit = machine_flip_and_read();
 		machine_advance(jump_size);
+		var increment_dir = machine_flip_and_read();
+		machine_advance(jump_size);
 		var direction_bit = machine_flip_and_read();
 		machine_advance(jump_size);
 
@@ -163,6 +165,7 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 			wt_bit: wt_bit,
 			wt_skip: wt_skip,
 			increment_bit: increment_bit,
+			increment_dir: increment_dir,
 			direction_bit: direction_bit,
 		};
 	}
@@ -190,7 +193,15 @@ function make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_si
 
 		read_tape_pos++;
 
-		var new_register_value = memory_tape_register + ret.increment_bit;
+		var increment_dir_factor = ret.increment_dir * 2 - 1;
+		var new_register_value =
+			memory_tape_register +
+			increment_dir_factor *
+			ret.increment_bit;
+		if (new_register_value < 0) {
+			new_register_value = 0;
+		}
+
 		double_bitarray_set_bit_extend0(
 			memory_tape,
 			memory_tape_pos,
@@ -203,7 +214,7 @@ function make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_si
 		if (MAX < memory_tape_register) {
 			MAX = memory_tape_register;
 			// console.log("MAX:", MAX);
-			console.log(memory_tape);
+			// console.log(memory_tape);
 		}
 
 		// if (MAX < memory_tape_pos) {
