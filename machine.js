@@ -130,7 +130,7 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 	}
 
 	function machine_read() {
-		return bitarray_at(machine_bits, machine_pos) ^ flip_flop;
+		return bitarray_at(machine_bits, machine_pos);
 	}
 
 	function machine_flip_current_bit() {

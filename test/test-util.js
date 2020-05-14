@@ -80,9 +80,15 @@ function tm_env_generate_output(env, wrap_count) {
 }
 
 function make_random_tm_env(input_size, machine_size, wr_tape_size) {
+	// machine_size = 1;
+
 	var machine_bits = generate_n_weak_random_bits(200, machine_size);
 	var input_bits = generate_n_weak_random_bits(300, input_size);
 	var env = make_default_tm_env(machine_bits, input_bits, 777, wr_tape_size);
+
+	// for (var i = 0; i < machine_size; i++) {
+	// 	bitarray_set_bit(machine_bits, i, 1);
+	// }
 
 	return {
 		machine_bits: machine_bits,
