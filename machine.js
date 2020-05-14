@@ -1,6 +1,4 @@
 
-var MAX = 0;
-
 function bitarray_length(bitarr) {
 	return bitarr.length;
 }
@@ -97,29 +95,6 @@ function double_bitarray_set_bit_extend0(dbitarr, at, value) {
 	return bitarray_set_bit_extend0(target, abs_at, value);
 }
 
-// works on uint32_t
-function init_simple_rng_ref(seed) {
-	var x = seed;
-	var mod = 4294967296; // 2 ^ 32
-	function to1bit (z) {
-		if (z > 2147483648) { return 1; }
-		else { return 0; }
-	}
-	return function () {
-		x = (((x * 1664525) % mod) + 1013904223) % mod;
-		return to1bit(x);
-	};
-}
-
-function generate_n_weak_random_bits(seed, n) {
-	var rng = init_simple_rng_ref(seed);
-	var ret = bitarray_alloc(n);
-	for (var i = 0; i < n; i++) {
-		bitarray_set_bit(ret, i, rng())
-	}
-	return ret;
-}
-
 function make_tm(machine_bits) {
 	var machine_len = bitarray_length(machine_bits);
 	var machine_pos = 0;
@@ -144,9 +119,6 @@ function make_tm(machine_bits) {
 
 	function step (read_tape_bit, memory_tape_register) {
 		var jump_size = 1 + (1 + read_tape_bit) * memory_tape_register;
-
-		// console.log('read:', read_tape_bit);
-		// console.log('jump:', jump_size);
 
 		var wt_skip = machine_flip_and_read();
 		machine_advance(jump_size);
@@ -207,20 +179,6 @@ function make_tm_env(machine_bits, input_bits, write_tape_size_limit) {
 			memory_tape_pos,
 			new_register_value);
 		memory_tape_pos += ret.direction_bit * 2 - 1;
-
-		// console.log('wt_bit:', ret.wt_bit);
-		// console.log('wt_skip:', ret.wt_skip);
-
-		if (MAX < memory_tape_register) {
-			MAX = memory_tape_register;
-			// console.log("MAX:", MAX);
-			// console.log(memory_tape);
-		}
-
-		// if (MAX < memory_tape_pos) {
-		// 	MAX = memory_tape_pos;
-		// 	console.log("MAX:", MAX);
-		// }
 
 		if (ret.wt_skip == 0) {
 			bitarray_set_bit_extend0(write_tape, write_tape_pos, ret.wt_bit);
