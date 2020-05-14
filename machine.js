@@ -200,10 +200,11 @@ function make_tm_env(machine_bits, input_bits, weak_rng, key_tape, write_tape_si
 		// console.log('wt_bit:', ret.wt_bit);
 		// console.log('wt_skip:', ret.wt_skip);
 
-		// if (MAX < memory_tape_register) {
-		// 	MAX = memory_tape_register;
-		// 	console.log("MAX:", MAX);
-		// }
+		if (MAX < memory_tape_register) {
+			MAX = memory_tape_register;
+			// console.log("MAX:", MAX);
+			console.log(memory_tape);
+		}
 
 		// if (MAX < memory_tape_pos) {
 		// 	MAX = memory_tape_pos;
