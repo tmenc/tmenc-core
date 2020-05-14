@@ -101,7 +101,7 @@ function test_tm_hashing() {
 		if (singleflip) {
 			var len = bitarray_length(input_bits2);
 			var change_pos = len - 32;
-			bitarray_set_bit(input_bits2, change_pos, 1 ^ bitarray_at(input_bits2, change_pos));
+			// bitarray_set_bit(input_bits2, change_pos, 1 ^ bitarray_at(input_bits2, change_pos));
 		} else {
 			for (var i = 0; i < bitarray_length(input_bits2); i++) {
 				bitarray_set_bit(input_bits2, i, 1 ^ bitarray_at(input_bits2, i));
@@ -129,7 +129,7 @@ function test_tm_hashing() {
 	var sum = 0;
 	for (var i = 0; i < times; i++) {
 		console.log('wt size = ', start + i);
-		var ratio = dotest(true, 100000, 1000, start + i, 2);
+		var ratio = dotest(true, 100000, 1000, start + i, 0);
 		sum += ratio;
 		if (ratio > max) {
 			max = ratio;
