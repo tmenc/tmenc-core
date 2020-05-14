@@ -122,7 +122,6 @@ function generate_n_weak_random_bits(seed, n) {
 
 function make_tm(machine_bits, weak_rng, key_tape) {
 	var machine_len = bitarray_length(machine_bits);
-	var max_shift = 1 * 1 + 2 * 1 + 4 * 1;
 	var machine_pos = 0;
 
 	function machine_advance(by) {
