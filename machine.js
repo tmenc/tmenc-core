@@ -124,19 +124,6 @@ function make_tm(machine_bits, weak_rng, key_tape) {
 	var machine_len = bitarray_length(machine_bits);
 	var max_shift = 1 * 1 + 2 * 1 + 4 * 1;
 	var machine_pos = 0;
-	var diff_accumulator = 1; // makes cycles less probable
-
-	function read_bit_and_skip_range(shift, range) {
-		var bit_pos = (machine_pos + shift) % machine_len;
-		var bit = bitarray_at(machine_bits, bit_pos) ^ weak_rng();
-		machine_pos += range + 1; // skip range bits
-		machine_pos = machine_pos % machine_len; // overflow protection
-		return bit;
-	}
-
-	function read_chosen_bit(shift) {
-		return read_bit_and_skip_range(shift, max_shift);
-	}
 
 	function machine_advance(by) {
 		machine_pos = (machine_pos + by) % machine_len;
