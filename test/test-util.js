@@ -122,22 +122,37 @@ function test_tm_hashing() {
 		return vectors_same_bits_ratio(env1.write_tape, env2.write_tape);
 	}
 
+	var max = 0;
+	var min = 1;
 	var start = 512;
 	var times = 100;
 	var sum = 0;
 	for (var i = 0; i < times; i++) {
 		console.log('wt size = ', start + i);
 		var ratio = dotest(true, 100000, 1000, start + i, 2);
-		var dd = ratio > 0.8 ? 1 : 0;
-		sum += dd;
+		sum += ratio;
+		if (ratio > max) {
+			max = ratio;
+		}
+		if (ratio < min) {
+			min = ratio;
+		}
 		console.log('ratio = ', ratio);
 	}
 
-	var score = sum / times;
-	console.log('score = ', score);
+	var avg = sum / times;
+	console.log('avg = ', avg);
+	console.log('min = ', min);
+	console.log('max = ', max);
 
-	if (score !== 0) {
-		throw "TEST FAILED";
+	if (avg > 0.55 || avg < 0.45) {
+		throw "BAD AVERAGE";
+	}
+	if (max > 0.8) {
+		throw "MAX IS TOO HIGH";
+	}
+	if (min < 0.2) {
+		throw "MIN IS TOO LOW";
 	}
 }
 
