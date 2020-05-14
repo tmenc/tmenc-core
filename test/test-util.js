@@ -94,6 +94,7 @@ function make_random_tm_env(input_size, machine_size, wr_tape_size) {
 function test_tm_hashing() {
 	function dotest(singleflip, input_size, machine_size, wr_tape_size, wrap_count) {
 		var first = make_random_tm_env(input_size, machine_size, wr_tape_size);
+		var machine_bits = bitarray_copy(first.machine_bits);
 		var env1 = first.env;
 		tm_env_generate_output(env1, wrap_count);
 
@@ -101,14 +102,14 @@ function test_tm_hashing() {
 		if (singleflip) {
 			var len = bitarray_length(input_bits2);
 			var change_pos = len - 32;
-			// bitarray_set_bit(input_bits2, change_pos, 1 ^ bitarray_at(input_bits2, change_pos));
+			bitarray_set_bit(input_bits2, change_pos, 1 ^ bitarray_at(input_bits2, change_pos));
 		} else {
 			for (var i = 0; i < bitarray_length(input_bits2); i++) {
 				bitarray_set_bit(input_bits2, i, 1 ^ bitarray_at(input_bits2, i));
 			}
 		}
 
-		var env2 = make_default_tm_env(first.machine_bits, input_bits2, 777, wr_tape_size);
+		var env2 = make_default_tm_env(machine_bits, input_bits2, 777, wr_tape_size);
 		tm_env_generate_output(env2, wrap_count);
 
 		// for (var i = 0; i < bitarray_length(write_tape); i++) {
