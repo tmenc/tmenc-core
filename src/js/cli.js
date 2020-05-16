@@ -15,7 +15,7 @@ function debug_vec(v) {
 rl.question('pass: ', (pass) => {
 	rl.question("salt: ", (salt) => {
 		rl.question("keyfile: ", (file) => {
-			var key = make_key(pass, salt, file, 100, 999, 3);
+				var key = make_key(pass, salt, file, 100, 999, 3);
 
 			debug_vec(key)
 
