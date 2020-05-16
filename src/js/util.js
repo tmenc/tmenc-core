@@ -105,7 +105,7 @@ function integer_to_binary_stream(size) {
 function byte_stream_to_binary_stream(pop) {
 	var conv = integer_to_binary_stream(8);
 
-	function ret() {
+	return function() {
 		var x = conv();
 		if (x === END_OF_STREAM_TOKEN) {
 			var n = pop();
@@ -117,23 +117,45 @@ function byte_stream_to_binary_stream(pop) {
 		} else {
 			return x;
 		}
-	}
+	};
+}
 
-	return ret;
+function binary_stream_to_byte_stream(pop) {
+	return function() {
+		var count = 0;
+		var acc = 0;
+		var pow = 1;
+		while (true) {
+			var b = pop();
+
+			if (b == END_OF_STREAM_TOKEN) {
+				if (acc !== 0) {
+					throw "NOT PADDED TO 8 BITS!";
+				}
+				return END_OF_STREAM_TOKEN;
+			}
+
+			acc += b * pow;
+			pow *= 2;
+			count++;
+
+			if (count == 8) {
+				return acc;
+			}
+		}
+	};
 }
 
 function ascii_to_numbers(ascii) {
 	var i = -1;
-	function pop() {
+	return function() {
 		i = i + 1;
 		if (i < ascii.length) {
 			return ascii.charCodeAt(i);
 		} else {
 			return END_OF_STREAM_TOKEN;
 		}
-	}
-
-	return pop;
+	};
 }
 
 function hex_to_numbers(ascii) {
