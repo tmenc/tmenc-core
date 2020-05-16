@@ -185,14 +185,21 @@ function generate_weak_rng_test() {
 	}
 }
 
-function test_1_bit_byte_conversions() {
-	var byte = 0;
-	var f = integer_to_binary_stream(8);
-	f(byte);
-
-	for (var i = 0; i < 9; i++) {
-		console.log(f());
+function assert_eq(a, b) {
+	if (a !== b) {
+		debugger;
+		throw "ASSERT FAILED";
 	}
+}
+
+function test_1_bit_byte_conversions() {
+	var f = integer_to_binary_stream(8);
+
+	f(0);
+	assert_eq(stream_to_vector(f), [0,0,0,0,0,0,0,0]);
+
+	f(255);
+	assert_eq(stream_to_vector(f), [1,1,1,1,1,1,1,1]);
 }
 
 function test_bit_byte_conversions() {
