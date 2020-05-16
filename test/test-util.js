@@ -148,7 +148,7 @@ function test_tm_hashing() {
 	var sum = 0;
 	for (var i = 0; i < times; i++) {
 		console.log('wt size = ', start + i);
-		var ratio = dotest(true, 100000, 1000, start + i, 5);
+		var ratio = dotest(true, 100000, 1000, start + i, 0);
 		sum += ratio;
 		if (ratio > max) {
 			max = ratio;
