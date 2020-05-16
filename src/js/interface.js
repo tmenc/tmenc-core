@@ -2,10 +2,10 @@
 // NOTE: `wrap_count' should depend on `length(pass++file)'
 // salt should to be different for each key!
 function make_key(pass, salt, file, size, machine_size, wrap_count) {
-	var file_buffer = fs.readFileSync(file);
-	var file_stream = byte_stream_to_binary_stream(buffer_to_byte_stream(file_buffer));
 	var pass_stream = hex_to_binary_stream(pass);
 	var salt_stream = hex_to_binary_stream(salt);
+	var file_buffer = fs.readFileSync(file);
+	var file_stream = byte_stream_to_binary_stream(buffer_to_byte_stream(file_buffer));
 
 	var input_stream = append_streams([pass_stream, salt_stream, file_stream]);
 
