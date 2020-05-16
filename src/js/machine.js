@@ -118,6 +118,8 @@ function make_tm(machine_bits) {
 	}
 
 	function step (read_tape_bit, memory_tape_register) {
+		console.log(machine_bits);
+
 		var jump_size = (1 + read_tape_bit) * (1 + memory_tape_register);
 
 		var wt_skip = machine_flip_and_read();
@@ -161,6 +163,7 @@ function make_tm_env(machine_bits, input_bits, write_tape_size_limit) {
 	function step() {
 		var read_tape_bit = bitarray_at(read_tape, read_tape_pos);
 		var memory_tape_register = double_bitarray_at_or_x(memory_tape, memory_tape_pos, 0);
+		debugger;
 		var ret = tm(read_tape_bit, memory_tape_register);
 
 		read_tape_pos++;
