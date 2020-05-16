@@ -118,8 +118,6 @@ function make_tm(machine_bits) {
 	}
 
 	function step (read_tape_bit, memory_tape_register) {
-		console.log(machine_bits);
-
 		var jump_size = (1 + read_tape_bit) * (1 + memory_tape_register);
 
 		var wt_skip = machine_flip_and_read();
