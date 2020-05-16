@@ -203,7 +203,7 @@ function make_machine_from_secret(pass_vector, salt_vector, file_vector, machine
 	}
 
 	// This is really ugly
-	// But we are doing this only to normalize input
+	// But we are doing this only to normalize machine bits
 	// Nothing important
 	var weak_rng = init_simple_rng_ref(777);
 	var pass_cv  = vector_to_cycle_vector(pass_vector);
