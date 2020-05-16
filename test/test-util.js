@@ -187,7 +187,8 @@ function generate_weak_rng_test() {
 
 function test_bit_byte_conversions() {
 	// var vec = [10, 20, 30, 225, 255, 0];
-	var vec = [10, 20, 30, 225, 0, 255];
+	// var vec = [10, 20, 30, 225, 0, 255];
+	var vec = [0, 255];
 	var stream = vector_to_stream(vec);
 
 	var bin_stream = byte_stream_to_binary_stream(stream);
