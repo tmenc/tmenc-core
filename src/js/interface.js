@@ -7,7 +7,7 @@ function make_key(pass, salt, file, size, machine_size, wrap_count) {
 	var pass_stream = hex_to_binary_stream(pass);
 	var salt_stream = hex_to_binary_stream(salt);
 
-	var input_stream = append_streams([salt_stream, pass_stream, file_stream]);
+	var input_stream = append_streams([pass_stream, salt_stream, file_stream]);
 
 	var pass_v = stream_to_vector(hex_to_binary_stream(pass));
 	var salt_v = stream_to_vector(hex_to_binary_stream(salt));
