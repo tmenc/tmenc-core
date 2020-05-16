@@ -185,6 +185,16 @@ function generate_weak_rng_test() {
 	}
 }
 
+function test_1_bit_byte_conversions() {
+	var byte = 0;
+	var f = integer_to_binary_stream(8);
+	f(byte);
+
+	for (var i = 0; i < 9; i++) {
+		console.log(f());
+	}
+}
+
 function test_bit_byte_conversions() {
 	// var vec = [10, 20, 30, 225, 255, 0];
 	// var vec = [10, 20, 30, 225, 0, 255];
