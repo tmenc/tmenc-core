@@ -195,33 +195,28 @@ function buffer_to_vector(buffer) {
 	return buffer;
 }
 
-function make_machine_from_secret(pass_vector, file_vector, machine_size) {
-	function two_immutable_vectors_to_cycle_vector(a, b) {
-		var alen = a.length;
-		var blen = b.length;
-		var tot = alen + blen;
-
+function make_machine_from_secret(pass_vector, salt_vector, file_vector, machine_size) {
+	function vector_to_cycle_vector(a) {
 		return function(i) {
-			i = i % tot;
-			var target = a;
-			if (i >= alen) {
-				i = i - alen;
-				target = b;
-			}
-			return target[i];
+			return a[i % a.length];
 		}
 	}
 
 	// This is really ugly
 	// But we are doing this only to normalize input
 	// Nothing important
-	var weak_rng = generate_n_weak_random_bits(777, machine_size);
+	var weak_rng = init_simple_rng_ref(777);
+	var pass_cv  = vector_to_cycle_vector(pass_vector);
+	var salt_cv  = vector_to_cycle_vector(salt_vector);
+	var file_cv  = vector_to_cycle_vector(file_vector);
 
-	var rng_vec = two_immutable_vectors_to_cycle_vector(
+	var output = new Array(machine_size);
+
 	for (var i = 0; i < machine_size; i++) {
-		
+		output[i] = weak_rng() ^ pass_cv(i) ^ salt_cv(i) ^ file_cv(i);
 	}
 
+	return output;
 }
 
 function tm_run_for_wc(env, wc) {
