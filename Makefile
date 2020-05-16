@@ -16,8 +16,8 @@ test-all: test-nist-big test-nist-small test-hash
 
 tests-builds-srcs: $(TEST_SRCS)
 
-$(TEST_SRCS): build/test machine.js test/test-util.js $(TEST_FILES)
-	cat machine.js test/test-util.js $(@:build/%=%) > $@
+$(TEST_SRCS): build/test src/js/machine.js test/test-util.js $(TEST_FILES)
+	cat src/js/machine.js test/test-util.js $(@:build/%=%) > $@
 
 $(NIST_TEST_DATA_FILE): build/test/test-nist.js
 	node build/test/test-nist.js > $(NIST_TEST_DATA_FILE)
@@ -52,10 +52,7 @@ builds-srcs: build/cli.js
 build:
 	mkdir $@
 
-build/test.js: machine.js test.js
-	cat $^ > $@
-
-build/cli.js: machine.js cli.js util.js
+build/cli.js: src/js/machine.js src/js/cli.js src/js/util.js
 	cat $^ > $@
 
 clean:
