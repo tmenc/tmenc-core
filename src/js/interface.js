@@ -1,5 +1,6 @@
 
-function make_key(pass, salt, file, size) {
+// NOTE: passes should depend on `length(pass++file)'
+function make_key(pass, salt, file, size, passes) {
 	var file_buffer = fs.readFileSync(file);
 	var file_stream = byte_stream_to_binary_stream(buffer_to_byte_stream(file_buffer));
 	var pass_stream = hex_to_binary_stream(pass);
@@ -9,6 +10,9 @@ function make_key(pass, salt, file, size) {
 
 	var machine_bits = stream_to_bitarr(salt);
 	var input_bits = stream_to_bitarr(combined_input);
-	var tm_env = make_tm_env(machine_bits, input_bits, size);
+	var env = make_tm_env(machine_bits, input_bits, size);
+	tm_run_for_wc(env, passes);
 
+	return env.write_tape;
+}
 
