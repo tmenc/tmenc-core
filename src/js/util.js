@@ -182,3 +182,23 @@ function buffer_to_byte_stream(js_Buffer) {
 
 	return pop;
 }
+
+function vector_to_bitarr_inplace(vec) {
+	return vec;
+}
+
+function stream_to_bitarr(stream) {
+	return vector_to_bitarr_inplace(stream_to_vector(stream));
+}
+
+function tm_run_for_wc(env, wc) {
+	function is_tm_finished(env, wc) {
+		return env.read_tape_read_all() && env.write_tape_wrap_count() >= wc;
+	}
+
+	var step = env.step;
+	while (!is_tm_finished(env, wc)) {
+		step();
+	}
+}
+
