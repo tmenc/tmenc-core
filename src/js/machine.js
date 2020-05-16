@@ -47,6 +47,10 @@ function bitarray_set_bit_or_nop(bitarr, i, value) {
 }
 
 function bitarray_set_bit_extend0(bitarr, i, value) {
+	if (i > 1000000) {
+		throw "WTF";
+	}
+
 	if (bitarray_set_bit_or_nop(bitarr, i, value)) {
 		return true;
 	} else {
