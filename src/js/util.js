@@ -95,7 +95,7 @@ function integer_to_binary_stream(size) {
 			n = Math.floor(n / 2);
 			return x;
 		}
-		if (i < size) {
+		if (i <= size) {
 			return 0;
 		}
 		return END_OF_STREAM_TOKEN;

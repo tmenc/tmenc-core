@@ -185,8 +185,19 @@ function generate_weak_rng_test() {
 	}
 }
 
-function assert_eq(a, b) {
-	if (a !== b) {
+function arr_equal(a, b) {
+	if (a === b) { return true; }
+	if (a.length != b.length) { return false; }
+
+	for (var i = 0; i < a.length; ++i) {
+		if (a[i] !== b[i]) { return false; }
+	}
+
+	return true;
+}
+
+function assert_arr_equal(a, b) {
+	if (!(arraysEqual
 		debugger;
 		throw "ASSERT FAILED";
 	}
