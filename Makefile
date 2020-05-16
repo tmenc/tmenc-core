@@ -45,7 +45,7 @@ $(NIST_EXECUTABLE):
 	cd $(NIST_DIR) && $(MAKE)
 
 cli: all
-	printf '0a0bff\n0a0b00\nMakefile\nEND' | node --trace-uncaught build/cli.js
+	printf '0a0bff\n0a0b00\nMakefile\nEND' | node inspect build/cli.js
 
 build-js-srcs: build/cli.js
 

@@ -12,15 +12,18 @@ function debug_vec(v) {
 	console.log('len(v):', v.length, 'v:', v);
 }
 
-rl.question('pass: ', (pass) => {
-	rl.question("salt: ", (salt) => {
-		rl.question("keyfile: ", (file) => {
-			var key = make_key(pass, salt, file, 100, 999, 3);
+// rl.question('pass: ', (pass) => {
+// 	rl.question("salt: ", (salt) => {
+// 		rl.question("keyfile: ", (file) => {
+// 			var key = make_key(pass, salt, file, 100, 999, 3);
 
-			debug_vec(key)
+// 			debug_vec(key)
 
-			rl.close();
-		});
-	});
-});
+// 			rl.close();
+// 		});
+// 	});
+// });
+
+
+var key = make_key("aaa", "bbb", "Makefile", 100, 999, 3);
 
