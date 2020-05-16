@@ -197,8 +197,9 @@ function buffer_to_vector(buffer) {
 
 function make_machine_from_secret(pass_vector, salt_vector, file_vector, machine_size) {
 	function vector_to_cycle_vector(a) {
+		var len = a.length;
 		return function(i) {
-			return a[i % a.length];
+			return a[i % len];
 		}
 	}
 
