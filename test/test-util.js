@@ -131,6 +131,7 @@ function test_tm_hashing() {
 		if (singleflip) {
 			var len = bitarray_length(input_bits2);
 			var change_pos = len - 32;
+			// var change_pos = 0;
 			bitarray_set_bit(input_bits2, change_pos, 1 ^ bitarray_at(input_bits2, change_pos));
 		} else {
 			for (var i = 0; i < bitarray_length(input_bits2); i++) {
