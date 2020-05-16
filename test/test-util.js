@@ -186,7 +186,8 @@ function generate_weak_rng_test() {
 }
 
 function test_bit_byte_conversions() {
-	var vec = [10, 20, 30, 225, 255, 0];
+	// var vec = [10, 20, 30, 225, 255, 0];
+	var vec = [10, 20, 30, 225, 0, 255];
 	var stream = vector_to_stream(vec);
 
 	var bin_stream = byte_stream_to_binary_stream(stream);
@@ -194,7 +195,7 @@ function test_bit_byte_conversions() {
 	var byt_stream = binary_stream_to_byte_stream(vector_to_stream(bin));
 	var byt = stream_to_vector(byt_stream);
 
-	if (bin !== byt) {
+	if (vec !== byt) {
 		debugger;
 		throw "NOT EQUAL";
 	}
