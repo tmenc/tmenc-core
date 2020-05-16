@@ -28,10 +28,13 @@ rl.question('pass: ', (pass) => {
 							var key = make_key(pass, salt, file, key_size, machine_size, wrap_count);
 							debug_vec(key)
 
+							var buf = new Buffer(key_size);
+
 							for (var i = 0; i < key_size; i++) {
-								var x = key[i] ^ input_file_bits[i];
-								process.stdout.write(x);
+								buf[i] = key[i] ^ input_file_bits[i];
 							}
+
+							process.stdout.write(buf);
 
 						rl.close();
 					});
