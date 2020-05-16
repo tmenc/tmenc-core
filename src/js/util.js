@@ -28,6 +28,19 @@ function stream_to_vector(pop) {
 	}
 }
 
+function vector_to_stream(vec) {
+	var i = -1;
+	var len = vec.length;
+	return function() {
+		i = i + 1;
+		if (i < len) {
+			return vec[i];
+		} else {
+			return END_OF_STREAM_TOKEN;
+		}
+	}
+}
+
 function append_2_streams(pop1, pop2) {
 	var first = true;
 	var cur = pop1;
