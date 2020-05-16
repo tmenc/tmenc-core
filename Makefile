@@ -1,6 +1,8 @@
 
 HERE = $(PWD)
 
+NODE = node inspect --trace-uncaught
+
 NIST_TEST_DATA_FILE = $(HERE)/build/test/test-data~
 NIST_DIR = test/nist-sts
 NIST_EXECUTABLE = $(NIST_DIR)/assess
@@ -12,7 +14,7 @@ all: build-js
 build-js: | build build-js-srcs
 tests: | tests-build-js-srcs
 
-test-all: test-nist-big test-nist-small test-hash
+test-all: test-nist-big test-nist-small test-hash test-misc
 
 tests-build-js-srcs: $(TEST_SRCS)
 
@@ -20,7 +22,7 @@ $(TEST_SRCS): build/test src/js/machine.js src/js/util.js test/test-util.js $(TE
 	cat src/js/machine.js src/js/util.js test/test-util.js $(@:build/%=%) > $@
 
 $(NIST_TEST_DATA_FILE): build/test/test-nist.js
-	node build/test/test-nist.js > $(NIST_TEST_DATA_FILE)
+	$(NODE) build/test/test-nist.js > $(NIST_TEST_DATA_FILE)
 
 test-nist-small: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 	cd $(NIST_DIR) && \
@@ -35,7 +37,10 @@ test-nist-big: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 	test/check-nist-result.sh "0" "$(HERE)/build/$@-result"
 
 test-hash: build/test build/test/test-hash.js
-	node build/test/test-hash.js
+	$(NODE) build/test/test-hash.js
+
+test-misc: build/test build/test/test-misc.js
+	$(NODE) build/test/test-misc.js
 
 build/test: build
 	mkdir -p $@
@@ -45,7 +50,7 @@ $(NIST_EXECUTABLE):
 	cd $(NIST_DIR) && $(MAKE)
 
 cli: all
-	printf '0a0bff\n0a0b00\nMakefile\n1000\n3\nbuild/cli.js\nEND' | node build/cli.js
+	printf '0a0bff\n0a0b00\nMakefile\n1000\n3\nbuild/cli.js\nEND' | $(NODE) build/cli.js
 
 build-js-srcs: build/cli.js
 

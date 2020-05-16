@@ -184,3 +184,18 @@ function generate_weak_rng_test() {
 		console.log(rng());
 	}
 }
+
+function test_bit_byte_conversions() {
+	var vec = [10, 20, 30, 225, 255, 0];
+	var stream = vector_to_stream(vec);
+
+	var bin_stream = byte_stream_to_binary_stream(stream);
+	var bin = stream_to_vector(bin_stream);
+	var byt_stream = binary_stream_to_byte_stream(vector_to_stream(bin));
+	var byt = stream_to_vector(byt_stream);
+
+	if (bin !== byt) {
+		debugger;
+		throw "NOT EQUAL";
+	}
+}
