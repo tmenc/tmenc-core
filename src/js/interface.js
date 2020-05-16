@@ -7,12 +7,12 @@ function make_key(pass, salt, file, size, machine_size, wrap_count) {
 	var file_buffer = fs.readFileSync(file);
 	var file_stream = byte_stream_to_binary_stream(buffer_to_byte_stream(file_buffer));
 
-	var input_stream = append_streams([pass_stream, salt_stream, file_stream]);
-
 	var pass_v = stream_to_vector(hex_to_binary_stream(pass));
 	var salt_v = stream_to_vector(hex_to_binary_stream(salt));
 	var file_v = buffer_to_vector(file_buffer);
 	var machine_bits = make_machine_from_secret(pass_v, salt_v, file_v, machine_size);
+
+	var input_stream = append_streams([pass_stream, salt_stream, file_stream]);
 
 	var input_bits = stream_to_bitarr(input_stream);
 	var env = make_tm_env(machine_bits, input_bits, size);
