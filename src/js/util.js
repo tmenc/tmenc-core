@@ -78,7 +78,7 @@ function append_streams(streams_vector) {
 
 // LITTLE ENDIAN?
 function integer_to_binary_stream(size) {
-	var i = size;
+	var i = -1;
 	var n = -1;
 
 	return function(new_n) {
