@@ -15,11 +15,20 @@ function debug_vec(v) {
 rl.question('pass: ', (pass) => {
 	rl.question("salt: ", (salt) => {
 		rl.question("keyfile: ", (file) => {
-				var key = make_key(pass, salt, file, 100, 999, 3);
+			rl.question("machine-size: ", (machine_size_s) => {
+				var machine_size = parseInt(machine_size_s);
+				rl.question("key-size: ", (key_size_s) => {
+					var key_size = parseInt(key_size_s);
+					rl.question("wrap-count: ", (wrap_count_s) => {
+						var wrap_count = parseInt(wrap_count_s);
 
-			debug_vec(key)
+						var key = make_key(pass, salt, file, key_size, machine_size, wrap_count);
+						debug_vec(key)
 
-			rl.close();
+						rl.close();
+					});
+				});
+			});
 		});
 	});
 });
