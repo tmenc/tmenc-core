@@ -1,18 +1,4 @@
 
-// works on uint32_t
-function init_simple_rng_ref(seed) {
-	var x = seed;
-	var mod = 4294967296; // 2 ^ 32
-	function to1bit (z) {
-		if (z > 2147483648) { return 1; }
-		else { return 0; }
-	}
-	return function () {
-		x = (((x * 1664525) % mod) + 1013904223) % mod;
-		return to1bit(x);
-	};
-}
-
 function generate_n_weak_random_bits(seed, n) {
 	var rng = init_simple_rng_ref(seed);
 	var ret = bitarray_alloc(n);
