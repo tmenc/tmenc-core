@@ -89,7 +89,7 @@ function integer_to_binary_stream(size) {
 		}
 
 		i = i + 1;
-		if (n > 0)
+		if (n >= 0)
 		{
 			var x = n % 2;
 			n = Math.floor(n / 2);
