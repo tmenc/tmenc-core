@@ -8,13 +8,13 @@ NIST_EXECUTABLE = $(NIST_DIR)/assess
 TEST_FILES = $(shell ls -d -1 test/*.js)
 TEST_SRCS = $(addprefix build/,$(TEST_FILES))
 
-all: builds
-builds: | build builds-srcs
-tests: | tests-builds-srcs
+all: build-js
+build-js: | build build-js-srcs
+tests: | tests-build-js-srcs
 
 test-all: test-nist-big test-nist-small test-hash
 
-tests-builds-srcs: $(TEST_SRCS)
+tests-build-js-srcs: $(TEST_SRCS)
 
 $(TEST_SRCS): build/test src/js/machine.js test/test-util.js $(TEST_FILES)
 	cat src/js/machine.js test/test-util.js $(@:build/%=%) > $@
@@ -47,7 +47,7 @@ $(NIST_EXECUTABLE):
 cli: all
 	printf '0a0bff\n0a0b00\nMakefile\nEND' | node build/cli.js
 
-builds-srcs: build/cli.js
+build-js-srcs: build/cli.js
 
 build:
 	mkdir $@
