@@ -1,5 +1,5 @@
 
-// NOTE: `wrap_count' should depend on `length(pass++file)'
+// NOTE: `wrap_count' should depend on `length(pass++salt++file)'
 // salt should to be different for each key!
 function make_key(pass_v, salt_v, file_buffer, size, machine_size, wrap_count) {
 	var pass_stream = vector_to_stream(pass_v);
