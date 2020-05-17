@@ -49,12 +49,7 @@ rl.question('pass: ', (pass_s) => {
 							var byte_stream = binary_stream_to_byte_stream(padded_stream);
 							var buf = byte_stream_to_byte_buffer(byte_stream);
 
-							// debug_vec(stream_to_vector(salt_stream));
-							// console.log('len:', salt_len);
-							// console.log('binary_stream:', binary_stream);
-							stream_to_vector(binary_stream);
-
-							// fs.writeFileSync(output_file_path, buf);
+							fs.writeFileSync(output_file_path, buf);
 
 							rl.close();
 						});
