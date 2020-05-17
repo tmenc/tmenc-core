@@ -21,13 +21,13 @@ function read_things(keys, callback) {
 
 	function rlcb(x) {
 		arr.push(x);
-		console.log('arr[' + keys[i] + '] = ' + x);
+		// console.log('arr[' + keys[i] + '] = ' + x);
 		i++;
 		if (i < keys.length) {
 			rl.question(keys[i] + ': ', rlcb);
 		} else {
 			rl.close();
-			callback.apply(arr);
+			callback.apply(null, arr);
 		}
 	}
 
