@@ -272,6 +272,18 @@ function stream_read_n_vector(n, stream) {
 	return vec;
 }
 
+function stream_read_n_stream(n, stream) {
+	var i = -1;
+	return function() {
+		i = i + 1;
+		if (i >= n) {
+			return END_OF_STREAM_TOKEN;
+		} else {
+			return stream();
+		}
+	};
+}
+
 function stream_map(stream, fn) {
 	return function() {
 		var x = stream();
