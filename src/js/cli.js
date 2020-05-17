@@ -34,11 +34,10 @@ rl.question('pass: ', (pass_s) => {
 							var key = make_key(pass, salt, file_buffer, key_size, machine_size, wrap_count);
 							debug_vec(key)
 
-							var buf = Buffer.alloc(key_size);
-
-							for (var i = 0; i < key_size; i++) {
-								buf[i] = key[i] ^ input_file_bits[i];
+							function xorer(i) {
+								return key[i] ^ input_file_bits[i];
 							}
+							var xored_stream = stream_map(stream_range(key_size), xorer);
 
 							var byte_size = key_size / BLOCK_LEN;
 							var bytes = byte_stream_to_byte_buffer(byte_size, binary_stream_to_byte_stream(buffer_to_stream(buf)));
