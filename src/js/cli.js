@@ -79,8 +79,13 @@ function decode_file() {
 	function read_cb(pass_s, file, machine_size_s, wrap_count_s, input_file_path, output_file_path) {
 		var input_file_buffer = fs.readFileSync(input_file_path);
 		var input_file_stream = byte_stream_to_binary_stream(buffer_to_byte_stream(input_file_buffer));
+
 		var salt_len = binary_stream_read_integer(SIZE_BLOCK_LEN, input_file_stream);
+		var salt_vector = stream_read_n_vector(salt_len, input_file_stream);
+		var xored_len = binary_stream_read_integer(SIZE_BLOCK_LEN, input_file_stream);
+		var xored_vector = stream_read_n_vector(xored_len, input_file_stream);
 		console.log('salt_len:', salt_len);
+		console.log('xored_len:', xored_len);
 	}
 	read_things(['pass', 'keyfile', 'machine-size', 'wrap-count', 'input-file', 'output-file'], read_cb);
 }
