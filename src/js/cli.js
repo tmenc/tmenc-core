@@ -39,7 +39,6 @@ rl.question('pass: ', (pass_s) => {
 							}
 							var xored_stream = stream_map(stream_range(key_size), xorer);
 
-							var byte_size = key_size / BLOCK_LEN;
 							var bytes = byte_stream_to_byte_buffer(byte_size, binary_stream_to_byte_stream(buffer_to_stream(buf)));
 
 							var salt_len = salt.length;

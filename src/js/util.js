@@ -294,17 +294,16 @@ function buffer_to_vector(buffer) {
 	return buffer;
 }
 
-function byte_stream_to_byte_buffer(size, stream) {
+function byte_stream_to_byte_buffer(stream) {
+	var vec = stream_to_vector(stream);
+	var size = vec.length;
 	var buf = Buffer.alloc(size);
-	var i = 0;
-	while (true) {
-		x = stream();
-		if (x == END_OF_STREAM_TOKEN) {
-			return buf;
-		}
+
+	for (var i = 0; i < size; i++) {
+		var x = vec[i];
 		buf.writeUInt8(x, i);
-		i = i + 1;
 	}
+	return buf;
 }
 
 function make_machine_from_secret(pass_vector, salt_vector, file_vector, machine_size) {
