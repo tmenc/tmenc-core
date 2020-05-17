@@ -33,12 +33,11 @@ function read_things(keys, callback) {
 	rl.question(keys[0] + ': ', rlcb);
 }
 
-function handle_file_buffer(pass_s, salt_s, file_buffer, machine_size_s, wrap_count_s, input_file_path, output_file_path) {
+function handle_file_buffer(pass_s, salt_s, file_buffer, machine_size_s, wrap_count_s, input_file_buffer, output_file_path) {
 	var pass = stream_to_vector(hex_to_binary_stream(pass_s));
 	var salt = stream_to_vector(hex_to_binary_stream(salt_s));
 	var machine_size = parseInt(machine_size_s);
 	var wrap_count = parseInt(wrap_count_s);
-	var input_file_buffer = fs.readFileSync(input_file_path);
 
 	var input_file_stream = byte_stream_to_binary_stream(buffer_to_byte_stream(input_file_buffer));
 	var input_file_bits = stream_to_bitarr(input_file_stream);
@@ -69,7 +68,8 @@ function handle_file_buffer(pass_s, salt_s, file_buffer, machine_size_s, wrap_co
 function encode_file() {
 	function read_cb(pass_s, salt_s, file, machine_size_s, wrap_count_s, input_file_path, output_file_path) {
 		var file_buffer = fs.readFileSync(file);
-		return handle_file_buffer(pass_s, salt_s, file_buffer, machine_size_s, wrap_count_s, input_file_path, output_file_path);
+		var input_file_buffer = fs.readFileSync(input_file_path);
+		return handle_file_buffer(pass_s, salt_s, file_buffer, machine_size_s, wrap_count_s, input_file_buffer, output_file_path);
 	}
 
 	read_things(['pass', 'salt', 'keyfile', 'machine-size', 'wrap-count', 'input-file', 'output-file'], read_cb);
