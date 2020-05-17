@@ -250,7 +250,7 @@ function ascii_to_binary(ascii) {
 	return stream_to_vector(ascii_to_binary_stream(ascii));
 }
 
-function buffer_to_byte_stream(js_Buffer) {
+function buffer_to_stream(js_Buffer) {
 	var i = -1;
 
 	function pop() {
