@@ -110,7 +110,7 @@ function decode_file() {
 		console.log('salt_len:', salt_len);
 		console.log('xored_len:', xored_len);
 
-		return handle_file_buffer(true, pass_s, salt, file_buffer, machine_size_s, wrap_count_s, xored_buffer, output_file_path);
+		return handle_file_buffer(false, pass_s, salt, file_buffer, machine_size_s, wrap_count_s, xored_buffer, output_file_path);
 	}
 	read_things(['pass', 'keyfile', 'machine-size', 'wrap-count', 'input-file', 'output-file'], read_cb);
 }
