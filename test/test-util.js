@@ -204,7 +204,7 @@ function assert_arr_equal(a, b) {
 }
 
 function test_1_bit_byte_conversions() {
-	var f = integer_to_binary_stream(8);
+	var f = integer_to_binary_stream_init(8);
 
 	f(0);
 	assert_arr_equal(stream_to_vector(f), [0,0,0,0,0,0,0,0]);

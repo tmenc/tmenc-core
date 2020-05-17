@@ -62,7 +62,7 @@ function append_streams(streams_vector) {
 }
 
 // LITTLE ENDIAN?
-function integer_to_binary_stream(size) {
+function integer_to_binary_stream_init(size) {
 	var i = size;
 	var n = -1;
 
@@ -87,8 +87,14 @@ function integer_to_binary_stream(size) {
 	}
 }
 
+function integer_to_binary_stream(size, n) {
+	var f = integer_to_binary_stream_init(size);
+	f(n);
+	return f;
+}
+
 function byte_stream_to_binary_stream(pop) {
-	var conv = integer_to_binary_stream(8);
+	var conv = integer_to_binary_stream_init(8);
 
 	return function() {
 		var x = conv();
