@@ -197,7 +197,7 @@ function arr_equal(a, b) {
 }
 
 function assert_arr_equal(a, b) {
-	if (!(arraysEqual
+	if (!(arraysEqual(a, b))) {
 		debugger;
 		throw "ASSERT FAILED";
 	}
