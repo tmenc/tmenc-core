@@ -75,8 +75,13 @@ function encode_file() {
 }
 
 function decode_file() {
-
-	read_things(['pass', 'salt', 'keyfile', 'machine-size', 'wrap-count', 'input-file', 'output-file'], read_cb);
+	function read_cb(pass_s, file, machine_size_s, wrap_count_s, input_file_path, output_file_path) {
+		var file_buffer = fs.readFileSync(file);
+		var file_stream = buffer_to_stream(file_buffer);
+		var salt_len = binary_stream_read_integer(SIZE_BLOCK_LEN, file_stream);
+		console.log('salt_len:', salt_len);
+	}
+	read_things(['pass', 'keyfile', 'machine-size', 'wrap-count', 'input-file', 'output-file'], read_cb);
 }
 
 function entry() {
