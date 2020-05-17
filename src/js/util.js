@@ -51,6 +51,7 @@ function append_streams(streams_vector) {
 			pos = pos + 1;
 			if (pos < len) {
 				cur = streams_vector[pos];
+				console.log('cur:', cur);
 				x = cur();
 			} else {
 				return END_OF_STREAM_TOKEN;
