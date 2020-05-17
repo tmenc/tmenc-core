@@ -41,22 +41,6 @@ function vector_to_stream(vec) {
 	}
 }
 
-function append_2_streams(pop1, pop2) {
-	var first = true;
-	var cur = pop1;
-	return function () {
-		var x = cur();
-		if (x === END_OF_STREAM_TOKEN) {
-			if (first) {
-				first = false;
-				cur = pop2;
-				x = cur();
-			}
-		}
-		return x;
-	}
-}
-
 function append_streams(streams_vector) {
 	var pos = 0;
 	var cur = streams_vector[0];
