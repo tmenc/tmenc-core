@@ -35,7 +35,8 @@ rl.question('pass: ', (pass) => {
 								buf[i] = key[i] ^ input_file_bits[i];
 							}
 
-							process.stdout.write(buf);
+							var bytes = byte_stream_to_byte_buffer(binary_stream_to_byte_stream(buffer_to_byte_stream(buf)));
+							process.stdout.write(bytes);
 
 						rl.close();
 					});

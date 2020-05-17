@@ -244,6 +244,17 @@ function buffer_to_vector(buffer) {
 	return buffer;
 }
 
+function byte_stream_to_byte_buffer(stream) {
+	var buf = new Buffer();
+	while (true) {
+		x = stream();
+		if (x == END_OF_STREAM_TOKEN) {
+			return buf;
+		}
+		buf.writeInt8(x);
+	}
+}
+
 function make_machine_from_secret(pass_vector, salt_vector, file_vector, machine_size) {
 	function vector_to_cycle_vector(a) {
 		var len = a.length;
