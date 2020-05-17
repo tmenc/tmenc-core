@@ -246,12 +246,14 @@ function buffer_to_vector(buffer) {
 
 function byte_stream_to_byte_buffer(size, stream) {
 	var buf = Buffer.alloc(size);
+	var i = 0;
 	while (true) {
 		x = stream();
 		if (x == END_OF_STREAM_TOKEN) {
 			return buf;
 		}
-		buf.writeUInt8(x);
+		buf.writeUInt8(x, i);
+		i = i + 1;
 	}
 }
 
