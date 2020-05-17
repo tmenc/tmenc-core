@@ -12,8 +12,10 @@ function debug_vec(v) {
 	console.log('len(v):', v.length, 'v:', v);
 }
 
-rl.question('pass: ', (pass) => {
-	rl.question("salt: ", (salt) => {
+rl.question('pass: ', (pass_s) => {
+	var pass = stream_to_vector(hex_to_binary_stream(pass_s));
+	rl.question("salt: ", (salt_s) => {
+		var salt = stream_to_vector(hex_to_binary_stream(salt_s));
 		rl.question("keyfile: ", (file) => {
 			rl.question("machine-size: ", (machine_size_s) => {
 				var machine_size = parseInt(machine_size_s);
