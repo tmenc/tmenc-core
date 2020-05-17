@@ -246,6 +246,30 @@ function stream_range(n) {
 	};
 }
 
+function binary_stream_read_integer(size, stream) {
+	var ret = 0;
+	var pow = 1;
+	for (var i = 0; i < size; i++) {
+		var x = stream();
+		if (x == END_OF_STREAM_TOKEN) {
+			throw 'Asked for integer that is bigger in size than the stream';
+		}
+		
+	}
+}
+
+function stream_read_n_vector(n, stream) {
+	var vec = new Array(n);
+	for (var i = 0; i < n; i++) {
+		var x = stream();
+		if (x == END_OF_STREAM_TOKEN) {
+			throw 'Asked for n bits, but stream doesnt have that much';
+		}
+		vec[i] = x;
+	}
+	return vec;
+}
+
 function stream_map(stream, fn) {
 	return function() {
 		var x = stream();
