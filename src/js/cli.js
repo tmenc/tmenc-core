@@ -40,6 +40,10 @@ rl.question('pass: ', (pass_s) => {
 
 							var byte_size = key_size / 8;
 							var bytes = byte_stream_to_byte_buffer(byte_size, binary_stream_to_byte_stream(buffer_to_byte_stream(buf)));
+
+							var salt_len = salt.length;
+							var salt_padding = salt.length % 8;
+
 							fs.writeFileSync(output_file_path, bytes);
 
 							rl.close();
