@@ -44,16 +44,15 @@ rl.question('pass: ', (pass_s) => {
 							var salt_len = salt.length;
 							var salt_len_stream = integer_to_binary_stream(32, salt_len);
 
-							// var binary_stream = append_streams([salt_len_stream, salt_stream, key_size, xored_stream]);
-							var binary_stream = append_streams([salt_len_stream, salt_stream, key_size_stream, xored_stream]);
+							// var binary_stream = append_streams([salt_len_stream, salt_stream, key_size_stream, xored_stream]);
 							// var padded_stream = pad_stream(BLOCK_LEN, binary_stream);
 							// var byte_stream = binary_stream_to_byte_stream(padded_stream);
 							// var buf = byte_stream_to_byte_buffer(byte_stream);
 
-							// debug_vec(stream_to_vector(salt_len_stream));
+							debug_vec(stream_to_vector(salt_len_stream));
 							// console.log('len:', salt_len);
 							// console.log('binary_stream:', binary_stream);
-							stream_to_vector(binary_stream);
+							// stream_to_vector(binary_stream);
 
 							// fs.writeFileSync(output_file_path, buf);
 
