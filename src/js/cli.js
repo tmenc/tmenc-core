@@ -33,28 +33,38 @@ function read_things(keys, callback) {
 	rl.question(keys[0] + ': ', rlcb);
 }
 
+function xor_with_key(key_tape, input_file_bits) {
+	var key_size = bitarray_length(key_tape);
+	function xorer(i) {
+		return key_tape[i] ^ input_file_bits[i];
+	}
+	var xored_stream = stream_map(stream_range(key_size), xorer);
+	return xored_stream;
+}
+
+function make_key_from_parameters(pass, salt, file_buffer, machine_size, wrap_count, input_file_buffer, key_size) {
+	var key = make_key(pass, salt, file_buffer, key_size, machine_size, wrap_count);
+	debug_vec(key)
+
+	return key;
+}
+
 function handle_file_buffer(pass_s, salt_s, file_buffer, machine_size_s, wrap_count_s, input_file_buffer, output_file_path) {
 	var pass = stream_to_vector(hex_to_binary_stream(pass_s));
 	var salt = stream_to_vector(hex_to_binary_stream(salt_s));
 	var machine_size = parseInt(machine_size_s);
 	var wrap_count = parseInt(wrap_count_s);
-
 	var input_file_stream = byte_stream_to_binary_stream(buffer_to_byte_stream(input_file_buffer));
 	var input_file_bits = stream_to_bitarr(input_file_stream);
 	var key_size = bitarray_length(input_file_bits);
 
-	var key = make_key(pass, salt, file_buffer, key_size, machine_size, wrap_count);
-	debug_vec(key)
-
-	function xorer(i) {
-		return key[i] ^ input_file_bits[i];
-	}
-	var xored_stream = stream_map(stream_range(key_size), xorer);
-	var key_size_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, key_size);
+	var key = make_key_from_parameters(pass, salt, file_buffer, machine_size, wrap_count, input_file_buffer, key_size);
+	var xored_stream = xor_with_key(key, input_file_bits);
 
 	var salt_stream = vector_to_stream(salt);
 	var salt_len = salt.length;
 	var salt_len_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, salt_len);
+	var key_size_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, key_size);
 
 	var binary_stream = append_streams([salt_len_stream, salt_stream, key_size_stream, xored_stream]);
 	var padded_stream = pad_stream(BLOCK_LEN, binary_stream);
