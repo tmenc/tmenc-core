@@ -255,6 +255,7 @@ function binary_stream_read_integer(size, stream) {
 			throw 'Asked for integer that is bigger in size than the stream';
 		}
 		ret += pow * x;
+		pow *= 2;
 	}
 	return ret;
 }
