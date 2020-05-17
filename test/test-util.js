@@ -224,8 +224,5 @@ function test_bit_byte_conversions() {
 	var byt_stream = binary_stream_to_byte_stream(vector_to_stream(bin));
 	var byt = stream_to_vector(byt_stream);
 
-	if (vec !== byt) {
-		debugger;
-		throw "NOT EQUAL";
-	}
+	assert_arr_equal(vec, byt);
 }
