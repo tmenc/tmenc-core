@@ -129,7 +129,7 @@ function binary_stream_to_byte_stream(pop) {
 			var b = pop();
 
 			if (b == END_OF_STREAM_TOKEN) {
-				if (acc !== 0) {
+				if (count !== 0) {
 					throw "NOT PADDED TO 8 BITS!";
 				}
 				return END_OF_STREAM_TOKEN;
