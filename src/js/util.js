@@ -82,7 +82,7 @@ function integer_to_binary_stream(size) {
 	var n = -1;
 
 	return function(new_n) {
-		if (new_n) {
+		if (new_n !== undefined) {
 			i = -1;
 			n = new_n;
 			return;
@@ -95,7 +95,7 @@ function integer_to_binary_stream(size) {
 			n = Math.floor(n / 2);
 			return x;
 		}
-		if (i <= size) {
+		if (i < size) {
 			return 0;
 		}
 		return END_OF_STREAM_TOKEN;
