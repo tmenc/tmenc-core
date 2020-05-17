@@ -41,7 +41,7 @@ rl.question('pass: ', (pass_s) => {
 
 							var salt_stream = vector_to_stream;
 							var salt_len = salt.length;
-							var salt_len_stream = integer_to_binary_stream_init(32)(salt_len);
+							var salt_len_stream = integer_to_binary_stream(32, salt_len);
 
 							// var binary_stream = append_streams([salt_len_stream, salt_stream, key_size, xored_stream]);
 							// var padded_stream = pad_stream(BLOCK_LEN, binary_stream);
