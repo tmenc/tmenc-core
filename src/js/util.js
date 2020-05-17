@@ -250,6 +250,17 @@ function ascii_to_binary(ascii) {
 	return stream_to_vector(ascii_to_binary_stream(ascii));
 }
 
+function stream_map(stream, fn) {
+	return function() {
+		var x = stream();
+		if (x == END_OF_STREAM_TOKEN) {
+			return END_OF_STREAM_TOKEN;
+		} else {
+			return fn(x);
+		}
+	};
+}
+
 function buffer_to_stream(js_Buffer) {
 	var i = -1;
 
