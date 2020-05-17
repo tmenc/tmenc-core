@@ -120,35 +120,29 @@ function byte_stream_to_binary_stream(pop) {
 	};
 }
 
-function padding_stream(padding, block_size) {
-	if (padding == 0) {
-		return padding_stream(block_size, block_size);
-	}
-	if (padding >= block_size) {
-		return padding_stream(padding % block_size, block_size);
-	}
-
+function pad_stream(block_size, stream) {
 	var i = -1;
+	var finished = false;
 	return function() {
-		if (i == padding) {
-			return 1;
-		} else if (i > padding) {
-			return END_OF_STREAM_TOKEN;
+		i = i + 1;
+		if (finished) {
+			if (i % block_size == 0) {
+				return END_OF_STREAM_TOKEN;
+			} else {
+				return 0;
+			}
 		} else {
-			return 0;
-		}
-	}
-}
-
-function stream_read_padding(stream) {
-	var count = -1;
-	while (true) {
-		count = count + 1;
-		var x = stream();
-		if (x == END_OF_STREAM_TOKEN) {
-			throw "Bad padding format: expected a 1 at the end but stream ended";
-		} else if (x == 1) {
-			return count;
+			var x = stream();
+			if (x == END_OF_STREAM_TOKEN) {
+				finished = true;
+				if (i % block_size == 0) {
+					return END_OF_STREAM_TOKEN;
+				} else {
+					return 0;
+				}
+			} else {
+				return x;
+			}
 		}
 	}
 }
