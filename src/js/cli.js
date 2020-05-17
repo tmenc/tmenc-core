@@ -16,21 +16,17 @@ var BLOCK_LEN = 8;
 var SIZE_BLOCK_LEN = 4 * BLOCK_LEN; // 32 bit integer
 
 function read_things(keys, callback) {
-	var i = -1;
+	var i = 0;
 	var arr = [];
 
-	console.log('wtf..');
-
 	function rlcb(x) {
-		console.log('pushing');
 		arr.push(x);
+		console.log('arr[' + keys[i] + '] = ' + x);
 		i++;
-		if (i <= keys.length) {
-			console.log('reading next');
+		if (i < keys.length) {
 			rl.question(keys[i] + ': ', rlcb);
 		} else {
-			console.log('ummmm..');
-			// rl.close();
+			rl.close();
 			callback.apply(arr);
 		}
 	}
