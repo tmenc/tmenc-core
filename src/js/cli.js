@@ -13,6 +13,7 @@ function debug_vec(v) {
 }
 
 var BLOCK_LEN = 8;
+var SIZE_BLOCK_LEN = 4 * BLOCK_LEN; // 32 bit integer
 
 rl.question('pass: ', (pass_s) => {
 	var pass = stream_to_vector(hex_to_binary_stream(pass_s));
@@ -38,11 +39,11 @@ rl.question('pass: ', (pass_s) => {
 								return key[i] ^ input_file_bits[i];
 							}
 							var xored_stream = stream_map(stream_range(key_size), xorer);
-							var key_size_stream = integer_to_binary_stream(32, key_size);
+							var key_size_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, key_size);
 
 							var salt_stream = vector_to_stream(salt);
 							var salt_len = salt.length;
-							var salt_len_stream = integer_to_binary_stream(32, salt_len);
+							var salt_len_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, salt_len);
 
 							var binary_stream = append_streams([salt_len_stream, salt_stream, key_size_stream, xored_stream]);
 							var padded_stream = pad_stream(BLOCK_LEN, binary_stream);
