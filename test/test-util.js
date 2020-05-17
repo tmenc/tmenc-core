@@ -197,7 +197,7 @@ function arr_equal(a, b) {
 }
 
 function assert_arr_equal(a, b) {
-	if (!(arraysEqual(a, b))) {
+	if (!(arr_equal(a, b))) {
 		debugger;
 		throw "ASSERT FAILED";
 	}
@@ -207,10 +207,10 @@ function test_1_bit_byte_conversions() {
 	var f = integer_to_binary_stream(8);
 
 	f(0);
-	assert_eq(stream_to_vector(f), [0,0,0,0,0,0,0,0]);
+	assert_arr_equal(stream_to_vector(f), [0,0,0,0,0,0,0,0]);
 
 	f(255);
-	assert_eq(stream_to_vector(f), [1,1,1,1,1,1,1,1]);
+	assert_arr_equal(stream_to_vector(f), [1,1,1,1,1,1,1,1]);
 }
 
 function test_bit_byte_conversions() {
