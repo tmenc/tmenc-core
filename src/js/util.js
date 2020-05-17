@@ -260,6 +260,20 @@ function binary_stream_read_integer(size, stream) {
 	return ret;
 }
 
+// function binary_stream_read_integer(size, stream) {
+// 	var ret = 0;
+// 	var pow = Math.pow(2, size - 1);
+// 	for (var i = 0; i < size; i++) {
+// 		var x = stream();
+// 		if (x == END_OF_STREAM_TOKEN) {
+// 			throw 'Asked for integer that is bigger in size than the stream';
+// 		}
+// 		ret += pow * x;
+// 		pow /= 2;
+// 	}
+// 	return ret;
+// }
+
 function stream_read_n_vector(n, stream) {
 	var vec = new Array(n);
 	for (var i = 0; i < n; i++) {
