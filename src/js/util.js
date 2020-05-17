@@ -254,8 +254,9 @@ function binary_stream_read_integer(size, stream) {
 		if (x == END_OF_STREAM_TOKEN) {
 			throw 'Asked for integer that is bigger in size than the stream';
 		}
-		
+		ret += pow * x;
 	}
+	return ret;
 }
 
 function stream_read_n_vector(n, stream) {
