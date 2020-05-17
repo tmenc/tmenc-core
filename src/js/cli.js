@@ -26,7 +26,6 @@ function read_things(keys, callback) {
 		if (i < keys.length) {
 			rl.question(keys[i] + ': ', rlcb);
 		} else {
-			rl.close();
 			callback.apply(null, arr);
 		}
 	}
