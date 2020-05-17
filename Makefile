@@ -50,7 +50,7 @@ $(NIST_EXECUTABLE):
 	cd $(NIST_DIR) && $(MAKE)
 
 cli: all
-	printf '0a0bff\n0a0b00\nMakefile\n1000\n3\nbuild/cli.js\nbuild/cli-output\nEND' | $(NODE) build/cli.js
+	printf '0a0bff\n0a0b00\nMakefile\n1000\n3\nLICENSE\nbuild/cli-output\nEND' | $(NODE) build/cli.js
 
 build-js-srcs: build/cli.js
 
