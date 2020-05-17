@@ -214,13 +214,19 @@ function test_1_bit_byte_conversions() {
 }
 
 function test_bit_byte_conversions() {
-	var vec = [10, 20, 30, 225, 255, 0];
-	var stream = vector_to_stream(vec);
+	function byte_to_bit(vec) {
+		var stream = vector_to_stream(vec);
 
-	var bin_stream = byte_stream_to_binary_stream(stream);
-	var bin = stream_to_vector(bin_stream);
-	var byt_stream = binary_stream_to_byte_stream(vector_to_stream(bin));
-	var byt = stream_to_vector(byt_stream);
+		var bin_stream = byte_stream_to_binary_stream(stream);
+		var bin = stream_to_vector(bin_stream);
+		var byt_stream = binary_stream_to_byte_stream(vector_to_stream(bin));
+		var byt = stream_to_vector(byt_stream);
 
-	assert_arr_equal(vec, byt);
+		assert_arr_equal(vec, byt);
+	}
+
+	byte_to_bit([0, 255]);
+	byte_to_bit([10, 20, 30, 225, 255, 0]);
+	byte_to_bit([10, 20, 30, 225, 0, 255, 42]);
+
 }
