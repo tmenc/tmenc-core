@@ -29,13 +29,14 @@ rl.question('pass: ', (pass) => {
 							var key = make_key(pass, salt, file_buffer, key_size, machine_size, wrap_count);
 							debug_vec(key)
 
-							var buf = new Buffer(key_size);
+							var buf = Buffer.alloc(key_size);
 
 							for (var i = 0; i < key_size; i++) {
 								buf[i] = key[i] ^ input_file_bits[i];
 							}
 
-							var bytes = byte_stream_to_byte_buffer(binary_stream_to_byte_stream(buffer_to_byte_stream(buf)));
+							var byte_size = key_size / 8;
+							var bytes = byte_stream_to_byte_buffer(byte_size, binary_stream_to_byte_stream(buffer_to_byte_stream(buf)));
 							process.stdout.write(bytes);
 
 						rl.close();

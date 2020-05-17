@@ -244,14 +244,14 @@ function buffer_to_vector(buffer) {
 	return buffer;
 }
 
-function byte_stream_to_byte_buffer(stream) {
-	var buf = new Buffer();
+function byte_stream_to_byte_buffer(size, stream) {
+	var buf = Buffer.alloc(size);
 	while (true) {
 		x = stream();
 		if (x == END_OF_STREAM_TOKEN) {
 			return buf;
 		}
-		buf.writeInt8(x);
+		buf.writeUInt8(x);
 	}
 }
 
