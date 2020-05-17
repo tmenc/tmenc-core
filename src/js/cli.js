@@ -12,6 +12,8 @@ function debug_vec(v) {
 	console.log('len(v):', v.length, 'v:', v);
 }
 
+var BLOCK_LEN = 8;
+
 rl.question('pass: ', (pass_s) => {
 	var pass = stream_to_vector(hex_to_binary_stream(pass_s));
 	rl.question("salt: ", (salt_s) => {
@@ -38,11 +40,11 @@ rl.question('pass: ', (pass_s) => {
 								buf[i] = key[i] ^ input_file_bits[i];
 							}
 
-							var byte_size = key_size / 8;
-							var bytes = byte_stream_to_byte_buffer(byte_size, binary_stream_to_byte_stream(buffer_to_byte_stream(buf)));
+							// var byte_size = key_size / BLOCK_LEN;
+							// var bytes = byte_stream_to_byte_buffer(byte_size, binary_stream_to_byte_stream(buffer_to_byte_stream(buf)));
 
 							var salt_len = salt.length;
-							var salt_padding = salt.length % 8;
+							var salt_len_stream = integer_to_binary_stream(32)(salt_len);
 
 							fs.writeFileSync(output_file_path, bytes);
 
