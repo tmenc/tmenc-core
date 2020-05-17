@@ -21,11 +21,12 @@ rl.question('pass: ', (pass) => {
 						var wrap_count = parseInt(wrap_count_s);
 						rl.question("input-file: ", (input_file_path) => {
 
+							var file_buffer = fs.readFileSync(file);
 							var input_file_stream = byte_stream_to_binary_stream(buffer_to_byte_stream(fs.readFileSync(input_file_path)));
 							var input_file_bits = stream_to_bitarr(input_file_stream);
 							var key_size = bitarray_length(input_file_bits);
 
-							var key = make_key(pass, salt, file, key_size, machine_size, wrap_count);
+							var key = make_key(pass, salt, file_buffer, key_size, machine_size, wrap_count);
 							debug_vec(key)
 
 							var buf = new Buffer(key_size);
