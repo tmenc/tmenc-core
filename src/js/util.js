@@ -297,13 +297,13 @@ function stream_map(stream, fn) {
 	};
 }
 
-function buffer_to_stream(js_Buffer) {
+function buffer_to_byte_stream(js_Buffer) {
 	var i = -1;
 
 	function pop() {
 		i = i + 1;
 		if (i < js_Buffer.length) {
-			return js_Buffer[i];
+			return js_Buffer.readUInt8(i);
 		} else {
 			return END_OF_STREAM_TOKEN;
 		}
