@@ -1,7 +1,7 @@
 
 HERE = $(PWD)
 
-NODE = node --trace-uncaught
+NODE = node inspect --trace-uncaught
 
 NIST_TEST_DATA_FILE = $(HERE)/build/test/test-data~
 NIST_DIR = test/nist-sts
