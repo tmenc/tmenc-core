@@ -150,13 +150,13 @@ function generate_example_key() {
 	var wr_tape_size   =   5000000;
 	var wrap_count     =         3;
 
-	var env_x = make_random_tm_env(input_size, machine_size, wr_tape_size);
-	var env = env_x.env;
-	tm_run_for_wc(env, wrap_count);
+	var stream = make_random_tm_env(input_size, machine_size, wr_tape_size);
+	var skip_count = input_size + wrap_count * wr_tape_size;
+	var write_tape = tm_run_for_wc(stream, skip_count, wr_tape_size);
 
-	var n = bitarray_length(env.write_tape);
+	var n = bitarray_length(write_tape);
 	for (var i = 0; i < n; i++) {
-		console.log(bitarray_at(env.write_tape, i));
+		console.log(bitarray_at(write_tape, i));
 	}
 }
 
