@@ -227,7 +227,7 @@ union stream_return_type_u {
 	size_t size;
 	void *other;
 };
-typedef stream_return_type_u stream_return_type;
+typedef union stream_return_type_u stream_return_type;
 
 typedef stream_return_type (*stream_generator)(void*);
 
