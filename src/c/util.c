@@ -5,9 +5,7 @@
 static bitarr
 bitarray_create_empty() {
 	bitarr ret = bitarray_alloc(1024);
-
 	ret.bit_size = 0;
-
 	return ret;
 }
 
