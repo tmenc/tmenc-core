@@ -117,7 +117,7 @@ void test_range_stream() {
 	print_vector_of_sizes(v);
 
 	y = range_stream(10);
-	b = stream_to_bitarr(&y);
+	b = binary_stream_to_bitarr(&y);
 
 	bitarray_print(b);
 }
@@ -145,7 +145,7 @@ void test_integer_to_binary_stream() {
 	size_t x = 100;
 	size_t base = 8;
 	stream s = integer_to_binary_stream(base, x);
-	bitarr a = stream_to_bitarr(&s);
+	bitarr a = binary_stream_to_bitarr(&s);
 
 	bitarray_print(a);
 }
@@ -176,7 +176,7 @@ void test_byte_stream_to_binary_stream() {
 
 	vs = vector_to_stream(&v);
 	bs = byte_stream_to_binary_stream(&vs);
-	/* a = binary_stream_to_bitarr(&bs); */
+	/* a = binary_binary_stream_to_bitarr(&bs); */
 
 }
 
