@@ -229,10 +229,11 @@ union stream_return_type_u {
 };
 typedef union stream_return_type_u stream_return_type;
 
-typedef stream_return_type (*stream_generator)(void*);
+typedef stream_return_type (*stream_generator)(void*, bit*);
 
 struct stream_s {
 	void* state; /* like context */
+	bit finished_q;
 	stream_generator generator;
 };
 typedef struct stream_s stream;
@@ -243,9 +244,14 @@ struct range_stream_closure {
 };
 
 static stream_return_type
-range_stream_generator(void *state) {
+range_stream_generator(void *state, bit *finished_q) {
 	stream_return_type ret;
 	struct range_stream_closure *ctx = state;
+
+	if (ctx->current == ctx->max) {
+		*finished_q = 1;
+		return NULL;
+	}
 
 	ret.size = ctx->current;
 	ctx->current++;
@@ -261,6 +267,7 @@ range_stream(size_t n) {
 	ctx->current = 0;
 	ctx->max = n;
 
+	ret.finished_q = 0;
 	ret.state = ctx;
 	ret.generator = range_stream_generator;
 	return ret;
