@@ -58,7 +58,7 @@ build-js-srcs: build/cli.js
 build:
 	mkdir $@
 
-build/cli.js: src/js/machine.js src/js/util.js src/js/interface.js src/js/cli.js
+build/cli.js: src/js/machine.js src/js/util.js src/js/cli.js
 	cat $^ > $@
 
 clean:
