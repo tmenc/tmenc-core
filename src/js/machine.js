@@ -111,17 +111,17 @@ function make_tm_env(machine_bits, input_stream) {
 			var memory_tape_register = double_tape_get(memory_tape);
 			var ret = tm(read_tape_bit, memory_tape_register);
 
-			var diff = undefined;
-			if (ret.increment_dir == 0 && ret.increment_bit == 1) {
-				if (memory_tape_register > 0) {
-					diff = -1;
-				} else {
-					diff = 0;
-				}
-			} else {
-				diff = (ret.increment_dir * 2 - 1) * (ret.increment_bit);
+			if (ret.increment_dir == 0 && memory_tape_register <= 0) {
+				ret.increment_bit = 0;
 			}
-			double_tape_set(memory_tape, memory_tape_register + diff);
+
+			var new_register_value = undefined;
+			if (ret.increment_dir == 0) {
+				new_register_value = memory_tape_register - ret.increment_bit;
+			} else {
+				new_register_value = memory_tape_register + ret.increment_bit;
+			}
+			double_tape_set(memory_tape, new_register_value);
 
 			if (ret.direction_bit == 0) {
 				double_tape_move_left(memory_tape);

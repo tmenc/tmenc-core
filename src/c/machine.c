@@ -275,9 +275,26 @@ static opaque
 tm_env_generator(void *state, bit *finished_q) {
 	tm_env *env = state;
 	opaque ret;
+	bit read_tape_bit;
+	size_t memory_tape_register;
+	size_t diff;
 
-	ret.other = NULL;
-	return ret;
+	while (1) {
+
+		read_tape_bit = stream_read(env->input_stream).binary;
+#if DEBUG
+		if (stream_finished(env->input_stream)) {
+			printf("tm input_stream finished but it should never do that\n");
+		}
+#endif
+
+		memory_tape_register = double_tape_get(env->memory_tape);
+
+		
+
+		ret.other = NULL;
+		return ret;
+	}
 }
 
 static stream
