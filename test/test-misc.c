@@ -5,6 +5,7 @@ int main() {
 	test_bit_ops();
 	test_range_stream();
 	test_append_streams();
+	test_integer_to_binary_stream();
 
 	return 0;
 }

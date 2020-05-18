@@ -131,3 +131,12 @@ void test_append_streams() {
 	print_vector_of_sizes(v);
 }
 
+void test_integer_to_binary_stream() {
+	size_t x = 100;
+	size_t base = 8;
+	stream s = integer_to_binary_stream(base, x);
+	bitarr a = stream_to_bitarr(&s);
+
+	bitarray_print(a);
+}
+
