@@ -99,7 +99,7 @@ void print_vector_of_sizes(vector v) {
 }
 
 void test_range_stream() {
-	stream s = range_stream(1000);
+	stream s = range_stream(20);
 	vector v = stream_to_vector(&s);
 
 	print_vector_of_sizes(v);
