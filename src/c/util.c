@@ -276,3 +276,53 @@ integer_to_binary_stream_reset(struct integer_to_binary_stream_s* s, size_t n) {
 	s->me.finished_q = 0;
 }
 
+struct byte_stream_to_binary_stream_closure {
+	struct integer_to_binary_stream_s *conv;
+	stream *bytes;
+};
+
+static opaque
+byte_stream_to_binary_stream_generator(void *state, bit *finished_q) {
+	struct byte_stream_to_binary_stream_closure *ctx;
+	opaque ret;
+	size_t n;
+	bit x;
+
+	if (ctx->conv == NULL) {
+		n = stream_read(ctx->bytes).size;
+		ctx->conv = integer_to_binary_stream_init(8, n);
+	}
+
+	x = stream_read(ctx->conv).binary;
+	if (stream_finish(ctx->conv)) {
+		n = stream_read(ctx->bytes).size;
+		if (stream_finish(ctx->bytes)) {
+			*finished_q = 1;
+			free(state);
+			ret.other = NULL;
+			return ret;
+		}
+		integer_to_binary_stream_reset(ctx->conv, n);
+		x = stream_read(ctx->conv);
+	}
+
+	ret.bit = x;
+	return ret;
+}
+
+static stream
+byte_stream_to_binary_stream(stream *bytes) {
+	struct byte_stream_to_binary_stream_closure *ctx;
+	struct stream ret;
+
+	ctx = malloc(sizeof(struct byte_stream_to_binary_stream_closure));
+	ctx->conv = NULL;
+	ctx->bytes = bytes;
+
+	ret.finished_q = 0;
+	ret.state = ctx;
+	ret.generator = byte_stream_to_binary_stream_generator;
+
+	return ret;
+}
+
