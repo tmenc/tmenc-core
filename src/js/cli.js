@@ -50,7 +50,7 @@ function make_key_from_parameters(pass, salt, file_buffer, machine_size, wrap_co
 }
 
 function handle_file_buffer(encryptQ, pass_s, salt, file_buffer, machine_size, wrap_count, input_file_bitarr, output_file_path) {
-	var pass = stream_to_vector(hex_to_binary_stream(pass_s));
+	var pass = stream_to_bitarr(hex_to_binary_stream(pass_s));
 	var key_size = bitarray_length(input_file_bitarr);
 
 	var key = make_key_from_parameters(pass, salt, file_buffer, machine_size, wrap_count, key_size);
@@ -82,7 +82,7 @@ function encrypt_file() {
 	function read_cb(pass_s, salt_s, file, machine_size_s, wrap_count_s, input_file_path, output_file_path) {
 		var file_buffer = fs.readFileSync(file);
 		var input_file_buffer = fs.readFileSync(input_file_path);
-		var salt = stream_to_vector(hex_to_binary_stream(salt_s));
+		var salt = stream_to_bitarr(hex_to_binary_stream(salt_s));
 		var input_file_stream = byte_stream_to_binary_stream(buffer_to_byte_stream(input_file_buffer));
 		var input_file_bitarr = stream_to_bitarr(input_file_stream);
 		var machine_size = parseInt(machine_size_s);
