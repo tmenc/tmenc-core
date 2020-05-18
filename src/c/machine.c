@@ -6,8 +6,8 @@
 
 typedef unsigned long largeint_t;
 
-typedef uint8_t bit;
-typedef uint8_t bit_container;
+typedef unsigned char bit;
+typedef unsigned char bit_container;
 #define BITS_IN_SIZEOF 8
 #define CONTAINER_BITS (BITS_IN_SIZEOF * (sizeof(bit_container)))
 
