@@ -24,7 +24,7 @@ tests-build-c-csrs: $(C_TEST_SRCS)
 tests-build-js-srcs: $(JS_TEST_SRCS)
 
 $(C_TEST_SRCS): build/test src/c/machine.c src/c/util.c test/test-util.c $(C_TEST_FILES)
-	cat src/js/machine.js src/js/util.js test/test-util.js $(@:build/%.exe=%.c) > $(@:%.exe=%.c)
+	cat src/c/machine.c src/c/util.c test/test-util.c $(@:build/%.exe=%.c) > $(@:%.exe=%.c)
 	$(CC) -o $@ $(@:%.exe=%.c)
 
 $(JS_TEST_SRCS): build/test src/js/machine.js src/js/util.js test/test-util.js $(JS_TEST_FILES)
