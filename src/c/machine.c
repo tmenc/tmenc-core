@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef unsigned long largeint_t;
+typedef unsigned long largeint_t; /* NOTE: "long long" is not in c89 */
 
 typedef unsigned char bit;
 typedef unsigned char bit_container;
