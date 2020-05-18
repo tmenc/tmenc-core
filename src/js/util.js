@@ -73,8 +73,7 @@ function integer_to_binary_stream_init(size) {
 		}
 
 		i = i + 1;
-		if (n > 0)
-		{
+		if (n > 0) {
 			var x = n & 1;
 			n = n >> 1;
 			return x;
