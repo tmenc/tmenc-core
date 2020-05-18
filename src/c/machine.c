@@ -153,3 +153,32 @@ double_tape_set(double_tape tape, largeint_t value) {
 	tape.me->current = value;
 }
 
+struct tm_s {
+	size_t machine_len;
+	size_t machine_pos;
+	bitarr machine_bits;
+};
+
+typedef struct tm_s tm;
+
+static struct tm_s
+make_tm(bitarr machine_bits) {
+	struct tm_s me;
+
+	me.machine_len = bitarray_length(machine_bits);
+	me.machine_pos = 0;
+	me.machine_bits = machine_bits;
+
+	return me;
+}
+
+static void
+machine_advance(tm *me, size_t by) {
+	me->machine_pos = ((me->machine_pos) + by) % (me->machine_len);
+}
+
+static bit
+machine_read(tm *me) {
+	return bitarray_at(me->machine_bits, me->machine_pos);
+}
+
