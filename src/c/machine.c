@@ -299,6 +299,14 @@ vector_push(vector *vec, opaque object) {
 	vec->size++;
 }
 
+static void
+vector_free(vector *vec) {
+	free(vec->buffer);
+	vec->buffer = NULL;
+	vec->capacity = 0;
+	vec->size = 0;
+}
+
 /********
  * UTIL *
  ********/
