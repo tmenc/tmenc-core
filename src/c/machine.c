@@ -290,6 +290,7 @@ make_tm_env(bitarr machine_bits, stream *input_stream) {
 	env->memory_tape = double_tape_create();
 	env->input_stream = input_stream;
 
+	ret.state = env;
 	ret.finished_q = 0;
 	ret.generator = tm_env_generator;
 
