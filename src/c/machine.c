@@ -11,12 +11,14 @@
 
 typedef unsigned char bit;
 typedef unsigned char bit_container;
+typedef unsigned char byte_t;
 #define BITS_IN_SIZEOF 8
 #define CONTAINER_BITS (BITS_IN_SIZEOF * (sizeof(bit_container)))
 
 union opaque_u {
 	bit binary;
 	int integer;
+	byte_t byte;
 	size_t size;
 	void *other;
 };
