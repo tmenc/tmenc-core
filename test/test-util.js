@@ -25,13 +25,6 @@ function test_rng_ref() {
 	// console.log(rng());
 }
 
-function default_key_tape() {
-	return init_simple_rng_ref(72731);
-	// return function () {
-	// 	return 1;
-	// };
-}
-
 function make_default_tm_env(machine_bits, input_bits) {
 	return make_tm_env(machine_bits, input_bits);
 }
