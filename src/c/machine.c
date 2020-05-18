@@ -182,3 +182,11 @@ machine_read(tm *me) {
 	return bitarray_at(me->machine_bits, me->machine_pos);
 }
 
+static void
+machine_flip_and_read(tm *me) {
+	bit new_bit = 1 ^ machine_read(me);
+	bitarray_set_bit(me->machine_bits, me->machine_pos, new_bit);
+	return new_bit;
+}
+
+

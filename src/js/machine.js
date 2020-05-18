@@ -69,14 +69,10 @@ function make_tm(machine_bits) {
 		return bitarray_at(machine_bits, machine_pos);
 	}
 
-	function machine_flip_current_bit() {
+	function machine_flip_and_read() {
 		var new_bit = 1 ^ machine_read();
 		bitarray_set_bit(machine_bits, machine_pos, new_bit);
 		return new_bit;
-	}
-
-	function machine_flip_and_read() {
-		return machine_flip_current_bit();
 	}
 
 	function step (read_tape_bit, memory_tape_register) {
