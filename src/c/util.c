@@ -26,8 +26,8 @@ bitarray_push(bitarr *arr, bit o) {
 		arr->bit_capacity = size * BITS_IN_SIZEOF;
 	}
 
-	bitarray_set_bit(*arr, arr->bit_size, o);
 	arr->bit_size++;
+	bitarray_set_bit(*arr, arr->bit_size - 1, o);
 }
 
 static void
