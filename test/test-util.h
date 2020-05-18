@@ -115,14 +115,16 @@ void test_range_stream() {
 void test_append_streams() {
 	stream s1 = range_stream(20);
 	stream s2 = range_stream(10);
-	stream *vec[2];
+	stream s3 = range_stream(5);
+	stream *vec[3];
 	stream app;
 	vector v;
 
 	vec[0] = &s1;
 	vec[1] = &s2;
+	vec[2] = &s3;
 
-	app = append_streams(2, vec);
+	app = append_streams(3, vec);
 
 	v = stream_to_vector(&app);
 
