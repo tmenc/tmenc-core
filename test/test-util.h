@@ -59,4 +59,6 @@ void test_bit_ops() {
 	bitarray_print(arr);
 	bitarray_set_bit(arr, 2, 1);
 	bitarray_print(arr);
+	bitarray_set_bit(arr, 7, 1);
+	bitarray_print(arr);
 }
