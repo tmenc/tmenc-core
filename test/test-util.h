@@ -41,7 +41,7 @@ void bitarr_print(bitarr arr) {
 
 	printf("; bits: [");
 	for (i = 0; i < arr.bit_size; i++) {
-		printf("%d ", bitarray_at(arr, i);
+		printf("%d ", bitarray_at(arr, i));
 	}
 	printf("\n");
 }
