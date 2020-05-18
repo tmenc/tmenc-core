@@ -197,3 +197,20 @@ struct tm_step_s {
 };
 typedef struct tm_step_s tm_step;
 
+static tm_step
+machine_step(tm *me, bit read_tape_bit, largeint_t memory_tape_register) {
+	tm_step ret;
+	size_t jump_size = (1 + read_tape_bit) * (1 + memory_tape_register);
+
+	ret.wt_skip = machine_flip_and_read(me);
+	machine_advance(me, jump_size);
+	ret.increment_bit = machine_flip_and_read(me);
+	machine_advance(me, jump_size);
+	ret.increment_dir = machine_flip_and_read(me);
+	machine_advance(me, jump_size);
+	ret.direction_bit = machine_flip_and_read(me);
+	machine_advance(me, jump_size);
+
+	return ret;
+}
+

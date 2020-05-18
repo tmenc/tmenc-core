@@ -83,7 +83,6 @@ function make_tm(machine_bits) {
 
 		var wt_bit = machine_flip_and_read();
 		machine_advance(jump_size);
-
 		var increment_bit = machine_flip_and_read();
 		machine_advance(jump_size);
 		var increment_dir = machine_flip_and_read();
