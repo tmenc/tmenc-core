@@ -105,8 +105,8 @@ function make_tm_env(machine_bits, input_bits) {
 	var tm = make_tm(machine_bits);
 
 	var memory_tape = double_tape_create();
-	var read_tape_len = bitarray_length(input_bits);
 	var read_tape = input_bits;
+	var read_tape_len = bitarray_length(input_bits);
 	var read_tape_pos = 0;
 
 	return function() {

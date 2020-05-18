@@ -218,8 +218,50 @@ machine_step(tm *me, bit read_tape_bit, size_t memory_tape_register) {
 }
 
 /**********
+ * STREAM *
+ **********/
+
+union stream_return_type_u {
+	bit binary;
+	int integer;
+	size_t size;
+	void *other;
+};
+typedef union stream_return_type_u stream_return_type;
+
+struct stream_s {
+	stream_return_type state; /* like context */
+	stream_return_type (*generator)(struct stream_s);
+};
+typedef struct stream_s stream;
+
+static stream_return_type
+range_stream_generator(struct stream_s stream) {
+	stream_return_type ret;
+	ret.other = NULL;
+	return ret;
+}
+
+static stream
+range_stream(size_t n) {
+	stream_return_type state;
+	stream ret;
+	state.other = NULL;
+	ret.state = state;
+	ret.generator = range_stream_generator;
+	return ret;
+}
+
+/**********
  * TM ENV *
  **********/
 
+struct tm_env_s {
+	struct tm_s tm;
+	double_tape memory_tape;
+	bitarr      read_tape;
+	size_t      read_tape_len;
+	size_t      read_tape_pos;
+};
 
 
