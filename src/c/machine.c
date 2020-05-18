@@ -250,6 +250,8 @@ range_stream_generator(void *state, bit *finished_q) {
 
 	if (ctx->current == ctx->max) {
 		*finished_q = 1;
+		ret.other = NULL;
+		return ret;
 	}
 
 	ret.size = ctx->current;
