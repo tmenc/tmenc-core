@@ -14,7 +14,7 @@ all: build-js
 build-js: | build build-js-srcs
 tests: | tests-build-js-srcs
 
-test-all: test-nist-big test-nist-small test-hash test-misc
+test-all: test-nist-big test-nist-small test-hash test-misc test-cli
 
 tests-build-js-srcs: $(TEST_SRCS)
 
@@ -42,16 +42,17 @@ test-hash: build/test build/test/test-hash.js
 test-misc: build/test build/test/test-misc.js
 	$(NODE) build/test/test-misc.js
 
+test-cli: all
+	printf 'encode\n0a0bff\n0a0b00\nMakefile\n1000\n3\nLICENSE\nbuild/cli-encrypted\nEND' | $(NODE) build/cli.js
+	printf 'decode\n0a0bff\nMakefile\n1000\n3\nbuild/cli-encrypted\nbuild/cli-decrypted\nEND' | $(NODE) build/cli.js
+	diff LICENSE build/cli-decrypted
+
 build/test: build
 	mkdir -p $@
 
 $(NIST_EXECUTABLE):
 	git submodule update --init
 	cd $(NIST_DIR) && $(MAKE)
-
-cli: all
-	printf 'encode\n0a0bff\n0a0b00\nMakefile\n1000\n3\nLICENSE\nbuild/cli-encrypted\nEND' | $(NODE) build/cli.js
-	printf 'decode\n0a0bff\nMakefile\n1000\n3\nbuild/cli-encrypted\nbuild/cli-decrypted\nEND' | $(NODE) build/cli.js
 
 build-js-srcs: build/cli.js
 
