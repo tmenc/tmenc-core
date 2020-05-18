@@ -174,12 +174,14 @@ append_streams_generator(void *state, bit *finished_q) {
 		printf("ctx->len: %lu\n", ctx->len);
 		ctx->pos = 1 + ctx->pos;
 		if (ctx->pos < ctx->len) {
+			printf("change!\n");
 			ctx->cur = ctx->streams_vector[ctx->pos];
 			x = stream_read(ctx->cur);
 		} else {
 			*finished_q = 1;
 			free(ctx->streams_vector);
 			free(ctx);
+			break;
 		}
 	}
 	return x;
