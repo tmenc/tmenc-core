@@ -25,7 +25,7 @@ bit bitarr_at(bitarr arr, size_t at) {
 	int byte_shift = at % sizeof(bit_container);
 
 #ifdef DEBUG
-	printf("OUT OF BOUNDS: %lu ; BIT SIZE IS %lu\n", at, arr.bit_size);
+	printf("OUT OF BOUNDS: %lu ; BIT_SIZE = %lu\n", at, arr.bit_size);
 #endif
 
 	return (nth_bit(arr.buffer[byte_pos], byte_shift));
@@ -34,7 +34,9 @@ bit bitarr_at(bitarr arr, size_t at) {
 bitarr_s bitarr_alloc(size_t size) {
 	bitarr_s ret;
 
-	ret.buffer = malloc((size / 8) + 1);
+	ret.buffer = malloc(
+		(1 * (sizeof(bit_container))) +
+		(size / (sizeof(bit_container))));
 	if (ret.buffer == NULL) {
 		printf("COULD NOT ALLOCATE BUFFER OF SIZE %lu", size);
 	}
