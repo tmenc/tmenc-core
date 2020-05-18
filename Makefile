@@ -1,6 +1,7 @@
 
 HERE = $(PWD)
-CC = gcc -std=c89 -Werror -Wall -pedantic -O0 -g
+CC = gcc
+CLFAGS = -std=c89 -Werror -Wall -pedantic -O0 -g
 
 NODE = node --trace-uncaught
 
@@ -25,7 +26,7 @@ tests-build-js-srcs: $(JS_TEST_SRCS)
 
 $(C_TEST_SRCS): build/test src/c/machine.c src/c/util.c test/test-util.h $(C_TEST_FILES)
 	cat src/c/machine.c src/c/util.c test/test-util.h $(@:build/%.exe=%.c) > $(@:%.exe=%.c)
-	$(CC) -o $@ $(@:%.exe=%.c)
+	$(CC) $(CLFAGS) -o $@ $(@:%.exe=%.c)
 
 $(JS_TEST_SRCS): build/test src/js/machine.js src/js/util.js test/test-util.js $(JS_TEST_FILES)
 	cat src/js/machine.js src/js/util.js test/test-util.js $(@:build/%=%) > $@
