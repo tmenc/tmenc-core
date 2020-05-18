@@ -283,7 +283,7 @@ struct byte_stream_to_binary_stream_closure {
 
 static opaque
 byte_stream_to_binary_stream_generator(void *state, bit *finished_q) {
-	struct byte_stream_to_binary_stream_closure *ctx;
+	struct byte_stream_to_binary_stream_closure *ctx = state;
 	opaque ret;
 	size_t n;
 	bit x;
@@ -293,27 +293,27 @@ byte_stream_to_binary_stream_generator(void *state, bit *finished_q) {
 		ctx->conv = integer_to_binary_stream_init(8, n);
 	}
 
-	x = stream_read(ctx->conv).binary;
-	if (stream_finish(ctx->conv)) {
+	x = stream_read(&(ctx->conv->me)).binary;
+	if (stream_finished(&(ctx->conv->me))) {
 		n = stream_read(ctx->bytes).size;
-		if (stream_finish(ctx->bytes)) {
+		if (stream_finished(ctx->bytes)) {
 			*finished_q = 1;
 			free(state);
 			ret.other = NULL;
 			return ret;
 		}
 		integer_to_binary_stream_reset(ctx->conv, n);
-		x = stream_read(ctx->conv);
+		x = stream_read(&(ctx->conv->me)).binary;
 	}
 
-	ret.bit = x;
+	ret.binary = x;
 	return ret;
 }
 
 static stream
 byte_stream_to_binary_stream(stream *bytes) {
 	struct byte_stream_to_binary_stream_closure *ctx;
-	struct stream ret;
+	stream ret;
 
 	ctx = malloc(sizeof(struct byte_stream_to_binary_stream_closure));
 	ctx->conv = NULL;
