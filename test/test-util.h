@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <stdint.h>
 
 uint32_t simple_rng(uint32_t x) {
 	uint32_t a = 1664525;
