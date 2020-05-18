@@ -63,15 +63,18 @@ bitarray_set_bit(bitarr arr, size_t at, bit value) {
 	arr.buffer[bi] = y;
 }
 
-#define BITARR_BYTE_SIZE(bit_size) (1 + (bit_size / (BITS_IN_SIZEOF * (sizeof(bit_container)))))
+static size_t
+bitarray_byte_length(bitarr arr) {
+	return (1 + (arr.bit_size / (BITS_IN_SIZEOF * (sizeof(bit_container)))));
+}
 
 static bitarr
 bitarray_alloc(size_t bit_size) {
 	bitarr ret;
 	size_t size;
 
-	size = BITARR_BYTE_SIZE(bit_size);
 	ret.bit_size = bit_size;
+	size = bitarray_byte_length(ret);
 	ret.buffer = malloc(size);
 	if (ret.buffer == NULL) {
 		printf("COULD NOT ALLOCATE BUFFER OF SIZE %lu", size);
