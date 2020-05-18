@@ -3,28 +3,6 @@ function bitarray_length(bitarr) {
 	return bitarr.length;
 }
 
-function bitarray_at_or0(bitarr, at) {
-	if (at >= 0 && at < bitarr.length) {
-		return bitarr[at];
-	} else {
-		return 0;
-	}
-}
-
-function bitarray_at_or_x(bitarr, at, x) {
-	if (at >= 0 && at < bitarr.length) {
-		return bitarr[at];
-	} else {
-		return x;
-	}
-}
-
-function bitarray_extend_with0(bitarr, newlen) {
-	for (var i = bitarray_length(bitarr); i < newlen; i++) {
-		bitarr.push(0);
-	}
-}
-
 function bitarray_at(bitarr, at) {
 	return bitarr[at];
 }
@@ -35,45 +13,6 @@ function bitarray_alloc(bits) {
 
 function bitarray_set_bit(bitarr, i, value) {
 	bitarr[i] = value;
-}
-
-function bitarray_set_bit_or_nop(bitarr, i, value) {
-	if (i >= 0 && i < bitarr.length) {
-		bitarr[i] = value;
-		return true;
-	} else {
-		return false;
-	}
-}
-
-function bitarray_set_bit_extend0(bitarr, i, value) {
-	if (bitarray_set_bit_or_nop(bitarr, i, value)) {
-		return true;
-	} else {
-		bitarray_extend_with0(bitarr, i + 1);
-		bitarray_set_bit(bitarr, i, value);
-		return false;
-	}
-}
-
-function bitarray_copy(x) {
-	var len = bitarray_length(x);
-	var ret = bitarray_alloc(len);
-	for (var i = 0; i < len; i++) {
-		bitarray_set_bit(ret, i, bitarray_at(x, i));
-	}
-	return ret;
-}
-
-function bitarray_xor_with(target, other) {
-	var lent = bitarray_length(target);
-	var leno = bitarray_length(other);
-	var len = lent < leno ? lent : leno;
-	for (var i = 0; i < len; i++) {
-		var x = bitarray_at(target, i);
-		var y = bitarray_at(other, i);
-		bitarray_set_bit(target, i, x ^ y);
-	}
 }
 
 function double_tape_create(value) {
