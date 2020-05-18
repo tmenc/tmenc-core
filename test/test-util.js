@@ -82,7 +82,7 @@ function test_tm_hashing() {
 		var first = make_random_tm_env(input_size, machine_size);
 		var machine_bits = bitarray_copy(first.machine_bits);
 		var stream1 = first.stream;
-		var write_tape_1 = tm_get_stream_bitarr(stream1, skip_count, wr_tape_size);
+		var write_tape_1 = tm_get_stream_bitarr(stream1, input_size, wrap_count, wr_tape_size);
 
 		var input_bits2 = bitarray_copy(first.input_bits);
 		if (singleflip) {
@@ -97,7 +97,7 @@ function test_tm_hashing() {
 		}
 
 		var stream2 = make_default_tm_env(machine_bits, input_bits2, 777, wr_tape_size);
-		var write_tape_2 = tm_get_stream_bitarr(stream2, skip_count, wr_tape_size);
+		var write_tape_2 = tm_get_stream_bitarr(stream2, input_size, wrap_count, wr_tape_size);
 
 		// for (var i = 0; i < bitarray_length(write_tape); i++) {
 		// 	console.log(bitarray_at(write_tape, i));
