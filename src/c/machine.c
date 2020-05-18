@@ -269,11 +269,11 @@ struct tm_env_s {
 	double_tape  memory_tape;
 	stream      *input_stream;
 };
-struct struct tm_env_s tm_env;
+typedef struct tm_env_s tm_env;
 
 static opaque
 tm_env_generator(void *state, bit *finished_q) {
-	tm_env *env = state;
+	/* tm_env *env = state; */
 	opaque ret;
 
 	ret.other = NULL;
@@ -283,18 +283,10 @@ tm_env_generator(void *state, bit *finished_q) {
 static stream
 make_tm_env(bitarr machine_bits, stream *input_stream) {
 	tm_env *env;
-	tm *tm;
-	tm tm_0;
 	stream ret;
 
-	tm_0 = make_tm(machine_bits);
-	tm = malloc(sizeof(tm));
-	tm->machine_bits = tm_0.machine_bits;
-	tm->machine_len  = tm_0.machine_len;
-	tm->machine_pos  = tm_0.machine_pos;
-
 	env = malloc(sizeof(tm_env));
-	env->tm = ??;
+	env->tm = make_tm(machine_bits);
 	env->memory_tape = double_tape_create();
 	env->input_stream = input_stream;
 
