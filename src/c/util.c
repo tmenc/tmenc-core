@@ -1,3 +1,38 @@
+/********************
+ * BITARR AS VECTOR *
+ ********************/
+
+static bitarr
+bitarray_create_empty() {
+	bitarr ret = bitarray_alloc(1024);
+
+	ret.bit_size = 0;
+
+	return ret;
+}
+
+static void
+bitarray_push(bitarr *arr, bit object) {
+	size_t size;
+
+	if ((arr->bit_size) >= (arr->bit_capacity)) {
+		vec->bit_capacity = (vec->capacity + 1) * 2;
+		vec->buffer = realloc(vec->buffer, (vec->capacity) * (sizeof(opaque)));
+		if (vec->buffer == NULL) {
+			printf("COULD NOT GROW VECTOR TO SIZE %lu\n", (unsigned long)(vec->capacity));
+		}
+	}
+	vec->buffer[vec->size] = object;
+	vec->size++;
+}
+
+static void
+bitarray_free(bitarr *arr) {
+	free(arr->buffer);
+	arr->buffer = NULL;
+	arr->bit_capacity = 0;
+	arr->bit_size = 0;
+}
 
 /**********
  * VECTOR *
