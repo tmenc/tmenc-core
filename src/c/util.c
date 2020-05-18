@@ -254,7 +254,7 @@ integer_to_binary_stream_init(size_t size, size_t n) {
 
 	ret->me.finished_q = 0;
 	ret->me.state = ret;
-	ret->me.generator = append_streams_generator;
+	ret->me.generator = integer_to_binary_stream_generator;
 
 	return ret;
 }
