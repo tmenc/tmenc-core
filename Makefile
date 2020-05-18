@@ -11,7 +11,8 @@ NIST_EXECUTABLE = $(NIST_DIR)/assess
 JS_TEST_FILES = $(shell ls -d -1 test/*.js)
 JS_TEST_SRCS = $(addprefix build/,$(JS_TEST_FILES))
 C_TEST_FILES = $(shell ls -d -1 test/*.c)
-C_TEST_SRCS = $($(addprefix build/,$(C_TEST_FILES)):%.c=%.exe)
+C_TEST_FILES_P = $(addprefix build/,$(C_TEST_FILES))
+C_TEST_SRCS = $(C_TEST_FILES_P:%.c=%.exe)
 
 all: build-js
 build-js: | build build-js-srcs
@@ -23,7 +24,7 @@ tests-build-c-csrs: $(C_TEST_SRCS)
 tests-build-js-srcs: $(JS_TEST_SRCS)
 
 $(C_TEST_SRCS): build/test src/c/machine.c src/c/util.c test/test-util.c $(C_TEST_FILES)
-	cat src/js/machine.js src/js/util.js test/test-util.js $(@:build/%=%) > $(@:%.exe=%.c)
+	cat src/js/machine.js src/js/util.js test/test-util.js $(@:build/%.exe=%.c) > $(@:%.exe=%.c)
 	$(CC) -o $@ $(@:%.exe=%.c)
 
 $(JS_TEST_SRCS): build/test src/js/machine.js src/js/util.js test/test-util.js $(JS_TEST_FILES)
