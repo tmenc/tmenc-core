@@ -22,19 +22,43 @@ bit nth_bit(bit_container x, int n) {
 	return (x >> n) & 1;
 }
 
-/* NOTE: doesn't check for size! */
-bit bitarr_at(bitarr arr, size_t at) {
+size_t bitarray_length(bitarr arr) {
+	return arr.bit_size;
+}
+
+bit bitarray_at(bitarr arr, size_t at) {
 	size_t byte_pos = at / sizeof(bit_container);
 	int byte_shift = at % sizeof(bit_container);
 
 #ifdef DEBUG
-	printf("OUT OF BOUNDS: %lu ; BIT_SIZE = %lu\n", at, arr.bit_size);
+	if (at > arr.bit_size) {
+		printf("OUT OF BOUNDS: %lu ; BIT_SIZE = %lu\n", at, arr.bit_size);
+	}
 #endif
 
 	return (nth_bit(arr.buffer[byte_pos], byte_shift));
 }
 
-bitarr_set_bit
+void bitarray_set_bit(bitarr arr, size_t at, bit value) {
+	size_t bi = at / sizeof(bit_container);
+	int offset = at % sizeof(bit_container);
+	bit_container b;
+	bit_container a;
+	bit_container x;
+	bit_container y;
+
+#ifdef DEBUG
+	if (at > arr.bit_size) {
+		printf("OUT OF BOUNDS: %lu ; BIT_SIZE = %lu\n", at, arr.bit_size);
+	}
+#endif
+
+	b = arr.buffer[bi];
+	a = ((bit_container) value) << offset;
+	x = ((bit_container) 1) << offset;
+	y = b ^ ((b & x) ^ (a & x));
+	arr.buffer[bi] = y;
+}
 
 bitarr_s bitarr_alloc(size_t bit_size) {
 	bitarr_s ret;
