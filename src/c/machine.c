@@ -198,7 +198,7 @@ typedef struct tm_step_s tm_step;
 static tm_step
 machine_step(tm *me, bit read_tape_bit, size_t memory_tape_register) {
 	tm_step ret;
-	size_t jump_size = (1 + read_tape_bit) * (1 + memory_tape_register);
+	size_t jump_size = (1 + ((size_t)read_tape_bit)) * (1 + memory_tape_register);
 
 	ret.wt_skip = machine_flip_and_read(me);
 	machine_advance(me, jump_size);
