@@ -60,26 +60,31 @@ void test_bit_ops() {
 	for (i = 0; i < TEST_BIT_OPS_LEN; i++) {
 		answers[i] = 0;
 	}
-
 	bitarray_print(arr);
+
 	bitarray_set_bit(arr, 0, 1);
 	answers[0] = 1;
 	bitarray_print(arr);
+
 	bitarray_set_bit(arr, 1, 1);
 	answers[1] = 1;
 	bitarray_print(arr);
+
 	bitarray_set_bit(arr, 2, 1);
 	answers[2] = 1;
 	bitarray_print(arr);
+
 	bitarray_set_bit(arr, 7, 1);
 	answers[7] = 1;
 	bitarray_print(arr);
+
 	bitarray_set_bit(arr, 9, 1);
 	answers[9] = 1;
 	bitarray_print(arr);
 
 	bitarray_zero_out(arr);
 	for (i = 0; i < TEST_BIT_OPS_LEN; i++) {
+		printf("answers[%ld] == %d; bitarray_at(arr, %ld) == %d\n", i, (int)answers[i], i, (int)bitarray_at(arr, i));
 		assert(answers[i] == bitarray_at(arr, i));
 	}
 }
