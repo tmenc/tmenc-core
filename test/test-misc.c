@@ -4,6 +4,7 @@ int main() {
 
 	test_bit_ops();
 	test_range_stream();
+	test_append_streams();
 
 	return 0;
 }

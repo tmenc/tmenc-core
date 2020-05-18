@@ -171,6 +171,7 @@ append_streams_generator(void *state, bit *finished_q) {
 
 	x = stream_read(ctx->cur);
 	while (stream_finished(ctx->cur)) {
+		printf("ctx->len: %lu\n", ctx->len);
 		ctx->pos = 1 + ctx->pos;
 		if (ctx->pos < ctx->len) {
 			ctx->cur = ctx->streams_vector[ctx->pos];
@@ -186,13 +187,19 @@ append_streams_generator(void *state, bit *finished_q) {
 static stream
 append_streams(size_t len, stream **streams_vector) {
 	struct append_streams_closure *ctx;
+	size_t i;
 	stream ret;
 
 	ctx = malloc(sizeof(struct append_streams_closure));
-	ctx->len = len;
-	ctx->streams_vector = streams_vector;
-	ctx->pos = 0;
+	ctx->streams_vector = malloc(len * sizeof(stream*));
+
+	for (i = 0; i < len; i++) {
+		ctx->streams_vector[i] = streams_vector[i];
+	}
+
 	ctx->cur = streams_vector[0];
+	ctx->len = len;
+	ctx->pos = 0;
 
 	ret.finished_q = 0;
 	ret.state = ctx;

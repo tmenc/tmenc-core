@@ -112,3 +112,20 @@ void test_range_stream() {
 	bitarray_print(b);
 }
 
+void test_append_streams() {
+	stream s1 = range_stream(20);
+	stream s2 = range_stream(10);
+	stream *vec[2];
+	stream app;
+	vector v;
+
+	vec[0] = &s1;
+	vec[1] = &s2;
+
+	app = append_streams(2, vec);
+
+	v = stream_to_vector(&app);
+
+	print_vector_of_sizes(v);
+}
+
