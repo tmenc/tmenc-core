@@ -3,8 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef unsigned long largeint_t; /* NOTE: "long long" is not in c89 */
+#include <stddef.h> /* size_t */
 
 typedef unsigned char bit;
 typedef unsigned char bit_container;
@@ -13,7 +12,7 @@ typedef unsigned char bit_container;
 
 struct bitarr_s {
 	bit_container *buffer;
-	largeint_t bit_size;
+	size_t bit_size;
 };
 typedef struct bitarr_s bitarr;
 
@@ -22,14 +21,14 @@ nth_bit(bit_container x, int n) {
 	return (x >> n) & 1;
 }
 
-static largeint_t
+static size_t
 bitarray_length(bitarr arr) {
 	return arr.bit_size;
 }
 
 static bit
-bitarray_at(bitarr arr, largeint_t at) {
-	largeint_t byte_pos = at / CONTAINER_BITS;
+bitarray_at(bitarr arr, size_t at) {
+	size_t byte_pos = at / CONTAINER_BITS;
 	int byte_shift = at % CONTAINER_BITS;
 
 #ifdef DEBUG
@@ -42,8 +41,8 @@ bitarray_at(bitarr arr, largeint_t at) {
 }
 
 static void
-bitarray_set_bit(bitarr arr, largeint_t at, bit value) {
-	largeint_t bi = at / CONTAINER_BITS;
+bitarray_set_bit(bitarr arr, size_t at, bit value) {
+	size_t bi = at / CONTAINER_BITS;
 	int offset = at % CONTAINER_BITS;
 	bit_container b;
 	bit_container a;
@@ -63,15 +62,15 @@ bitarray_set_bit(bitarr arr, largeint_t at, bit value) {
 	arr.buffer[bi] = y;
 }
 
-static largeint_t
+static size_t
 bitarray_byte_length(bitarr arr) {
 	return (1 + (arr.bit_size / (BITS_IN_SIZEOF * (sizeof(bit_container)))));
 }
 
 static bitarr
-bitarray_alloc(largeint_t bit_size) {
+bitarray_alloc(size_t bit_size) {
 	bitarr ret;
-	largeint_t size;
+	size_t size;
 
 	ret.bit_size = bit_size;
 	size = bitarray_byte_length(ret);
