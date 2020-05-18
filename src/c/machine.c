@@ -249,7 +249,7 @@ struct stream_s {
 typedef struct stream_s stream;
 
 static stream_return_type
-range_stream_generator(struct stream_s stream) {
+range_stream_generator(stream s) {
 	stream_return_type ret;
 	ret.object.other = NULL;
 	ret.end_of_stream_q = 0;
