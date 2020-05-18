@@ -236,7 +236,7 @@ struct stream_return_type_s {
 typedef struct stream_return_type_s stream_return_type;
 
 struct stream_s {
-	stream_return_type state; /* like context */
+	opaque state; /* like context */
 	stream_return_type (*generator)(struct stream_s);
 };
 typedef struct stream_s stream;
