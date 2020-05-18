@@ -5,10 +5,22 @@
 #include <stdlib.h>
 #include <stddef.h> /* size_t */
 
+/*********
+ * TYPES *
+ *********/
+
 typedef unsigned char bit;
 typedef unsigned char bit_container;
 #define BITS_IN_SIZEOF 8
 #define CONTAINER_BITS (BITS_IN_SIZEOF * (sizeof(bit_container)))
+
+union opaque_u {
+	bit binary;
+	int integer;
+	size_t size;
+	void *other;
+};
+typedef union opaque_u opaque;
 
 /************
  * BITARRAY *
@@ -221,13 +233,7 @@ machine_step(tm *me, bit read_tape_bit, size_t memory_tape_register) {
  * STREAM *
  **********/
 
-union stream_return_type_u {
-	bit binary;
-	int integer;
-	size_t size;
-	void *other;
-};
-typedef union stream_return_type_u stream_return_type;
+typedef opaque stream_return_type;
 
 typedef stream_return_type (*stream_generator)(void*, bit*);
 
@@ -237,6 +243,65 @@ struct stream_s {
 	stream_generator generator;
 };
 typedef struct stream_s stream;
+
+/**********
+ * TM ENV *
+ **********/
+
+struct tm_env_s {
+	struct tm_s tm;
+	double_tape memory_tape;
+	bitarr      read_tape;
+	size_t      read_tape_len;
+	size_t      read_tape_pos;
+};
+
+
+
+/**********
+ * VECTOR *
+ **********/
+
+struct vector_s {
+	opaque *buffer;
+	size_t size;
+	size_t capacity;
+};
+typedef struct vector_s vector;
+
+static vector
+vector_create_empty() {
+	vector ret;
+	ret.size = 0;
+	ret.capacity = 128;
+	ret.buffer = malloc(ret.capacity * sizeof(opaque));
+	if (ret.buffer == NULL) {
+		printf("COULD NOT ALLOCATE EMPTY VECTOR\n");
+	}
+	return ret;
+}
+
+static size_t
+vector_length(vector vec) {
+	return vec.size;
+}
+
+static void
+vector_push(vector *vec, opaque object) {
+	if ((vec->size) >= (vec->capacity)) {
+		vec->capacity *= 2;
+		vec->buffer = realloc(vec.buffer, vec.capacity);
+		if (vec.buffer == NULL) {
+			printf("COULD NOT GROW VECTOR TO SIZE %lu\n", (unsigned long)(vec.capacity));
+		}
+	}
+	vec->buffer[vec.size] = object;
+	vec->size++;
+}
+
+/********
+ * UTIL *
+ ********/
 
 struct range_stream_closure {
 	size_t max;
@@ -273,17 +338,4 @@ range_stream(size_t n) {
 	ret.generator = range_stream_generator;
 	return ret;
 }
-
-/**********
- * TM ENV *
- **********/
-
-struct tm_env_s {
-	struct tm_s tm;
-	double_tape memory_tape;
-	bitarr      read_tape;
-	size_t      read_tape_len;
-	size_t      read_tape_pos;
-};
-
 
