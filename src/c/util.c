@@ -142,5 +142,19 @@ stream_to_vector(stream *s) {
 	}
 }
 
+/* NOTE: user must ensure that stream is binary! */
+static bitarr
+stream_to_bitarr(stream *s) {
+	bitarr ret = bitarray_create_empty();
+	opaque x;
 
+	while (1) {
+		x = stream_read(s);
+		if (stream_finished(s)) {
+			return ret;
+		}
+
+		bitarray_push(&ret, x.binary);
+	}
+}
 
