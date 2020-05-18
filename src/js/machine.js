@@ -15,20 +15,22 @@ function bitarray_set_bit(bitarr, i, value) {
 	bitarr[i] = value;
 }
 
-function double_tape_create(value) {
+var DOUBLE_TAPE_DEFAULT_VALUE = 1;
+
+function double_tape_create() {
 	return {
 		me: {
-			current: value,
+			current: DOUBLE_TAPE_DEFAULT_VALUE,
 			left: null,
 			right: null,
 		}
 	};
 }
 
-function double_tape_move_left(tape, default_value) {
+function double_tape_move_left(tape) {
 	if (tape.me.left == null) {
 		tape.me.left = {
-			current: default_value,
+			current: DOUBLE_TAPE_DEFAULT_VALUE,
 			left: null,
 			right: tape.me,
 		}
@@ -39,7 +41,7 @@ function double_tape_move_left(tape, default_value) {
 function double_tape_move_right(tape, default_value) {
 	if (tape.me.right == null) {
 		tape.me.right = {
-			current: default_value,
+			current: DOUBLE_TAPE_DEFAULT_VALUE,
 			left: tape.me,
 			right: null,
 		}
@@ -107,7 +109,7 @@ function make_tm(machine_bits) {
 function make_tm_env(machine_bits, input_bits) {
 	var tm = make_tm(machine_bits);
 
-	var memory_tape = double_tape_create(0);
+	var memory_tape = double_tape_create();
 	var read_tape_len = bitarray_length(input_bits);
 	var read_tape = input_bits;
 	var read_tape_pos = 0;
@@ -136,9 +138,9 @@ function make_tm_env(machine_bits, input_bits) {
 			double_tape_set(memory_tape, memory_tape_register + diff);
 
 			if (ret.direction_bit == 0) {
-				double_tape_move_left(memory_tape, 0);
+				double_tape_move_left(memory_tape);
 			} else {
-				double_tape_move_right(memory_tape, 0);
+				double_tape_move_right(memory_tape);
 			}
 
 			if (ret.wt_skip == 0) {
