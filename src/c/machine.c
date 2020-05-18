@@ -289,7 +289,7 @@ vector_length(vector vec) {
 static void
 vector_push(vector *vec, opaque object) {
 	if ((vec->size) >= (vec->capacity)) {
-		vec->capacity *= 2;
+		vec->capacity = (vec->capacity + 1) * 2;
 		vec->buffer = realloc(vec->buffer, vec->capacity);
 		if (vec->buffer == NULL) {
 			printf("COULD NOT GROW VECTOR TO SIZE %lu\n", (unsigned long)(vec->capacity));
