@@ -214,6 +214,7 @@ struct integer_to_binary_stream_s {
 	size_t size;
 	size_t i;
 	size_t n;
+	bit auto_free;
 };
 
 static opaque
@@ -234,6 +235,10 @@ integer_to_binary_stream_generator(void *state, bit *finished_q) {
 	}
 
 	*finished_q = 1;
+	if (ctx->auto_free) {
+		free(ctx);
+	}
+
 	ret.other = NULL;
 	return ret;
 }
@@ -246,11 +251,22 @@ integer_to_binary_stream_init(size_t size, size_t n) {
 	ret->i = 0;
 	ret->n = n;
 	ret->size = size;
+	ret->auto_free = 0;
 
 	ret->me.finished_q = 0;
 	ret->me.state = ret;
 	ret->me.generator = append_streams_generator;
 
 	return ret;
+}
+
+static stream
+integer_to_binary_stream(size_t size, size_t n) {
+	struct integer_to_binary_stream_s* s;
+
+	s = integer_to_binary_stream_init(size, n);
+	s->auto_free = 1;
+
+	return s->me;
 }
 
