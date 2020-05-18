@@ -17,11 +17,11 @@ bitarray_push(bitarr *arr, bit o) {
 	size_t new_bit_size;
 
 	if ((arr->bit_size) >= (arr->bit_capacity)) {
-		new_bit_size = (arr->capacity + 1) * 2;
+		new_bit_size = ((arr->bit_capacity) + 1) * 2;
 		size = bit_length_to_byte_length(new_bit_size);
 		arr->buffer = realloc(arr->buffer, size);
-		if (vec->buffer == NULL) {
-			printf("COULD NOT GROW VECTOR TO SIZE %lu\n", (unsigned long)(vec->capacity));
+		if (arr->buffer == NULL) {
+			printf("COULD NOT GROW VECTOR TO SIZE %lu\n", (unsigned long)size);
 		}
 		arr->bit_capacity = size * BITS_IN_SIZEOF;
 	}
