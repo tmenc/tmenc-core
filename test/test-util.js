@@ -26,7 +26,8 @@ function test_rng_ref() {
 }
 
 function make_default_tm_env(machine_bits, input_bits) {
-	return make_tm_env(machine_bits, input_bits);
+	var input_cycle_stream = bitarr_to_cycle_stream(input_bits);
+	return make_tm_env(machine_bits, input_cycle_stream);
 }
 
 function vectors_same_bits_ratio(v1, v2) {

@@ -371,6 +371,15 @@ function tm_get_stream_bitarr(stream, input_size, wrap_count, output_size) {
 	return out;
 }
 
+function bitarr_to_cycle_stream(arr) {
+	var i = -1;
+	var len = bitarray_length(arr);
+	return function() {
+		i = (i + 1) % len;
+		return bitarray_at(arr, i);
+	};
+}
+
 // NOTE: `wrap_count' should depend on `length(pass++salt++file)'
 // salt should to be different for each key!
 function make_key(pass_v, salt_v, file_buffer, size, machine_size, wrap_count) {
@@ -383,8 +392,9 @@ function make_key(pass_v, salt_v, file_buffer, size, machine_size, wrap_count) {
 
 	var input_stream = append_streams([pass_stream, salt_stream, file_stream]);
 	var input_bits = stream_to_bitarr(input_stream);
+	var input_cycle_stream = bitarr_to_cycle_stream(input_bits);
 
-	var stream = make_tm_env(machine_bits, input_bits);
+	var stream = make_tm_env(machine_bits, input_cycle_stream);
 	var input_size = bitarray_length(input_bits);
 	return tm_get_stream_bitarr(stream, input_size, wrap_count, size);
 }
