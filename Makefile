@@ -1,7 +1,7 @@
 
 HERE = $(PWD)
 CC = gcc
-CLFAGS = -std=c89 -Werror -Wall -pedantic -O0 -g
+CLFAGS = -std=c89 -Werror -Wall -pedantic -O0 -g -Wno-unused-function
 
 NODE = node --trace-uncaught
 
