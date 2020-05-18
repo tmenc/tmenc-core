@@ -90,11 +90,12 @@ function double_tape_move_left(tape, default_value) {
 	if (tape.me.left) {
 		tape.me = tape.me.left;
 	} else {
-		tape.me = {
+		tape.me.left = {
 			current: default_value,
 			left: null,
 			right: tape.me,
 		}
+		tape.me = tape.me.left;
 	}
 }
 
@@ -102,11 +103,12 @@ function double_tape_move_right(tape, default_value) {
 	if (tape.me.right) {
 		tape.me = tape.me.right;
 	} else {
-		tape.me = {
+		tape.me.right = {
 			current: default_value,
 			left: tape.me,
 			right: null,
 		}
+		tape.me = tape.me.right;
 	}
 }
 
