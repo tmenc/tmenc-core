@@ -242,14 +242,16 @@ stream_end_of_stream() {
 	return ret;
 }
 
+typedef stream_return_type (*stream_generator)(opaque*);
+
 struct stream_s {
 	opaque state; /* like context */
-	stream_return_type (*generator)(struct stream_s);
+	stream_generator generator;
 };
 typedef struct stream_s stream;
 
 static stream_return_type
-range_stream_generator(stream s) {
+range_stream_generator(opaque *state) {
 	stream_return_type ret;
 	ret.object.other = NULL;
 	ret.end_of_stream_q = 0;
