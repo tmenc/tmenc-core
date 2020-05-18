@@ -82,7 +82,6 @@ void test_bit_ops() {
 	answers[9] = 1;
 	bitarray_print(arr);
 
-	bitarray_zero_out(arr);
 	for (i = 0; i < TEST_BIT_OPS_LEN; i++) {
 		printf("answers[%ld] == %d; bitarray_at(arr, %ld) == %d\n", i, (int)answers[i], i, (int)bitarray_at(arr, i));
 		assert(answers[i] == bitarray_at(arr, i));
