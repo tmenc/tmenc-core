@@ -18,7 +18,7 @@ all: build-js
 build-js: | build build-js-srcs
 tests: tests-build-js-srcs test-build-c-srcs
 
-test-all: test-nist-big test-nist-small test-hash test-misc test-js-cli
+test-all: test-nist-big test-nist-small test-js-hash test-js-misc test-js-cli test-c-misc
 
 tests-build-c-csrs: $(C_TEST_SRCS)
 tests-build-js-srcs: $(JS_TEST_SRCS)
@@ -45,11 +45,14 @@ test-nist-big: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 		tee "$(HERE)/build/$@-result"
 	test/check-nist-result.sh "0" "$(HERE)/build/$@-result"
 
-test-hash: build/test build/test/test-hash.js
+test-js-hash: build/test build/test/test-hash.js
 	$(NODE) build/test/test-hash.js
 
-test-misc: build/test build/test/test-misc.js
+test-js-misc: build/test build/test/test-misc.js
 	$(NODE) build/test/test-misc.js
+
+test-c-misc: build/test build/test/test-misc.exe
+	./build/test/test-misc.exe
 
 test-js-cli: all
 	printf 'encrypt\n0a0bff\n0a0b00\nMakefile\n1000\n3\nLICENSE\nbuild/cli-encrypted\nEND' | $(NODE) build/cli.js
