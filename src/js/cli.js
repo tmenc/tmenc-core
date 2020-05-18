@@ -69,7 +69,7 @@ function handle_file_buffer(encryptQ, pass_s, salt, file_buffer, machine_size, w
 		var byte_stream = binary_stream_to_byte_stream(padded_stream);
 		var buf = byte_stream_to_byte_buffer(byte_stream);
 
-		console.log('encode buf:', buf);
+		console.log('encrypt buf:', buf);
 		fs.writeFileSync(output_file_path, buf);
 	} else {
 		var byte_stream = binary_stream_to_byte_stream(xored_stream);
@@ -78,7 +78,7 @@ function handle_file_buffer(encryptQ, pass_s, salt, file_buffer, machine_size, w
 	}
 }
 
-function encode_file() {
+function encrypt_file() {
 	function read_cb(pass_s, salt_s, file, machine_size_s, wrap_count_s, input_file_path, output_file_path) {
 		var file_buffer = fs.readFileSync(file);
 		var input_file_buffer = fs.readFileSync(input_file_path);
@@ -93,7 +93,7 @@ function encode_file() {
 	read_things(['pass', 'salt', 'keyfile', 'machine-size', 'wrap-count', 'input-file', 'output-file'], read_cb);
 }
 
-function decode_file() {
+function decrypt_file() {
 	function read_cb(pass_s, file, input_file_path, output_file_path) {
 		var file_buffer = fs.readFileSync(file);
 
@@ -116,13 +116,13 @@ function decode_file() {
 }
 
 function entry() {
-	rl.question('encode/decode', function (x) {
-		if (x == 'encode') {
-			encode_file();
-		} else if (x == 'decode') {
-			decode_file();
+	rl.question('encrypt/decrypt', function (x) {
+		if (x == 'encrypt') {
+			encrypt_file();
+		} else if (x == 'decrypt') {
+			decrypt_file();
 		} else {
-			throw 'expected encode or decode';
+			throw 'expected encrypt or decrypt';
 		}
 	});
 }
