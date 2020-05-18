@@ -1,6 +1,6 @@
 
 HERE = $(PWD)
-CC = gcc
+CC = gcc -std=c89 -Werror -Wall -pedantic
 
 NODE = node --trace-uncaught
 
