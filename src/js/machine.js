@@ -15,7 +15,7 @@ function bitarray_set_bit(bitarr, i, value) {
 	bitarr[i] = value;
 }
 
-var DOUBLE_TAPE_DEFAULT_VALUE = 1;
+var DOUBLE_TAPE_DEFAULT_VALUE = 0;
 
 function double_tape_create() {
 	return {
