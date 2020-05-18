@@ -158,10 +158,10 @@ stream_to_bitarr(stream *s) {
 }
 
 struct append_streams_closure {
-	size_t pos;
-	stream *cur;
 	size_t len;
 	stream **streams_vector;
+	size_t pos;
+	stream *cur;
 };
 
 static opaque
@@ -183,8 +183,20 @@ append_streams_generator(void *state, bit *finished_q) {
 	return x;
 }
 
-/* static stream */
-/* append_streams(size_t argc, stream **argv) { */
-/* 	return  */
-/* } */
+static stream
+append_streams(size_t len, stream **streams_vector) {
+	struct append_streams_closure *ctx;
+	stream ret;
+
+	ctx = malloc(sizeof(struct append_streams_closure));
+	ctx->len = len;
+	ctx->streams_vector = streams_vector;
+	ctx->pos = 0;
+	ctx->cur = streams_vector[0];
+
+	ret.finished_q = 0;
+	ret.state = ctx;
+	ret.generator = append_streams_generator;
+	return ret;
+}
 
