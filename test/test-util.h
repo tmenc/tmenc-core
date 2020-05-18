@@ -47,55 +47,34 @@ void bitarray_print(bitarr arr) {
 	printf("]\n");
 }
 
-#define IS_BIG_ENDIAN (*(uint16_t *)"\0\xff" < 0x100)
-#define IS_LITTLE_ENDIAN (!IS_BIG_ENDIAN)
-
 void test_bit_ops() {
 	size_t len = 10;
 	bitarr arr = bitarray_alloc(len);
-
-	if (IS_BIG_ENDIAN) {
-		printf("ON BIG ENDIAN MACHINE\n");
-	} else {
-		printf("ON LITTLE ENDIAN MACHINE\n");
-	}
 
 	assert(len == bitarray_length(arr));
 
 	bitarray_zero_out(arr);
 
 	bitarray_print(arr);
-#if IS_LITTLE_ENDIAN
 	assert(arr.buffer[0] == 0 && arr.buffer[1] == 0);
-#endif
 
 	bitarray_set_bit(arr, 0, 1);
 	bitarray_print(arr);
-#if IS_LITTLE_ENDIAN
 	assert(arr.buffer[0] == 1 && arr.buffer[1] == 0);
-#endif
 
 	bitarray_set_bit(arr, 1, 1);
 	bitarray_print(arr);
-#if IS_LITTLE_ENDIAN
 	assert(arr.buffer[0] == 3 && arr.buffer[1] == 0);
-#endif
 
 	bitarray_set_bit(arr, 2, 1);
 	bitarray_print(arr);
-#if IS_LITTLE_ENDIAN
 	assert(arr.buffer[0] == 7 && arr.buffer[1] == 0);
-#endif
 
 	bitarray_set_bit(arr, 7, 1);
 	bitarray_print(arr);
-#if IS_LITTLE_ENDIAN
 	assert(arr.buffer[0] == 135 && arr.buffer[1] == 0);
-#endif
 
 	bitarray_set_bit(arr, 9, 1);
 	bitarray_print(arr);
-#if IS_LITTLE_ENDIAN
 	assert(arr.buffer[0] == 135 && arr.buffer[1] == 2);
-#endif
 }
