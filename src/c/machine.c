@@ -9,8 +9,8 @@ typedef unsigned long largeint_t;
 typedef uint8_t bit;
 typedef uint8_t bit_container;
 
-#define true ((bit)1)
-#define false ((bit)0)
+#define TRUE ((bit)1)
+#define FALSE ((bit)0)
 
 struct bitarr_s {
 	bit_container *buffer;
