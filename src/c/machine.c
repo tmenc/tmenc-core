@@ -221,50 +221,47 @@ machine_step(tm *me, bit read_tape_bit, size_t memory_tape_register) {
  * STREAM *
  **********/
 
-union opaque_u {
+union stream_return_type_u {
 	bit binary;
 	int integer;
 	size_t size;
 	void *other;
 };
-typedef union opaque_u opaque;
+typedef stream_return_type_u stream_return_type;
 
-struct stream_return_type_s {
-	bit end_of_stream_q; /* if this is 1 then value doesnt matter! */
-	opaque object;
-};
-typedef struct stream_return_type_s stream_return_type;
-
-static stream_return_type
-stream_end_of_stream() {
-	stream_return_type ret;
-	ret.end_of_stream_q = 1;
-	return ret;
-}
-
-typedef stream_return_type (*stream_generator)(opaque*);
+typedef stream_return_type (*stream_generator)(void*);
 
 struct stream_s {
-	opaque state; /* like context */
+	void* state; /* like context */
 	stream_generator generator;
 };
 typedef struct stream_s stream;
 
+struct range_stream_closure {
+	size_t max;
+	size_t current;
+};
+
 static stream_return_type
-range_stream_generator(opaque *state) {
+range_stream_generator(void *state) {
 	stream_return_type ret;
-	ret.object.other = NULL;
-	ret.end_of_stream_q = 0;
+	struct range_stream_closure *ctx = state;
+
+	ret.size = ctx->current;
+	ctx->current++;
 	return ret;
 }
 
 static stream
 range_stream(size_t n) {
-	opaque state;
 	stream ret;
+	struct range_stream_closure *ctx;
 
-	state.other = NULL;
-	ret.state = state;
+	ctx = malloc(sizeof(struct range_stream_closure));
+	ctx->current = 0;
+	ctx->max = n;
+
+	ret.state = ctx;
 	ret.generator = range_stream_generator;
 	return ret;
 }
