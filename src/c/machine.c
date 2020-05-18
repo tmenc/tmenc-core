@@ -235,6 +235,13 @@ struct stream_return_type_s {
 };
 typedef struct stream_return_type_s stream_return_type;
 
+static stream_return_type
+stream_end_of_stream() {
+	stream_return_type ret;
+	ret.end_of_stream_q = 1;
+	return ret;
+}
+
 struct stream_s {
 	opaque state; /* like context */
 	stream_return_type (*generator)(struct stream_s);
@@ -244,14 +251,16 @@ typedef struct stream_s stream;
 static stream_return_type
 range_stream_generator(struct stream_s stream) {
 	stream_return_type ret;
-	ret.other = NULL;
+	ret.object.other = NULL;
+	ret.end_of_stream_q = 0;
 	return ret;
 }
 
 static stream
 range_stream(size_t n) {
-	stream_return_type state;
+	opaque state;
 	stream ret;
+
 	state.other = NULL;
 	ret.state = state;
 	ret.generator = range_stream_generator;
