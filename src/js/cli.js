@@ -104,8 +104,7 @@ function decode_file() {
 		var salt_len = binary_stream_read_integer(SIZE_BLOCK_LEN, input_file_stream);
 		var salt = stream_read_n_vector(salt_len, input_file_stream);
 		var xored_len = binary_stream_read_integer(SIZE_BLOCK_LEN, input_file_stream);
-		var xored_vector = stream_read_n_vector(xored_len, input_file_stream);
-		var xored_buffer = byte_stream_to_byte_buffer(binary_stream_to_byte_stream(vector_to_stream(xored_vector)));
+		var xored_buffer = byte_stream_to_byte_buffer(binary_stream_to_byte_stream(stream_read_n_stream(xored_len, input_file_stream)));
 
 		console.log('salt_len:', salt_len);
 		console.log('xored_len:', xored_len);
