@@ -178,7 +178,8 @@ append_streams_generator(void *state, bit *finished_q) {
 			x = stream_read(ctx->cur);
 		} else {
 			*finished_q = 1;
-			free(state);
+			free(ctx->streams_vector);
+			free(ctx);
 		}
 	}
 	return x;
