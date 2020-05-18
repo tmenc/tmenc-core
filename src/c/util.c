@@ -211,6 +211,7 @@ append_streams(size_t len, stream **streams_vector) {
 /* when done, just free it */
 struct integer_to_binary_stream_s {
 	stream me;
+	size_t size;
 	size_t i;
 	size_t n;
 };
@@ -220,13 +221,14 @@ integer_to_binary_stream_generator(void *state, bit *finished_q) {
 	struct integer_to_binary_stream_s *ctx = state;
 	opaque ret;
 
-	ctx->i = ctx->i + 1;
 	if (ctx->n > 0) {
-		ret.size = n & 1;
-		n = n >> 1;
+		ctx->i = ctx->i + 1;
+		ret.size = (ctx->n) & 1;
+		ctx->n = (ctx->n) >> 1;
 		return ret;
 	}
-	if (i < size) {
+	if (ctx->i < ctx->size) {
+		ctx->i = ctx->i + 1;
 		ret.size = 0;
 		return ret;
 	}
@@ -237,10 +239,14 @@ integer_to_binary_stream_generator(void *state, bit *finished_q) {
 }
 
 static struct integer_to_binary_stream_s*
-integer_to_binary_stream_init(size_t size) {
+integer_to_binary_stream_init(size_t size, size_t n) {
 	struct integer_to_binary_stream_s *ret;
 
 	ret = malloc(sizeof(struct integer_to_binary_stream_s));
+	ret->i = 0;
+	ret->n = n;
+	ret->size = size;
+
 	ret->me.finished_q = 0;
 	ret->me.state = ret;
 	ret->me.generator = append_streams_generator;
