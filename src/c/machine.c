@@ -19,15 +19,18 @@ struct bitarr_s {
 };
 typedef struct bitarr_s bitarr;
 
-bit nth_bit(bit_container x, int n) {
+static bit
+nth_bit(bit_container x, int n) {
 	return (x >> n) & 1;
 }
 
-size_t bitarray_length(bitarr arr) {
+static size_t
+bitarray_length(bitarr arr) {
 	return arr.bit_size;
 }
 
-bit bitarray_at(bitarr arr, size_t at) {
+static bit
+bitarray_at(bitarr arr, size_t at) {
 	size_t byte_pos = at / sizeof(bit_container);
 	int byte_shift = at % sizeof(bit_container);
 
@@ -40,7 +43,8 @@ bit bitarray_at(bitarr arr, size_t at) {
 	return (nth_bit(arr.buffer[byte_pos], byte_shift));
 }
 
-void bitarray_set_bit(bitarr arr, size_t at, bit value) {
+static void
+bitarray_set_bit(bitarr arr, size_t at, bit value) {
 	size_t bi = at / sizeof(bit_container);
 	int offset = at % sizeof(bit_container);
 	bit_container b;
@@ -61,7 +65,8 @@ void bitarray_set_bit(bitarr arr, size_t at, bit value) {
 	arr.buffer[bi] = y;
 }
 
-bitarr bitarr_alloc(size_t bit_size) {
+static bitarr
+bitarr_alloc(size_t bit_size) {
 	bitarr ret;
 	size_t size;
 
@@ -76,15 +81,3 @@ bitarr bitarr_alloc(size_t bit_size) {
 
 	return ret;
 }
-
-uint32_t simple(uint32_t x) {
-	uint32_t a = 1664525;
-	uint32_t b = 1013904223;
-	return x * a + b;
-}
-
-uint32_t to1bit(uint32_t x) {
-	if (x > 2147483648) { return 1; }
-	else { return 0; }
-}
-
