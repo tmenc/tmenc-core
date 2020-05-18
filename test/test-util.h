@@ -152,6 +152,9 @@ void test_integer_to_binary_stream() {
 
 void test_byte_stream_to_binary_stream() {
 	vector v = vector_create_empty();
+	stream vs;
+	stream bs;
+	bitarr a;
 	opaque o;
 
 	/* Hello world:
@@ -170,6 +173,10 @@ void test_byte_stream_to_binary_stream() {
 	vector_push(&v, o);
 
 	print_vector_of_bytes(v);
+
+	vs = vector_to_stream(&v);
+	bs = byte_stream_to_binary_stream(&vs);
+	/* a = binary_stream_to_bitarr(&bs); */
 
 }
 
