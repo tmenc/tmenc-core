@@ -75,7 +75,7 @@ function make_tm(machine_bits) {
 		return new_bit;
 	}
 
-	function step (read_tape_bit, memory_tape_register) {
+	function machine_step (read_tape_bit, memory_tape_register) {
 		var jump_size = (1 + read_tape_bit) * (1 + memory_tape_register);
 
 		var wt_skip = machine_flip_and_read();
@@ -99,7 +99,7 @@ function make_tm(machine_bits) {
 			direction_bit: direction_bit,
 		};
 	}
-	return step;
+	return machine_step;
 }
 
 function make_tm_env(machine_bits, input_bits) {

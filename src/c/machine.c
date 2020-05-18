@@ -158,7 +158,6 @@ struct tm_s {
 	size_t machine_pos;
 	bitarr machine_bits;
 };
-
 typedef struct tm_s tm;
 
 static struct tm_s
@@ -189,4 +188,12 @@ machine_flip_and_read(tm *me) {
 	return new_bit;
 }
 
+struct tm_step_s {
+	bit wt_bit;
+	bit wt_skip;
+	bit increment_bit;
+	bit increment_dir;
+	bit direction_bit;
+};
+typedef struct tm_step_s tm_step;
 
