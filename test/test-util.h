@@ -27,7 +27,7 @@ void test_rng() {
 void bitarray_zero_out(bitarr arr) {
 	size_t i;
 
-	for (i = 0; i < (arr.bit_size / 8) + 1; i++) {
+	for (i = 0; i < bitarray_byte_length(arr); i++) {
 		arr.buffer[i] = 0;
 	}
 }
