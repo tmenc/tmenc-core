@@ -88,3 +88,20 @@ void test_bit_ops() {
 	}
 }
 
+void print_vector_of_sizes(vector v) {
+	size_t i;
+
+	printf("vec: [ ");
+	for (i = 0; i < v.size; i++) {
+		printf("%lu ", (unsigned long)v.buffer[i].size);
+	}
+	printf("]\n");
+}
+
+void test_range_stream() {
+	stream s = range_stream(10);
+	vector v = stream_to_vector(&s);
+
+	print_vector_of_sizes(v);
+}
+
