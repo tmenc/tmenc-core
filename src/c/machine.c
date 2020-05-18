@@ -65,7 +65,7 @@ bitarray_set_bit(bitarr arr, size_t at, bit value) {
 #define BITARR_BYTE_SIZE(bit_size) ((sizeof(bit_container)) + (bit_size / (sizeof(bit_container))))
 
 static bitarr
-bitarr_alloc(size_t bit_size) {
+bitarray_alloc(size_t bit_size) {
 	bitarr ret;
 	size_t size;
 

@@ -47,7 +47,11 @@ void bitarr_print(bitarr arr) {
 }
 
 void test_bit_ops() {
-	bitarr arr = bitarr_alloc(10);
+	size_t len = 10;
+	bitarr arr = bitarray_alloc(len);
+
+	assert(len == bitarray_length(arr));
 
 	bitarr_print(arr);
+	bitarr_set_bit(arr, 0, 1);
 }
