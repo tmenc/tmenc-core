@@ -42,14 +42,11 @@ function xor_with_key(key_tape, input_file_bits) {
 	return xored_stream;
 }
 
-function make_key_from_parameters(pass, salt, file_buffer, machine_size, wrap_count, input_file_buffer, key_size) {
+function make_key_from_parameters(pass, salt, file_buffer, machine_size, wrap_count, key_size) {
 	var key = make_key(pass, salt, file_buffer, key_size, machine_size, wrap_count);
 	debug_vec(key)
 
 	return key;
-}
-
-function write_out(salt, machine_size, wrap_count, xored_stream, key_size, output_file_path) {
 }
 
 function handle_file_buffer(encryptQ, pass_s, salt, file_buffer, machine_size_s, wrap_count_s, input_file_buffer, output_file_path) {
@@ -60,7 +57,7 @@ function handle_file_buffer(encryptQ, pass_s, salt, file_buffer, machine_size_s,
 	var input_file_bits = stream_to_bitarr(input_file_stream);
 	var key_size = bitarray_length(input_file_bits);
 
-	var key = make_key_from_parameters(pass, salt, file_buffer, machine_size, wrap_count, input_file_buffer, key_size);
+	var key = make_key_from_parameters(pass, salt, file_buffer, machine_size, wrap_count, key_size);
 	var xored_stream = xor_with_key(key, input_file_bits);
 
 	if (encryptQ) {
