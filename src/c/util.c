@@ -14,15 +14,16 @@ bitarray_create_empty() {
 static void
 bitarray_push(bitarr *arr, bit o) {
 	size_t size;
+	size_t new_bit_size;
 
 	if ((arr->bit_size) >= (arr->bit_capacity)) {
-		arr->bit_capacity = (arr->capacity + 1) * 2;
-
-		size = bit_length_to_byte_length(ret);
-		arr->buffer = realloc(arr->buffer, (vec->capacity) * (sizeof(opaque)));
+		new_bit_size = (arr->capacity + 1) * 2;
+		size = bit_length_to_byte_length(new_bit_size);
+		arr->buffer = realloc(arr->buffer, size);
 		if (vec->buffer == NULL) {
 			printf("COULD NOT GROW VECTOR TO SIZE %lu\n", (unsigned long)(vec->capacity));
 		}
+		arr->bit_capacity = size * BITS_IN_SIZEOF;
 	}
 
 	bitarray_set_bit(*arr, arr->bit_size, o);
