@@ -196,7 +196,7 @@ function make_tm_env(machine_bits, input_bits) {
 					diff = 0;
 				}
 			} else {
-				diff = (ret.indrement_dir * 2 - 1) * (ret.increment_bit);
+				diff = (ret.increment_dir * 2 - 1) * (ret.increment_bit);
 			}
 			double_tape_set(memory_tape, memory_tape_register + diff);
 
