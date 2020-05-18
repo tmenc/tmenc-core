@@ -184,25 +184,26 @@ function make_tm_env(machine_bits, input_bits) {
 			var ret = tm(read_tape_bit, memory_tape_register);
 
 			read_tape_pos++;
-
-			var increment_dir_factor = ret.increment_dir * 2 - 1;
-			var new_register_value =
-				memory_tape_register +
-				increment_dir_factor *
-				ret.increment_bit;
-			if (new_register_value < 0) {
-				new_register_value = 0;
+			if (read_tape_pos >= read_tape_len) {
+				read_tape_pos = 0;
 			}
 
-			double_tape_set(memory_tape, new_register_value);
+			var diff = undefined;
+			if (ret.increment_dir == 0 && ret.increment_bit == 1) {
+				if (memory_tape_register > 0) {
+					diff = -1;
+				} else {
+					diff = 0;
+				}
+			} else {
+				diff = (ret.indrement_dir * 2 - 1) * (ret.increment_bit);
+			}
+			double_tape_set(memory_tape, memory_tape_register + diff);
+
 			if (ret.direction_bit == 0) {
 				double_tape_move_left(memory_tape, 0);
 			} else {
 				double_tape_move_right(memory_tape, 0);
-			}
-
-			if (read_tape_pos >= read_tape_len) {
-				read_tape_pos = 0;
 			}
 
 			if (ret.wt_skip == 0) {
