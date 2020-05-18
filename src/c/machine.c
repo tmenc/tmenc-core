@@ -80,7 +80,7 @@ bitarray_alloc(size_t bit_size) {
 	size = bitarray_byte_length(ret);
 	ret.buffer = malloc(size);
 	if (ret.buffer == NULL) {
-		printf("COULD NOT ALLOCATE BUFFER OF SIZE %lu", (unsigned long)size);
+		printf("COULD NOT ALLOCATE BUFFER OF SIZE %lu\n", (unsigned long)size);
 	}
 
 	return ret;
@@ -89,10 +89,32 @@ bitarray_alloc(size_t bit_size) {
 /***************
    DOUBLE TAPE
  ***************/
+struct double_tape_body_s {
+	struct double_tape_body_s *left;
+	struct double_tape_body_s *right;
+	unsigned long current;
+};
+
 struct double_tape_s {
-	struct double_tape_s *left;
-	struct double_tape_s *right;
-	unsigned long value;
+	struct double_tape_body_s *me;
 };
 typedef struct double_tape_s double_tape;
-/* static  */
+
+#define DOUBLE_TAPE_DEFAULT_VALUE 0
+
+static double_tape
+double_tape_create() {
+	double_tape ret;
+
+	ret.me = malloc(sizeof(struct double_tape_s));
+	if (ret.me == NULL) {
+		printf("COULD NOT ALLOCATE DOUBLE TAPE\n");
+	}
+
+	ret.me->current = DOUBLE_TAPE_DEFAULT_VALUE;
+	ret.me->left = NULL;
+	ret.me->right = NULL;
+
+	return ret;
+}
+
