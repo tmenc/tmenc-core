@@ -290,7 +290,7 @@ vector_create_empty() {
 	vector ret;
 	ret.size = 0;
 	ret.capacity = 128;
-	ret.buffer = malloc(ret.capacity * sizeof(opaque));
+	ret.buffer = malloc((ret.capacity) * sizeof(opaque));
 	if (ret.buffer == NULL) {
 		printf("COULD NOT ALLOCATE EMPTY VECTOR\n");
 	}
@@ -306,7 +306,7 @@ static void
 vector_push(vector *vec, opaque object) {
 	if ((vec->size) >= (vec->capacity)) {
 		vec->capacity = (vec->capacity + 1) * 2;
-		vec->buffer = realloc(vec->buffer, vec->capacity);
+		vec->buffer = realloc(vec->buffer, (vec->capacity) * (sizeof(opaque)));
 		if (vec->buffer == NULL) {
 			printf("COULD NOT GROW VECTOR TO SIZE %lu\n", (unsigned long)(vec->capacity));
 		}
