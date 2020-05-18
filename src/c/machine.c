@@ -33,7 +33,7 @@ bitarray_at(bitarr arr, size_t at) {
 
 #ifdef DEBUG
 	if (at >= arr.bit_size) {
-		printf("OUT OF BOUNDS: %lu ; BIT_SIZE = %lu\n", at, arr.bit_size);
+		printf("OUT OF BOUNDS: %lu ; BIT_SIZE = %lu\n", (unsigned long)at, (unsigned long)arr.bit_size);
 	}
 #endif
 
@@ -51,7 +51,7 @@ bitarray_set_bit(bitarr arr, size_t at, bit value) {
 
 #ifdef DEBUG
 	if (at >= arr.bit_size) {
-		printf("OUT OF BOUNDS: %lu ; BIT_SIZE = %lu\n", at, arr.bit_size);
+		printf("OUT OF BOUNDS: %lu ; BIT_SIZE = %lu\n", (unsigned long)at, (unsigned long)arr.bit_size);
 	}
 #endif
 
@@ -76,7 +76,7 @@ bitarray_alloc(size_t bit_size) {
 	size = bitarray_byte_length(ret);
 	ret.buffer = malloc(size);
 	if (ret.buffer == NULL) {
-		printf("COULD NOT ALLOCATE BUFFER OF SIZE %lu", size);
+		printf("COULD NOT ALLOCATE BUFFER OF SIZE %lu", (unsigned long)size);
 	}
 
 	return ret;
