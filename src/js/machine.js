@@ -76,23 +76,46 @@ function bitarray_xor_with(target, other) {
 	}
 }
 
-function double_tape_create() {
+function double_tape_create(value) {
 	return {
-		left_part: bitarray_alloc(0),
-		right_part: bitarray_alloc(0),
+		me: {
+			current: value,
+			left: null,
+			right: null,
+		}
 	};
 }
 
-function double_tape_at_or_x(dbitarr, at, x) {
-	var target = at < 0 ? dbitarr.left_part : dbitarr.right_part;
-	var abs_at = at < 0 ? -at : at;
-	return bitarray_at_or_x(target, abs_at, x);
+function double_tape_move_left(tape, default_value) {
+	if (tape.me.left) {
+		tape.me = tape.me.left;
+	} else {
+		tape.me = {
+			current: default_value,
+			left: null,
+			right: tape.me,
+		}
+	}
 }
 
-function double_tape_set_bit_extend0(dbitarr, at, value) {
-	var target = at < 0 ? dbitarr.left_part : dbitarr.right_part;
-	var abs_at = at < 0 ? -at : at;
-	return bitarray_set_bit_extend0(target, abs_at, value);
+function double_tape_move_right(tape, default_value) {
+	if (tape.me.right) {
+		tape.me = tape.me.right;
+	} else {
+		tape.me = {
+			current: default_value,
+			left: tape.me,
+			right: null,
+		}
+	}
+}
+
+function double_tape_get(tape) {
+	return tape.me.value;
+}
+
+function double_tape_set(tape, value) {
+	tape.me.value = value;
 }
 
 function make_tm(machine_bits) {
@@ -147,16 +170,15 @@ function make_tm(machine_bits) {
 function make_tm_env(machine_bits, input_bits) {
 	var tm = make_tm(machine_bits);
 
-	var memory_tape = double_tape_create();
+	var memory_tape = double_tape_create(0);
 	var read_tape_len = bitarray_length(input_bits);
 	var read_tape = input_bits;
-	var memory_tape_pos = 0;
 	var read_tape_pos = 0;
 
 	return function() {
 		while (true) {
 			var read_tape_bit = bitarray_at(read_tape, read_tape_pos);
-			var memory_tape_register = double_tape_at_or_x(memory_tape, memory_tape_pos, 0);
+			var memory_tape_register = double_tape_get(memory_tape);
 			var ret = tm(read_tape_bit, memory_tape_register);
 
 			read_tape_pos++;
@@ -170,11 +192,12 @@ function make_tm_env(machine_bits, input_bits) {
 				new_register_value = 0;
 			}
 
-			double_tape_set_bit_extend0(
-				memory_tape,
-				memory_tape_pos,
-				new_register_value);
-			memory_tape_pos += ret.direction_bit * 2 - 1;
+			double_tape_set(memory_tape, new_register_value);
+			if (ret.direction_bit == 0) {
+				double_tape_move_left(memory_tape, 0);
+			} else {
+				double_tape_move_right(memory_tape, 0);
+			}
 
 			if (read_tape_pos >= read_tape_len) {
 				read_tape_pos = 0;
