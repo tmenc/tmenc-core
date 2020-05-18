@@ -157,3 +157,34 @@ stream_to_bitarr(stream *s) {
 	}
 }
 
+struct append_streams_closure {
+	size_t pos;
+	stream *cur;
+	size_t len;
+	stream **streams_vector;
+};
+
+static opaque
+append_streams_generator(void *state, bit *finished_q) {
+	struct append_streams_closure *ctx = state;
+	opaque x;
+
+	x = stream_read(ctx->cur);
+	while (stream_finished(ctx->cur)) {
+		ctx->pos = 1 + ctx->pos;
+		if (ctx->pos < ctx->len) {
+			ctx->cur = ctx->streams_vector[ctx->pos];
+			x = stream_read(ctx->cur);
+		} else {
+			*finished_q = 1;
+			free(state);
+		}
+	}
+	return x;
+}
+
+/* static stream */
+/* append_streams(size_t argc, stream **argv) { */
+/* 	return  */
+/* } */
+
