@@ -98,6 +98,16 @@ void print_vector_of_sizes(vector v) {
 	printf("]\n");
 }
 
+void print_vector_of_bytes(vector v) {
+	size_t i;
+
+	printf("vec: [ ");
+	for (i = 0; i < v.size; i++) {
+		printf("%lu ", (unsigned long)v.buffer[i].byte);
+	}
+	printf("]\n");
+}
+
 void test_range_stream() {
 	stream s = range_stream(20);
 	vector v = stream_to_vector(&s);
@@ -138,5 +148,28 @@ void test_integer_to_binary_stream() {
 	bitarr a = stream_to_bitarr(&s);
 
 	bitarray_print(a);
+}
+
+void test_byte_stream_to_binary_stream() {
+	vector v = vector_create_empty();
+	opaque o;
+
+	/* Hello world:
+	   72 101 108 108 111 32     119 111 114 108 100 */
+
+	o.byte = 72;
+	vector_push(&v, o);
+
+	o.byte = 101;
+	vector_push(&v, o);
+
+	o.byte = 108;
+	vector_push(&v, o);
+
+	o.byte = 111;
+	vector_push(&v, o);
+
+	print_vector_of_bytes(v);
+
 }
 
