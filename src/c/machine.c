@@ -5,8 +5,6 @@
 #include <stdlib.h>
 #include <stddef.h> /* size_t */
 
-typedef unsigned long largeint_t;
-
 typedef unsigned char bit;
 typedef unsigned char bit_container;
 #define BITS_IN_SIZEOF 8
@@ -94,7 +92,7 @@ bitarray_alloc(size_t bit_size) {
 struct double_tape_body_s {
 	struct double_tape_body_s *left;
 	struct double_tape_body_s *right;
-	largeint_t current;
+	size_t current;
 };
 
 struct double_tape_s {
@@ -143,13 +141,13 @@ double_tape_move_right(double_tape tape) {
 	tape.me = tape.me->right;
 }
 
-static largeint_t
+static size_t
 double_tape_get(double_tape tape) {
 	return tape.me->current;
 }
 
 static void
-double_tape_set(double_tape tape, largeint_t value) {
+double_tape_set(double_tape tape, size_t value) {
 	tape.me->current = value;
 }
 
@@ -198,7 +196,7 @@ struct tm_step_s {
 typedef struct tm_step_s tm_step;
 
 static tm_step
-machine_step(tm *me, bit read_tape_bit, largeint_t memory_tape_register) {
+machine_step(tm *me, bit read_tape_bit, size_t memory_tape_register) {
 	tm_step ret;
 	size_t jump_size = (1 + read_tape_bit) * (1 + memory_tape_register);
 
