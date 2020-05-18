@@ -144,69 +144,45 @@ function make_tm(machine_bits) {
 	return step;
 }
 
-function make_tm_env(machine_bits, input_bits, write_tape_size_limit) {
+function make_tm_env(machine_bits, input_bits) {
 	var tm = make_tm(machine_bits);
 
 	var memory_tape = double_bitarray_create();
 	var read_tape_len = bitarray_length(input_bits);
 	var read_tape = input_bits;
-	var write_tape = bitarray_alloc(0);
 	var memory_tape_pos = 0;
 	var read_tape_pos = 0;
-	var write_tape_pos = 0;
 
-	var write_tape_wrap_count = 0;
-	var read_tape_wrap_count = 0;
-	var read_tape_read_all = false;
-	function step() {
-		var read_tape_bit = bitarray_at(read_tape, read_tape_pos);
-		var memory_tape_register = double_bitarray_at_or_x(memory_tape, memory_tape_pos, 0);
-		debugger;
-		var ret = tm(read_tape_bit, memory_tape_register);
+	return function() {
+		while (true) {
+			var read_tape_bit = bitarray_at(read_tape, read_tape_pos);
+			var memory_tape_register = double_bitarray_at_or_x(memory_tape, memory_tape_pos, 0);
+			var ret = tm(read_tape_bit, memory_tape_register);
 
-		read_tape_pos++;
+			read_tape_pos++;
 
-		var increment_dir_factor = ret.increment_dir * 2 - 1;
-		var new_register_value =
-			memory_tape_register +
-			increment_dir_factor *
-			ret.increment_bit;
-		if (new_register_value < 0) {
-			new_register_value = 0;
-		}
+			var increment_dir_factor = ret.increment_dir * 2 - 1;
+			var new_register_value =
+				memory_tape_register +
+				increment_dir_factor *
+				ret.increment_bit;
+			if (new_register_value < 0) {
+				new_register_value = 0;
+			}
 
-		double_bitarray_set_bit_extend0(
-			memory_tape,
-			memory_tape_pos,
-			new_register_value);
-		memory_tape_pos += ret.direction_bit * 2 - 1;
+			double_bitarray_set_bit_extend0(
+				memory_tape,
+				memory_tape_pos,
+				new_register_value);
+			memory_tape_pos += ret.direction_bit * 2 - 1;
 
-		if (ret.wt_skip == 0) {
-			bitarray_set_bit_extend0(write_tape, write_tape_pos, ret.wt_bit);
-			write_tape_pos++;
-		}
+			if (read_tape_pos >= read_tape_len) {
+				read_tape_pos = 0;
+			}
 
-		if (read_tape_pos >= read_tape_len) {
-			read_tape_pos = 0;
-			read_tape_wrap_count++;
-			if (read_tape_wrap_count == 1) {
-				read_tape_read_all = true;
+			if (ret.wt_skip == 0) {
+				return ret.wt_bit;
 			}
 		}
-
-		if (write_tape_size_limit) {
-			if (write_tape_pos >= write_tape_size_limit) {
-				write_tape_pos = 0;
-				if (read_tape_read_all) {
-					write_tape_wrap_count++;
-				}
-			}
-		}
-	}
-	return {
-		step: step,
-		write_tape: write_tape,
-		write_tape_wrap_count: function () { return write_tape_wrap_count; },
-		read_tape_read_all: function () { return read_tape_read_all; },
 	};
 }

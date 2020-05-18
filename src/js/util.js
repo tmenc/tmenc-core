@@ -359,15 +359,15 @@ function make_machine_from_secret(pass_vector, salt_vector, file_vector, machine
 	return output;
 }
 
-function tm_run_for_wc(env, wc) {
-	function is_tm_finished(env, wc) {
-		return env.read_tape_read_all() && env.write_tape_wrap_count() >= wc;
+function tm_get_stream_bitarr(stream, skip_count, output_size) {
+	for (var i = 0; i < skip_count; i++) {
+		stream();
 	}
-
-	var step = env.step;
-	while (!is_tm_finished(env, wc)) {
-		step();
+	var out = bitarray_alloc(output_size);
+	for (var i = 0; i < output_size; i++) {
+		bitarray_set_bit(out, i, stream());
 	}
+	return out;
 }
 
 // NOTE: `wrap_count' should depend on `length(pass++salt++file)'
@@ -384,7 +384,7 @@ function make_key(pass_v, salt_v, file_buffer, size, machine_size, wrap_count) {
 	var input_bits = stream_to_bitarr(input_stream);
 
 	var env = make_tm_env(machine_bits, input_bits, size);
-	tm_run_for_wc(env, wrap_count);
+	tm_get_stream_bitarr(env, wrap_count);
 
 	return env.write_tape;
 }
