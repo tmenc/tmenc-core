@@ -383,9 +383,8 @@ function make_key(pass_v, salt_v, file_buffer, size, machine_size, wrap_count) {
 	var input_stream = append_streams([pass_stream, salt_stream, file_stream]);
 	var input_bits = stream_to_bitarr(input_stream);
 
-	var env = make_tm_env(machine_bits, input_bits, size);
-	tm_get_stream_bitarr(env, wrap_count);
-
-	return env.write_tape;
+	var stream = make_tm_env(machine_bits, input_bits);
+	var skip_count = bitarray_length(input_bits) + wrap_count * size;
+	return tm_get_stream_bitarr(stream, skip_count, size);
 }
 
