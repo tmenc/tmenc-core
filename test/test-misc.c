@@ -1,5 +1,8 @@
 
 int main() {
-	printf("Hello\n");
+	printf("start test-misc.c\n");
+
+	test_bit_ops();
+
 	return 0;
 }

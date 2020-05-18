@@ -49,6 +49,6 @@ void bitarr_print(bitarr arr) {
 void test_bit_ops() {
 	bitarr arr = bitarr_alloc(10);
 
-	
+	bitarr_print(arr);
 }
 
