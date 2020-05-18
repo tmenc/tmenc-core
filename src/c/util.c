@@ -23,7 +23,7 @@ bitarray_push(bitarr *arr, bit o) {
 		if (arr->buffer == NULL) {
 			printf("COULD NOT GROW VECTOR TO SIZE %lu\n", (unsigned long)size);
 		}
-		arr->bit_capacity = size * BITS_IN_SIZEOF;
+		arr->bit_capacity = size * CONTAINER_BITS;
 	}
 
 	arr->bit_size++;

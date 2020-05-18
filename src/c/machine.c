@@ -81,7 +81,7 @@ bitarray_set_bit(bitarr arr, size_t at, bit value) {
 
 static size_t
 bit_length_to_byte_length(size_t bit_size) {
-	return (1 + (bit_size / (BITS_IN_SIZEOF * (sizeof(bit_container)))));
+	return (1 + (bit_size / CONTAINER_BITS));
 }
 
 static bitarr
