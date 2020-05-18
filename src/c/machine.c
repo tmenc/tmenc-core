@@ -88,15 +88,3 @@ uint32_t to1bit(uint32_t x) {
 	else { return 0; }
 }
 
-int main() {
-	uint32_t x = 200;
-	size_t i = 0;
-
-	for (i = 0; i < 100; i++) {
-		x = simple(x);
-		printf("%u\n", to1bit(x));
-	}
-
-	return 0;
-}
-

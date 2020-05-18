@@ -7,18 +7,23 @@ NIST_TEST_DATA_FILE = $(HERE)/build/test/test-data~
 NIST_DIR = test/nist-sts
 NIST_EXECUTABLE = $(NIST_DIR)/assess
 
-TEST_FILES = $(shell ls -d -1 test/*.js)
-TEST_SRCS = $(addprefix build/,$(TEST_FILES))
+JS_TEST_FILES = $(shell ls -d -1 test/*.js)
+JS_TEST_SRCS = $(addprefix build/,$(JS_TEST_FILES))
+C_TEST_FILES = $(shell ls -d -1 test/*.c)
+C_TEST_SRCS = $(addprefix build/,$(C_TEST_FILES))
 
 all: build-js
 build-js: | build build-js-srcs
-tests: | tests-build-js-srcs
+tests: tests-build-js-srcs
 
 test-all: test-nist-big test-nist-small test-hash test-misc test-js-cli
 
-tests-build-js-srcs: $(TEST_SRCS)
+tests-build-c-csrs: $(C_TEST_SRCS)
+tests-build-js-srcs: $(JS_TEST_SRCS)
 
-$(TEST_SRCS): build/test src/js/machine.js src/js/util.js test/test-util.js $(TEST_FILES)
+$(C_TEST_SRCS): build/test src/c/machine.c src/c/util.c
+
+$(JS_TEST_SRCS): build/test src/js/machine.js src/js/util.js test/test-util.js $(JS_TEST_FILES)
 	cat src/js/machine.js src/js/util.js test/test-util.js $(@:build/%=%) > $@
 
 $(NIST_TEST_DATA_FILE): build/test/test-nist.js
