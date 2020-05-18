@@ -52,13 +52,16 @@ void test_bit_ops() {
 
 	assert(len == bitarray_length(arr));
 
+	arr.buffer[0] = 255;
 	bitarray_print(arr);
+
+	/* bitarray_print(arr); */
 	bitarray_set_bit(arr, 0, 1);
-	bitarray_print(arr);
-	bitarray_set_bit(arr, 1, 1);
-	bitarray_print(arr);
-	bitarray_set_bit(arr, 2, 1);
-	bitarray_print(arr);
-	bitarray_set_bit(arr, 7, 1);
-	bitarray_print(arr);
+	/* bitarray_print(arr); */
+	/* bitarray_set_bit(arr, 1, 1); */
+	/* bitarray_print(arr); */
+	/* bitarray_set_bit(arr, 2, 1); */
+	/* bitarray_print(arr); */
+	/* bitarray_set_bit(arr, 7, 1); */
+	/* bitarray_print(arr); */
 }

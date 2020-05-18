@@ -10,6 +10,7 @@ typedef unsigned long largeint_t;
 typedef uint8_t bit;
 typedef uint8_t bit_container;
 #define BITS_IN_SIZEOF 8
+#define CONTAINER_BITS (BITS_INT_SIZEOF * (sizeof(bit_container)))
 
 struct bitarr_s {
 	bit_container *buffer;
@@ -29,8 +30,10 @@ bitarray_length(bitarr arr) {
 
 static bit
 bitarray_at(bitarr arr, size_t at) {
-	size_t byte_pos = at / sizeof(bit_container);
-	int byte_shift = at % sizeof(bit_container);
+	size_t byte_pos = at / CONTAINER_BITS;
+	int byte_shift = at % CONTAINER_BITS;
+
+	printf("AT %lu ; BYTE_POS %lu ; BYTE_SHIFT %d\n", at, byte_pos, byte_shift);
 
 #ifdef DEBUG
 	if (at >= arr.bit_size) {
@@ -43,8 +46,8 @@ bitarray_at(bitarr arr, size_t at) {
 
 static void
 bitarray_set_bit(bitarr arr, size_t at, bit value) {
-	size_t bi = at / sizeof(bit_container);
-	int offset = at % sizeof(bit_container);
+	size_t bi = at / CONTAINER_BITS;
+	int offset = at % CONTAINER_BITS;
 	bit_container b;
 	bit_container a;
 	bit_container x;
