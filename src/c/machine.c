@@ -243,8 +243,8 @@ struct stream_s {
 typedef struct stream_s stream;
 
 static bit
-stream_finished(stream s) {
-	return s.finished_q;
+stream_finished(stream *s) {
+	return s->finished_q;
 }
 
 static opaque
@@ -363,18 +363,18 @@ range_stream(size_t n) {
 	return ret;
 }
 
-/* static vector */
-/* stream_to_vector(stream *s) { */
-/* 	vector ret = vector_create_empty(); */
-/* 	opaque x; */
+static vector
+stream_to_vector(stream *s) {
+	vector ret = vector_create_empty();
+	opaque x;
 
-/* 	while (1) { */
-/* 		x = stream_read(&s); */
-/* 		if (stream_finished(s)) { */
-/* 			return ret; */
-/* 		} */
+	while (1) {
+		x = stream_read(s);
+		if (stream_finished(s)) {
+			return ret;
+		}
 
-/* 		vector_push(&ret, x); */
-/* 	} */
-/* } */
+		vector_push(&ret, x);
+	}
+}
 
