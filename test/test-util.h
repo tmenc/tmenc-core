@@ -101,7 +101,14 @@ void print_vector_of_sizes(vector v) {
 void test_range_stream() {
 	stream s = range_stream(20);
 	vector v = stream_to_vector(&s);
+	stream y;
+	bitarr b;
 
 	print_vector_of_sizes(v);
+
+	y = range_stream(10);
+	b = stream_to_bitarr(&y);
+
+	bitarray_print(b);
 }
 
