@@ -221,17 +221,17 @@ machine_step(tm *me, bit read_tape_bit, size_t memory_tape_register) {
  * STREAM *
  **********/
 
-union stream_return_object_u {
+union opaque_u {
 	bit binary;
 	int integer;
 	size_t size;
 	void *other;
 };
-typedef union stream_return_object_u stream_return_object;
+typedef union opaque_u opaque;
 
 struct stream_return_type_s {
 	bit end_of_stream_q; /* if this is 1 then value doesnt matter! */
-	stream_return_object object;
+	opaque object;
 };
 typedef struct stream_return_type_s stream_return_type;
 
