@@ -23,7 +23,7 @@ void test_rng() {
 	}
 }
 
-void bitarr_zero_out(bitarr arr) {
+void bitarray_zero_out(bitarr arr) {
 	size_t i;
 
 	for (i = 0; i < (arr.bit_size / 8) + 1; i++) {
@@ -31,7 +31,7 @@ void bitarr_zero_out(bitarr arr) {
 	}
 }
 
-void bitarr_print(bitarr arr) {
+void bitarray_print(bitarr arr) {
 	size_t i;
 
 	printf("bitarr bytes: [ ");
@@ -52,6 +52,6 @@ void test_bit_ops() {
 
 	assert(len == bitarray_length(arr));
 
-	bitarr_print(arr);
-	bitarr_set_bit(arr, 0, 1);
+	bitarray_print(arr);
+	bitarray_set_bit(arr, 0, 1);
 }
