@@ -233,9 +233,7 @@ machine_step(tm *me, bit read_tape_bit, size_t memory_tape_register) {
  * STREAM *
  **********/
 
-typedef opaque stream_return_type;
-
-typedef stream_return_type (*stream_generator)(void*, bit*);
+typedef opaque (*stream_generator)(void*, bit*);
 
 struct stream_s {
 	void* state; /* like context */
@@ -243,6 +241,24 @@ struct stream_s {
 	stream_generator generator;
 };
 typedef struct stream_s stream;
+
+static bit
+stream_finished(stream s) {
+	return s.finished_q;
+}
+
+static opaque
+stream_read(stream *s) {
+	opaque ret;
+
+	if (s->finished_q) {
+		ret.other = NULL;
+	} else {
+		ret = s->generator(s->state, &(s->finished_q));
+	}
+
+	return ret;
+}
 
 /**********
  * TM ENV *
@@ -316,10 +332,10 @@ struct range_stream_closure {
 	size_t current;
 };
 
-static stream_return_type
+static opaque
 range_stream_generator(void *state, bit *finished_q) {
-	stream_return_type ret;
 	struct range_stream_closure *ctx = state;
+	opaque ret;
 
 	if (ctx->current == ctx->max) {
 		*finished_q = 1;
@@ -334,8 +350,8 @@ range_stream_generator(void *state, bit *finished_q) {
 
 static stream
 range_stream(size_t n) {
-	stream ret;
 	struct range_stream_closure *ctx;
+	stream ret;
 
 	ctx = malloc(sizeof(struct range_stream_closure));
 	ctx->current = 0;
@@ -346,4 +362,19 @@ range_stream(size_t n) {
 	ret.generator = range_stream_generator;
 	return ret;
 }
+
+/* static vector */
+/* stream_to_vector(stream *s) { */
+/* 	vector ret = vector_create_empty(); */
+/* 	opaque x; */
+
+/* 	while (1) { */
+/* 		x = stream_read(&s); */
+/* 		if (stream_finished(s)) { */
+/* 			return ret; */
+/* 		} */
+
+/* 		vector_push(&ret, x); */
+/* 	} */
+/* } */
 
