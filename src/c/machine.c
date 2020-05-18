@@ -291,7 +291,7 @@ tm_env_generator(void *state, bit *finished_q) {
 
 		memory_tape_register = double_tape_get(env->memory_tape);
 
-		ret = machine_step(env->tm, read_tape_bit, memory_tape_register);
+		ret = machine_step(&(env->tm), read_tape_bit, memory_tape_register);
 
 		if (ret.increment_dir == 0 && memory_tape_register <= 0) {
 			ret.increment_bit = 0;
