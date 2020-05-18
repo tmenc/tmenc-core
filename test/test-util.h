@@ -10,7 +10,7 @@ uint32_t simple_rng(uint32_t x) {
 }
 
 uint32_t simple_rng_to1bit(uint32_t x) {
-	if (x > 2147483648) { return 1; }
+	if (x > ((uint32_t)2147483648)) { return 1; }
 	else { return 0; }
 }
 
