@@ -113,11 +113,11 @@ function double_tape_move_right(tape, default_value) {
 }
 
 function double_tape_get(tape) {
-	return tape.me.value;
+	return tape.me.current;
 }
 
 function double_tape_set(tape, value) {
-	tape.me.value = value;
+	tape.me.current = value;
 }
 
 function make_tm(machine_bits) {
