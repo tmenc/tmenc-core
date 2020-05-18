@@ -10,6 +10,10 @@ typedef unsigned char bit_container;
 #define BITS_IN_SIZEOF 8
 #define CONTAINER_BITS (BITS_IN_SIZEOF * (sizeof(bit_container)))
 
+/************
+   BITARRAY
+ ************/
+
 struct bitarr_s {
 	bit_container *buffer;
 	size_t bit_size;
@@ -67,14 +71,6 @@ bitarray_byte_length(bitarr arr) {
 	return (1 + (arr.bit_size / (BITS_IN_SIZEOF * (sizeof(bit_container)))));
 }
 
-struct double_tape_s {
-	struct double_tape_s *left;
-	struct double_tape_s *right;
-	unsigned long value;
-};
-typedef struct double_tape_s double_tape;
-/* static  */
-
 static bitarr
 bitarray_alloc(size_t bit_size) {
 	bitarr ret;
@@ -89,3 +85,14 @@ bitarray_alloc(size_t bit_size) {
 
 	return ret;
 }
+
+/***************
+   DOUBLE TAPE
+ ***************/
+struct double_tape_s {
+	struct double_tape_s *left;
+	struct double_tape_s *right;
+	unsigned long value;
+};
+typedef struct double_tape_s double_tape;
+/* static  */
