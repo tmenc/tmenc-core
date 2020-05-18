@@ -2,16 +2,33 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#define DEBUG
+
 typedef unsigned long largeint_t;
 
+typedef uint8_t bit;
+typedef uint8_t bit_container;
+
 struct bitarr_s {
-	uint8_t *buffer;
-	largeint_t size;
+	bit_container *buffer;
+	largeint_t bit_size;
 };
 typedef struct bitarr_s bitarr;
 
-uint8_t bitn(uint8_t x, int n) {
+bit nth_bit(bit_container x, int n) {
 	return (x >> n) & 1;
+}
+
+/* NOTE: doesn't check for size! */
+bit bitarr_at(bitarr arr, largeint_t at) {
+	largeint_t byte_pos = at / sizeof(bit_container);
+	int byte_shift = at % sizeof(bit_container);
+
+#ifdef DEBUG
+	printf("OUT OF BOUNDS: %lu ; BIT SIZE IS %lu\n", at, arr.bit_size);
+#endif
+
+	return (nth_bit(arr.buffer[byte_pos], byte_shift));
 }
 
 uint32_t simple(uint32_t x) {
