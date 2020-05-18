@@ -31,16 +31,18 @@ bit bitarr_at(bitarr arr, size_t at) {
 	return (nth_bit(arr.buffer[byte_pos], byte_shift));
 }
 
-bitarr_s bitarr_alloc(size_t size) {
+bitarr_s bitarr_alloc(size_t bit_size) {
 	bitarr_s ret;
+	size_t size;
 
-	ret.buffer = malloc(
-		(1 * (sizeof(bit_container))) +
-		(size / (sizeof(bit_container))));
+	size = (1 * (sizeof(bit_container)))
+		+ (bit_size / (sizeof(bit_container)));
+
+	ret.bit_size = bit_size;
+	ret.buffer = malloc(size);
 	if (ret.buffer == NULL) {
 		printf("COULD NOT ALLOCATE BUFFER OF SIZE %lu", size);
 	}
-	ret.bit_size = size;
 
 	return ret;
 }
