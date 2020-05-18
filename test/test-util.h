@@ -46,9 +46,17 @@ void bitarray_print(bitarr arr) {
 	printf("]\n");
 }
 
+#define IS_BIG_ENDIAN (*(uint16_t *)"\0\xff" < 0x100)
+
 void test_bit_ops() {
 	size_t len = 10;
 	bitarr arr = bitarray_alloc(len);
+
+	if (IS_BIG_ENDIAN) {
+		printf("ON BIG ENDIAN MACHINE\n");
+	} else {
+		printf("ON LITTLE ENDIAN MACHINE\n");
+	}
 
 	assert(len == bitarray_length(arr));
 
