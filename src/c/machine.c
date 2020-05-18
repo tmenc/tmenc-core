@@ -105,11 +105,11 @@ typedef struct double_tape_s double_tape;
 #define DOUBLE_TAPE_DEFAULT_VALUE 0
 
 static struct double_tape_body_s*
-double_tape_body_alloc(double_tape_body_s *left, double_tape_body *right) {
+double_tape_body_alloc(struct double_tape_body_s *left, struct double_tape_body_s *right) {
 	struct double_tape_body_s *ret;
 
 	ret = malloc(sizeof(struct double_tape_s));
-	if (me == NULL) {
+	if (ret == NULL) {
 		printf("COULD NOT ALLOCATE DOUBLE TAPE\n");
 	}
 
