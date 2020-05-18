@@ -273,7 +273,7 @@ typedef struct tm_env_s tm_env;
 
 static opaque
 tm_env_generator(void *state, bit *finished_q) {
-	/* tm_env *env = state; */
+	tm_env *env = state;
 	opaque ret;
 
 	ret.other = NULL;
