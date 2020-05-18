@@ -350,10 +350,10 @@ function make_machine_from_secret(pass_vector, salt_vector, file_vector, machine
 	var salt_cv  = vector_to_cycle_vector(salt_vector);
 	var file_cv  = vector_to_cycle_vector(file_vector);
 
-	var output = new Array(machine_size);
+	var output = bitarray_alloc(machine_size);
 
 	for (var i = 0; i < machine_size; i++) {
-		output[i] = weak_rng() ^ pass_cv(i) ^ salt_cv(i) ^ file_cv(i);
+		bitarray_set_bit(output, i, weak_rng() ^ pass_cv(i) ^ salt_cv(i) ^ file_cv(i));
 	}
 
 	return output;
