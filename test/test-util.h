@@ -109,6 +109,6 @@ void test_range_stream() {
 	y = range_stream(10);
 	b = stream_to_bitarr(&y);
 
-	/* bitarray_print(b); */
+	bitarray_print(b);
 }
 
