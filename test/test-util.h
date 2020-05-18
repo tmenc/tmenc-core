@@ -39,11 +39,11 @@ void bitarray_print(bitarr arr) {
 		printf("%d ", arr.buffer[i]);
 	}
 
-	printf("; bits: [");
+	printf("]; bits: [");
 	for (i = 0; i < arr.bit_size; i++) {
 		printf("%d ", bitarray_at(arr, i));
 	}
-	printf("\n");
+	printf("]\n");
 }
 
 void test_bit_ops() {
