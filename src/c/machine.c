@@ -1,8 +1,9 @@
 
+#define DEBUG
+
 #include <stdio.h>
 #include <stdint.h>
-
-#define DEBUG
+#include <stdlib.h>
 
 typedef unsigned long largeint_t;
 
@@ -60,8 +61,8 @@ void bitarray_set_bit(bitarr arr, size_t at, bit value) {
 	arr.buffer[bi] = y;
 }
 
-bitarr_s bitarr_alloc(size_t bit_size) {
-	bitarr_s ret;
+bitarr bitarr_alloc(size_t bit_size) {
+	bitarr ret;
 	size_t size;
 
 	size = (1 * (sizeof(bit_container)))
