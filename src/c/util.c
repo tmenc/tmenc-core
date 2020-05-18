@@ -269,3 +269,9 @@ integer_to_binary_stream(size_t size, size_t n) {
 	return s->me;
 }
 
+static void
+integer_to_binary_stream_reset(struct integer_to_binary_stream_s* s, size_t n) {
+	s->n = n;
+	s->i = 0;
+}
+
