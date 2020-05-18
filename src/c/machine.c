@@ -9,6 +9,7 @@ typedef unsigned long largeint_t;
 
 typedef uint8_t bit;
 typedef uint8_t bit_container;
+#define BITS_IN_SIZEOF 8
 
 struct bitarr_s {
 	bit_container *buffer;
@@ -62,7 +63,7 @@ bitarray_set_bit(bitarr arr, size_t at, bit value) {
 	arr.buffer[bi] = y;
 }
 
-#define BITARR_BYTE_SIZE(bit_size) (1 + (bit_size / (sizeof(bit_container))))
+#define BITARR_BYTE_SIZE(bit_size) (1 + (bit_size / (BITS_IN_SIZEOF * (sizeof(bit_container)))))
 
 static bitarr
 bitarray_alloc(size_t bit_size) {
