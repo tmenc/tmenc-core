@@ -9,6 +9,9 @@ typedef unsigned long largeint_t;
 typedef uint8_t bit;
 typedef uint8_t bit_container;
 
+#define true ((bit)1)
+#define false ((bit)0)
+
 struct bitarr_s {
 	bit_container *buffer;
 	size_t bit_size;
@@ -30,6 +33,8 @@ bit bitarr_at(bitarr arr, size_t at) {
 
 	return (nth_bit(arr.buffer[byte_pos], byte_shift));
 }
+
+bitarr_set_bit
 
 bitarr_s bitarr_alloc(size_t bit_size) {
 	bitarr_s ret;
