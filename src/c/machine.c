@@ -29,6 +29,7 @@ typedef union opaque_u opaque;
 struct bitarr_s {
 	bit_container *buffer;
 	size_t bit_size;
+	size_t bit_capacity;
 };
 typedef struct bitarr_s bitarr;
 
@@ -90,6 +91,7 @@ bitarray_alloc(size_t bit_size) {
 
 	ret.bit_size = bit_size;
 	size = bitarray_byte_length(ret);
+	ret.bit_capacity = size * BITS_IN_SIZEOF;
 	ret.buffer = malloc(size);
 	if (ret.buffer == NULL) {
 		printf("COULD NOT ALLOCATE BUFFER OF SIZE %lu\n", (unsigned long)size);
