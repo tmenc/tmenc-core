@@ -2,29 +2,38 @@
 #include <stdio.h>
 #include <stdint.h>
 
-typedef uint32_t itype;
+typedef unsigned long largeint_t;
 
-itype simple(itype x) {
-	itype a = 1664525;
-	itype b = 1013904223;
-	return x * a + b;
-}
+struct bitarr_s {
+	uint8_t *buffer;
+	largeint_t size;
+};
+typedef struct bitarr_s bitarr;
 
-itype bitn(itype x, int n) {
+uint8_t bitn(uint8_t x, int n) {
 	return (x >> n) & 1;
 }
 
-itype to1bit(itype x) {
+uint32_t simple(uint32_t x) {
+	uint32_t a = 1664525;
+	uint32_t b = 1013904223;
+	return x * a + b;
+}
+
+uint32_t to1bit(uint32_t x) {
 	if (x > 2147483648) { return 1; }
 	else { return 0; }
 }
 
-void main() {
-	itype x = 200;
+int main() {
+	uint32_t x = 200;
+	largeint_t i = 0;
 
-	for (int i = 0; i < 100; i++) {
+	for (i = 0; i < 100; i++) {
 		x = simple(x);
 		printf("%u\n", to1bit(x));
 	}
+
+	return 0;
 }
 
