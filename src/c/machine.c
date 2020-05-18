@@ -31,7 +31,7 @@ bit bitarray_at(bitarr arr, size_t at) {
 	int byte_shift = at % sizeof(bit_container);
 
 #ifdef DEBUG
-	if (at > arr.bit_size) {
+	if (at >= arr.bit_size) {
 		printf("OUT OF BOUNDS: %lu ; BIT_SIZE = %lu\n", at, arr.bit_size);
 	}
 #endif
@@ -48,7 +48,7 @@ void bitarray_set_bit(bitarr arr, size_t at, bit value) {
 	bit_container y;
 
 #ifdef DEBUG
-	if (at > arr.bit_size) {
+	if (at >= arr.bit_size) {
 		printf("OUT OF BOUNDS: %lu ; BIT_SIZE = %lu\n", at, arr.bit_size);
 	}
 #endif
