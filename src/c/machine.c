@@ -11,7 +11,7 @@ typedef unsigned char bit_container;
 #define CONTAINER_BITS (BITS_IN_SIZEOF * (sizeof(bit_container)))
 
 /************
-   BITARRAY
+ * BITARRAY *
  ************/
 
 struct bitarr_s {
@@ -87,8 +87,9 @@ bitarray_alloc(size_t bit_size) {
 }
 
 /***************
-   DOUBLE TAPE
+ * DOUBLE TAPE *
  ***************/
+
 struct double_tape_body_s {
 	struct double_tape_body_s *left;
 	struct double_tape_body_s *right;
@@ -151,6 +152,10 @@ double_tape_set(double_tape tape, size_t value) {
 	tape.me->current = value;
 }
 
+/******
+ * TM *
+ ******/
+
 struct tm_s {
 	size_t machine_len;
 	size_t machine_pos;
@@ -211,4 +216,10 @@ machine_step(tm *me, bit read_tape_bit, size_t memory_tape_register) {
 
 	return ret;
 }
+
+/**********
+ * TM ENV *
+ **********/
+
+
 
