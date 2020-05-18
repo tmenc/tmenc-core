@@ -76,20 +76,20 @@ function bitarray_xor_with(target, other) {
 	}
 }
 
-function double_bitarray_create() {
+function double_tape_create() {
 	return {
 		left_part: bitarray_alloc(0),
 		right_part: bitarray_alloc(0),
 	};
 }
 
-function double_bitarray_at_or_x(dbitarr, at, x) {
+function double_tape_at_or_x(dbitarr, at, x) {
 	var target = at < 0 ? dbitarr.left_part : dbitarr.right_part;
 	var abs_at = at < 0 ? -at : at;
 	return bitarray_at_or_x(target, abs_at, x);
 }
 
-function double_bitarray_set_bit_extend0(dbitarr, at, value) {
+function double_tape_set_bit_extend0(dbitarr, at, value) {
 	var target = at < 0 ? dbitarr.left_part : dbitarr.right_part;
 	var abs_at = at < 0 ? -at : at;
 	return bitarray_set_bit_extend0(target, abs_at, value);
@@ -147,7 +147,7 @@ function make_tm(machine_bits) {
 function make_tm_env(machine_bits, input_bits) {
 	var tm = make_tm(machine_bits);
 
-	var memory_tape = double_bitarray_create();
+	var memory_tape = double_tape_create();
 	var read_tape_len = bitarray_length(input_bits);
 	var read_tape = input_bits;
 	var memory_tape_pos = 0;
@@ -156,7 +156,7 @@ function make_tm_env(machine_bits, input_bits) {
 	return function() {
 		while (true) {
 			var read_tape_bit = bitarray_at(read_tape, read_tape_pos);
-			var memory_tape_register = double_bitarray_at_or_x(memory_tape, memory_tape_pos, 0);
+			var memory_tape_register = double_tape_at_or_x(memory_tape, memory_tape_pos, 0);
 			var ret = tm(read_tape_bit, memory_tape_register);
 
 			read_tape_pos++;
@@ -170,7 +170,7 @@ function make_tm_env(machine_bits, input_bits) {
 				new_register_value = 0;
 			}
 
-			double_bitarray_set_bit_extend0(
+			double_tape_set_bit_extend0(
 				memory_tape,
 				memory_tape_pos,
 				new_register_value);
