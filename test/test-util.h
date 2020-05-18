@@ -34,6 +34,8 @@ void bitarray_zero_out(bitarr arr) {
 void bitarray_print(bitarr arr) {
 	size_t i;
 
+	printf("BIT SIZE: %lu ; BYTE SIZE: %lu\n", arr.bit_size, BITARR_BYTE_SIZE(arr.bit_size));
+
 	printf("bitarr bytes: [ ");
 	for (i = 0; i < BITARR_BYTE_SIZE(arr.bit_size); i++) {
 		printf("%d ", arr.buffer[i]);

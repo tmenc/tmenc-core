@@ -62,7 +62,7 @@ bitarray_set_bit(bitarr arr, size_t at, bit value) {
 	arr.buffer[bi] = y;
 }
 
-#define BITARR_BYTE_SIZE(bit_size) ((sizeof(bit_container)) + (bit_size / (sizeof(bit_container))))
+#define BITARR_BYTE_SIZE(bit_size) (1 + (bit_size / (sizeof(bit_container))))
 
 static bitarr
 bitarray_alloc(size_t bit_size) {
