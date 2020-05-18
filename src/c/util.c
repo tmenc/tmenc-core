@@ -208,7 +208,6 @@ append_streams(size_t len, stream **streams_vector) {
 	return ret;
 }
 
-/* when done, just free it */
 struct integer_to_binary_stream_s {
 	stream me;
 	size_t size;
