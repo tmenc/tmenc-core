@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <stddef.h> /* size_t */
 
+typedef unsigned long largeint_t;
+
 typedef unsigned char bit;
 typedef unsigned char bit_container;
 #define BITS_IN_SIZEOF 8
@@ -92,7 +94,7 @@ bitarray_alloc(size_t bit_size) {
 struct double_tape_body_s {
 	struct double_tape_body_s *left;
 	struct double_tape_body_s *right;
-	unsigned long current;
+	largeint_t current;
 };
 
 struct double_tape_s {
@@ -102,19 +104,52 @@ typedef struct double_tape_s double_tape;
 
 #define DOUBLE_TAPE_DEFAULT_VALUE 0
 
-static double_tape
-double_tape_create() {
-	double_tape ret;
+static struct double_tape_body_s*
+double_tape_body_alloc(double_tape_body_s *left, double_tape_body *right) {
+	struct double_tape_body_s *ret;
 
-	ret.me = malloc(sizeof(struct double_tape_s));
-	if (ret.me == NULL) {
+	ret = malloc(sizeof(struct double_tape_s));
+	if (me == NULL) {
 		printf("COULD NOT ALLOCATE DOUBLE TAPE\n");
 	}
 
-	ret.me->current = DOUBLE_TAPE_DEFAULT_VALUE;
-	ret.me->left = NULL;
-	ret.me->right = NULL;
+	ret->current = DOUBLE_TAPE_DEFAULT_VALUE;
+	ret->left = left;
+	ret->right = right;
 
 	return ret;
+}
+
+static double_tape
+double_tape_create() {
+	double_tape ret;
+	ret.me = double_tape_body_alloc(NULL, NULL);
+	return ret;
+}
+
+static void
+double_tape_move_left(double_tape tape) {
+	if (tape.me->left == NULL) {
+		tape.me->left = double_tape_body_alloc(NULL, tape.me);
+	}
+	tape.me = tape.me->left;
+}
+
+static void
+double_tape_move_right(double_tape tape) {
+	if (tape.me->right == NULL) {
+		tape.me->right = double_tape_body_alloc(tape.me, NULL);
+	}
+	tape.me = tape.me->right;
+}
+
+static largeint_t
+double_tape_get(double_tape tape) {
+	return tape.me->current;
+}
+
+static void
+double_tape_set(double_tape tape, largeint_t value) {
+	tape.me->current = value;
 }
 
