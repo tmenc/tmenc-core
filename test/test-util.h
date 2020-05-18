@@ -27,7 +27,7 @@ void test_rng() {
 void bitarray_zero_out(bitarr arr) {
 	size_t i;
 
-	for (i = 0; i < bitarray_byte_length(arr); i++) {
+	for (i = 0; i < bit_length_to_byte_length(arr.bit_size); i++) {
 		arr.buffer[i] = 0;
 	}
 }
@@ -36,7 +36,7 @@ void bitarray_print(bitarr arr) {
 	size_t i;
 
 	printf("bitarr bytes: [ ");
-	for (i = 0; i < bitarray_byte_length(arr); i++) {
+	for (i = 0; i < bit_length_to_byte_length(arr.bit_size); i++) {
 		printf("%d ", arr.buffer[i]);
 	}
 

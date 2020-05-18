@@ -12,18 +12,21 @@ bitarray_create_empty() {
 }
 
 static void
-bitarray_push(bitarr *arr, bit object) {
+bitarray_push(bitarr *arr, bit o) {
 	size_t size;
 
 	if ((arr->bit_size) >= (arr->bit_capacity)) {
-		vec->bit_capacity = (vec->capacity + 1) * 2;
-		vec->buffer = realloc(vec->buffer, (vec->capacity) * (sizeof(opaque)));
+		arr->bit_capacity = (arr->capacity + 1) * 2;
+
+		size = bit_length_to_byte_length(ret);
+		arr->buffer = realloc(arr->buffer, (vec->capacity) * (sizeof(opaque)));
 		if (vec->buffer == NULL) {
 			printf("COULD NOT GROW VECTOR TO SIZE %lu\n", (unsigned long)(vec->capacity));
 		}
 	}
-	vec->buffer[vec->size] = object;
-	vec->size++;
+
+	bitarray_set_bit(*arr, arr->bit_size, o);
+	arr->bit_size++;
 }
 
 static void
