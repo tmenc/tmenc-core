@@ -94,7 +94,7 @@ bitarray_alloc(size_t bit_size) {
 	if (ret.buffer == NULL) {
 		printf("COULD NOT ALLOCATE BUFFER OF SIZE %lu\n", (unsigned long)size);
 	}
-	ret.bit_capacity = size * BITS_IN_SIZEOF;
+	ret.bit_capacity = size * CONTAINER_BITS;
 	ret.bit_size = bit_size;
 
 	return ret;
