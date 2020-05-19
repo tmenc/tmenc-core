@@ -24,8 +24,33 @@ void test_rng() {
 	}
 }
 
+struct weak_rng_stream_closure {
+	uint32_t seed;
+};
+
+static opaque
+weak_rng_stream_generator(void *state, bit *finished_q) {
+	struct weak_rng_stream_closure *ctx = state;
+	opaque ret;
+
+	ctx->seed = simple_rng(ctx->seed);
+	ret.binary = simple_rng_to1bit(ctx->seed);
+	return ret;
+}
+
 static stream
 weak_rng_stream(uint32_t seed) {
+	struct weak_rng_stream_closure *ctx;
+	stream ret;
+
+	ctx = malloc(sizeof(struct weak_rng_stream_closure));
+	ctx->seed = seed;
+
+	ret.finished_q = 0;
+	ret.state = ctx;
+	ret.generator = weak_rng_stream_generator;
+
+	return ret;
 }
 
 static bitarr
