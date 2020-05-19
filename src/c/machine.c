@@ -301,7 +301,7 @@ typedef struct tm_env_s tm_env;
 
 static opaque
 tm_env_generator(void *state, bit *finished_q) {
-	tm_env *env = state;
+	tm_env env = (*((tm_env*)state));
 	opaque stream_ret;
 	bit read_tape_bit;
 	size_t memory_tape_register;
@@ -310,16 +310,16 @@ tm_env_generator(void *state, bit *finished_q) {
 
 	while (1) {
 
-		read_tape_bit = stream_read(env->input_stream).binary;
+		read_tape_bit = stream_read(env.input_stream).binary;
 #ifdef DEBUG
-		if (stream_finished(env->input_stream)) {
+		if (stream_finished(env.input_stream)) {
 			fprintf(stderr, "tm input_stream finished but it should never do that\n");
 		}
 #endif
 
-		memory_tape_register = double_tape_get(env->memory_tape);
+		memory_tape_register = double_tape_get(env.memory_tape);
 
-		ret = machine_step(&(env->tm), read_tape_bit, memory_tape_register);
+		ret = machine_step(&(env.tm), read_tape_bit, memory_tape_register);
 
 		if (ret.increment_dir == 0 && memory_tape_register <= 0) {
 			ret.increment_bit = 0;
@@ -330,12 +330,12 @@ tm_env_generator(void *state, bit *finished_q) {
 		} else {
 			new_register_value = memory_tape_register + ret.increment_bit;
 		}
-		double_tape_set(env->memory_tape, new_register_value);
+		double_tape_set(env.memory_tape, new_register_value);
 
 		if (ret.direction_bit == 0) {
-			double_tape_move_left(&(env->memory_tape));
+			double_tape_move_left(&(env.memory_tape));
 		} else {
-			double_tape_move_right(&(env->memory_tape));
+			double_tape_move_right(&(env.memory_tape));
 		}
 
 		if (ret.wt_skip == 0) {
