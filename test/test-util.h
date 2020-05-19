@@ -9,7 +9,7 @@ uint32_t simple_rng(uint32_t x) {
 	return x * a + b;
 }
 
-uint32_t simple_rng_to1bit(uint32_t x) {
+bit simple_rng_to1bit(uint32_t x) {
 	if (x > 2147483648UL) { return 1; }
 	else { return 0; }
 }
@@ -20,8 +20,23 @@ void test_rng() {
 
 	for (i = 0; i < 100; i++) {
 		x = simple_rng(x);
-		printf("%u\n", simple_rng_to1bit(x));
+		printf("%u\n", (unsigned int)simple_rng_to1bit(x));
 	}
+}
+
+static bitarr
+generate_n_weak_random_bits(uint32_t seed, size_t size) {
+	bitarr ret = bitarray_alloc(size);
+	size_t i;
+	bit b;
+
+	for (i = 0; i < size; i++) {
+		seed = simple_rng(seed);
+		b = simple_rng_to1bit(seed);
+		bitarray_set_bit(ret, i, b);
+	}
+
+	return ret;
 }
 
 void assert_byte_vector_equal(vector v1, vector v2) {
@@ -249,8 +264,27 @@ void test_binary_stream_to_byte_stream() {
 	assert_byte_vector_equal(v, v2);
 }
 
+static stream
+make_default_tm_env(bitarr machine_bits, bitarr input_bits) {
+	stream *s = malloc(sizeof(stream));
+	*s = bitarr_to_cycle_stream(&input_bits);
+	return make_tm_env(machine_bits, s);
+}
+
 struct make_random_tm_env_ret {
 	bitarr machine_bits;
 	bitarr input_bits;
+	stream tm_stream;
 };
+
+static struct make_random_tm_env_ret
+make_random_tm_env(uint32_t seed, size_t input_size, size_t machine_size) {
+	struct make_random_tm_env_ret ret;
+
+	ret.machine_bits = generate_n_weak_random_bits(seed, machine_size);
+	ret.input_bits = generate_n_weak_random_bits(seed + 1, input_size);
+	ret.tm_stream = make_default_tm_env(ret.machine_bits, ret.input_bits);
+
+	return ret;
+}
 
