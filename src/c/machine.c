@@ -299,45 +299,52 @@ struct tm_env_s {
 };
 typedef struct tm_env_s tm_env;
 
+static tm_step
+tm_env_step(tm_env env) {
+	size_t memory_tape_register;
+	size_t new_register_value;
+	bit read_tape_bit;
+	tm_step ret;
+
+	read_tape_bit = stream_read(env.input_stream).binary;
+#ifdef DEBUG
+	if (stream_finished(env.input_stream)) {
+		fprintf(stderr, "tm input_stream finished but it should never do that\n");
+	}
+#endif
+
+	memory_tape_register = double_tape_get(env.memory_tape);
+
+	ret = machine_step(&(env.tm), read_tape_bit, memory_tape_register);
+
+	if (ret.increment_dir == 0 && memory_tape_register <= 0) {
+		ret.increment_bit = 0;
+	}
+
+	if (ret.increment_dir == 0) {
+		new_register_value = memory_tape_register - ret.increment_bit;
+	} else {
+		new_register_value = memory_tape_register + ret.increment_bit;
+	}
+	double_tape_set(env.memory_tape, new_register_value);
+
+	if (ret.direction_bit == 0) {
+		double_tape_move_left(&(env.memory_tape));
+	} else {
+		double_tape_move_right(&(env.memory_tape));
+	}
+
+	return ret;
+}
+
 static opaque
 tm_env_generator(void *state, bit *finished_q) {
 	tm_env env = (*((tm_env*)state));
 	opaque stream_ret;
-	bit read_tape_bit;
-	size_t memory_tape_register;
 	tm_step ret;
-	size_t new_register_value;
 
 	while (1) {
-
-		read_tape_bit = stream_read(env.input_stream).binary;
-#ifdef DEBUG
-		if (stream_finished(env.input_stream)) {
-			fprintf(stderr, "tm input_stream finished but it should never do that\n");
-		}
-#endif
-
-		memory_tape_register = double_tape_get(env.memory_tape);
-
-		ret = machine_step(&(env.tm), read_tape_bit, memory_tape_register);
-
-		if (ret.increment_dir == 0 && memory_tape_register <= 0) {
-			ret.increment_bit = 0;
-		}
-
-		if (ret.increment_dir == 0) {
-			new_register_value = memory_tape_register - ret.increment_bit;
-		} else {
-			new_register_value = memory_tape_register + ret.increment_bit;
-		}
-		double_tape_set(env.memory_tape, new_register_value);
-
-		if (ret.direction_bit == 0) {
-			double_tape_move_left(&(env.memory_tape));
-		} else {
-			double_tape_move_right(&(env.memory_tape));
-		}
-
+		ret = tm_env_step(env);
 		if (ret.wt_skip == 0) {
 			stream_ret.binary = ret.wt_bit;
 			return stream_ret;
