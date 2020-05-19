@@ -328,10 +328,6 @@ tm_env_generator(void *state, bit *finished_q) {
 			double_tape_move_right(&(env->memory_tape));
 		}
 
-		if (ret.wt_bit != 0) {
-			fprintf(stderr, "LOL!\n");
-		}
-
 		if (ret.wt_skip == 0) {
 			stream_ret.binary = ret.wt_bit;
 			return stream_ret;
