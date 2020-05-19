@@ -354,6 +354,7 @@ generate_example_key() {
 	struct make_random_tm_env_ret env;
 	size_t i;
 	bit x;
+	/* size_t x; */
 
 	env = make_random_tm_env(777, input_size, machine_size);
 	tm_stream_skip(&env.tm_stream, input_size, wrap_count, wr_tape_size);
@@ -364,8 +365,10 @@ generate_example_key() {
 		/* } */
 		/* stream_read(&env.tm_stream); */
 		x = stream_read(&env.tm_stream).binary;
-		(void)x;
-		/* printf("%d\n", (int)x); */
+		/* x = stream_read(&env.tm_stream).size; */
+		/* (void)x; */
+		printf("%lu\n", (size_t)x);
+		/* printf("%d\n", 2); */
 	}
 }
 
