@@ -345,6 +345,13 @@ tm_get_stream_bitarr(stream *s, size_t input_size, size_t wrap_count, size_t out
 	return out;
 }
 
-/* /\* static void *\/ */
-/* /\* generate_example_key *\/ */
+static void
+generate_example_key() {
+	size_t machine_size   =      1000;
+	size_t input_size     =      1000;
+	size_t wr_tape_size   =   5000000;
+	size_t wrap_count     =         3;
+	struct make_random_tm_env_ret env;
+
+}
 

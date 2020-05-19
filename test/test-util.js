@@ -93,7 +93,6 @@ function make_random_tm_env(seed, input_size, machine_size) {
 
 function test_tm_hashing() {
 	function dotest(singleflip, seed, input_size, machine_size, wr_tape_size, wrap_count) {
-		var skip_count = input_size + wrap_count * wr_tape_size;
 		var first = make_random_tm_env(seed, input_size, machine_size);
 		var machine_bits = bitarray_copy(first.machine_bits);
 		var stream1 = first.stream;
@@ -165,7 +164,6 @@ function generate_example_key() {
 	var wrap_count     =         3;
 
 	var env = make_random_tm_env(777, input_size, machine_size, wr_tape_size);
-	var skip_count = input_size + wrap_count * wr_tape_size;
 	var write_tape = tm_get_stream_bitarr(env.stream, input_size, wrap_count, wr_tape_size);
 
 	var n = bitarray_length(write_tape);
