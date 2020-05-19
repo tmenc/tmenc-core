@@ -343,11 +343,16 @@ function make_machine_from_secret(pass_vector, salt_vector, file_vector, machine
 	return output;
 }
 
-function tm_get_stream_bitarr(stream, input_size, wrap_count, output_size) {
+function tm_stream_skip(stream, input_size, wrap_count, output_size) {
 	var skip_count = (2 * input_size) + (wrap_count * output_size);
 	for (var i = 0; i < skip_count; i++) {
 		stream();
 	}
+}
+
+function tm_get_stream_bitarr(stream, input_size, wrap_count, output_size) {
+	tm_stream_skip(stream, input_size, wrap_count, output_size);
+
 	var out = bitarray_alloc(output_size);
 	for (var i = 0; i < output_size; i++) {
 		bitarray_set_bit(out, i, stream());

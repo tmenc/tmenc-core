@@ -321,3 +321,30 @@ make_random_tm_env(uint32_t seed, size_t input_size, size_t machine_size) {
 	return ret;
 }
 
+static void
+tm_stream_skip(stream *s, size_t input_size, size_t wrap_count, size_t output_size) {
+	size_t skip_count = (2 * input_size) + (wrap_count * output_size);
+	size_t i;
+
+	for (i = 0; i < skip_count; i++) {
+		stream_read(s);
+	}
+}
+
+static bitarr
+tm_get_stream_bitarr(stream *s, size_t input_size, size_t wrap_count, size_t output_size) {
+	bitarr out = bitarray_alloc(output_size);
+	size_t i;
+	bit x;
+
+	tm_stream_skip(s, input_size, wrap_count, output_size);
+	for (i = 0; i < output_size; i++) {
+		x = stream_read(s).binary;
+		bitarray_set_bit(out, i, x);
+	}
+	return out;
+}
+
+/* /\* static void *\/ */
+/* /\* generate_example_key *\/ */
+
