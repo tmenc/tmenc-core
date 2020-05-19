@@ -42,18 +42,18 @@ function xor_with_key(key_tape, input_file_bitarr) {
 	return xored_stream;
 }
 
-function make_key_from_parameters(pass, salt, file_buffer, machine_size, wrap_count, key_size) {
-	var key = make_key(pass, salt, file_buffer, key_size, machine_size, wrap_count);
+function make_key_from_parameters(pass, salt, file_buffer, machine_size, input_wrap_count, wrap_count, key_size) {
+	var key = make_key(pass, salt, file_buffer, key_size, machine_size, input_wrap_count, wrap_count);
 	debug_vec(key)
 
 	return key;
 }
 
-function handle_file_buffer(encryptQ, pass_s, salt, file_buffer, machine_size, wrap_count, input_file_bitarr, output_file_path) {
+function handle_file_buffer(encryptQ, pass_s, salt, file_buffer, machine_size, input_wrap_count, wrap_count, input_file_bitarr, output_file_path) {
 	var pass = binary_stream_to_bitarr(hex_to_binary_stream(pass_s));
 	var key_size = bitarray_length(input_file_bitarr);
 
-	var key = make_key_from_parameters(pass, salt, file_buffer, machine_size, wrap_count, key_size);
+	var key = make_key_from_parameters(pass, salt, file_buffer, machine_size, input_wrap_count, wrap_count, key_size);
 	var xored_stream = xor_with_key(key, input_file_bitarr);
 
 	if (encryptQ) {
@@ -62,9 +62,10 @@ function handle_file_buffer(encryptQ, pass_s, salt, file_buffer, machine_size, w
 		var salt_len_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, salt_len);
 		var key_size_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, key_size);
 		var machine_size_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, machine_size);
+		var input_wrap_count_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, input_wrap_count);
 		var wrap_count_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, wrap_count);
 
-		var binary_stream = append_streams([machine_size_stream, wrap_count_stream, salt_len_stream, salt_stream, key_size_stream, xored_stream]);
+		var binary_stream = append_streams([machine_size_stream, input_wrap_count_stream, wrap_count_stream, salt_len_stream, salt_stream, key_size_stream, xored_stream]);
 		var padded_stream = pad_stream(BLOCK_LEN, binary_stream);
 		var byte_stream = binary_stream_to_byte_stream(padded_stream);
 		var buf = byte_stream_to_byte_buffer(byte_stream);
@@ -79,18 +80,19 @@ function handle_file_buffer(encryptQ, pass_s, salt, file_buffer, machine_size, w
 }
 
 function encrypt_file() {
-	function read_cb(pass_s, salt_s, file, machine_size_s, wrap_count_s, input_file_path, output_file_path) {
+	function read_cb(pass_s, salt_s, file, machine_size_s, input_wrap_count_s, wrap_count_s, input_file_path, output_file_path) {
 		var file_buffer = fs.readFileSync(file);
 		var input_file_buffer = fs.readFileSync(input_file_path);
 		var salt = binary_stream_to_bitarr(hex_to_binary_stream(salt_s));
 		var input_file_stream = byte_stream_to_binary_stream(buffer_to_byte_stream(input_file_buffer));
 		var input_file_bitarr = binary_stream_to_bitarr(input_file_stream);
 		var machine_size = parseInt(machine_size_s);
+		var input_wrap_count = parseInt(input_wrap_count_s);
 		var wrap_count = parseInt(wrap_count_s);
-		return handle_file_buffer(true, pass_s, salt, file_buffer, machine_size, wrap_count, input_file_bitarr, output_file_path);
+		return handle_file_buffer(true, pass_s, salt, file_buffer, machine_size, input_wrap_count, wrap_count, input_file_bitarr, output_file_path);
 	}
 
-	read_things(['pass', 'salt', 'keyfile', 'machine-size', 'wrap-count', 'input-file', 'output-file'], read_cb);
+	read_things(['pass', 'salt', 'keyfile', 'machine-size', 'input-wrap-count', 'wrap-count', 'input-file', 'output-file'], read_cb);
 }
 
 function decrypt_file() {
@@ -101,6 +103,7 @@ function decrypt_file() {
 		var input_file_stream = byte_stream_to_binary_stream(buffer_to_byte_stream(input_file_buffer));
 
 		var machine_size = binary_stream_read_integer(SIZE_BLOCK_LEN, input_file_stream);
+		var input_wrap_count = binary_stream_read_integer(SIZE_BLOCK_LEN, input_file_stream);
 		var wrap_count = binary_stream_read_integer(SIZE_BLOCK_LEN, input_file_stream);
 		var salt_len = binary_stream_read_integer(SIZE_BLOCK_LEN, input_file_stream);
 		var salt = stream_read_n_vector(salt_len, input_file_stream);
@@ -110,7 +113,7 @@ function decrypt_file() {
 		console.log('salt_len:', salt_len);
 		console.log('xored_len:', xored_len);
 
-		return handle_file_buffer(false, pass_s, salt, file_buffer, machine_size, wrap_count, xored_bitarr, output_file_path);
+		return handle_file_buffer(false, pass_s, salt, file_buffer, machine_size, input_wrap_count, wrap_count, xored_bitarr, output_file_path);
 	}
 	read_things(['pass', 'keyfile', 'input-file', 'output-file'], read_cb);
 }

@@ -92,11 +92,11 @@ function make_random_tm_env(seed, input_size, machine_size) {
 }
 
 function test_tm_hashing() {
-	function dotest(singleflip, seed, input_size, machine_size, wr_tape_size, wrap_count) {
+	function dotest(singleflip, seed, input_wrap_count, input_size, machine_size, wr_tape_size, wrap_count) {
 		var first = make_random_tm_env(seed, input_size, machine_size);
 		var machine_bits = bitarray_copy(first.machine_bits);
 		var stream1 = first.stream;
-		var write_tape_1 = tm_get_stream_bitarr(stream1, input_size, wrap_count, wr_tape_size);
+		var write_tape_1 = tm_get_stream_bitarr(stream1, input_wrap_count, input_size, wrap_count, wr_tape_size);
 
 		var input_bits2 = bitarray_copy(first.input_bits);
 		if (singleflip) {
@@ -111,7 +111,7 @@ function test_tm_hashing() {
 		}
 
 		var stream2 = make_default_tm_env(machine_bits, input_bits2);
-		var write_tape_2 = tm_get_stream_bitarr(stream2, input_size, wrap_count, wr_tape_size);
+		var write_tape_2 = tm_get_stream_bitarr(stream2, input_wrap_count, input_size, wrap_count, wr_tape_size);
 
 		// for (var i = 0; i < bitarray_length(write_tape); i++) {
 		// 	console.log(bitarray_at(write_tape, i));
@@ -130,7 +130,7 @@ function test_tm_hashing() {
 	var times = 100;
 	var sum = 0;
 	for (var i = 0; i < times; i++) {
-		var ratio = dotest(true, i, 100000, 1000, start, 5);
+		var ratio = dotest(true, i, 2, 100000, 1000, start, 5);
 		sum += ratio;
 		if (ratio > max) {
 			max = ratio;
@@ -162,9 +162,10 @@ function generate_example_key() {
 	var input_size     =      1000;
 	var wr_tape_size   =   5000000;
 	var wrap_count     =         0;
+	var in_wrap_count  =       100;
 
 	var env = make_random_tm_env(777, input_size, machine_size);
-	tm_stream_skip(env.stream, input_size, wrap_count, wr_tape_size);
+	tm_stream_skip(env.stream, in_wrap_count, input_size, wrap_count, wr_tape_size);
 
 	for (var i = 0; i < wr_tape_size; i++) {
 		var x = env.stream();

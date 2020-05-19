@@ -343,15 +343,15 @@ function make_machine_from_secret(pass_vector, salt_vector, file_vector, machine
 	return output;
 }
 
-function tm_stream_skip(stream, input_size, wrap_count, output_size) {
-	var skip_count = (100 * input_size) + (wrap_count * output_size);
+function tm_stream_skip(stream, input_wrap_count, input_size, wrap_count, output_size) {
+	var skip_count = (input_wrap_count * input_size) + (wrap_count * output_size);
 	for (var i = 0; i < skip_count; i++) {
 		stream();
 	}
 }
 
-function tm_get_stream_bitarr(stream, input_size, wrap_count, output_size) {
-	tm_stream_skip(stream, input_size, wrap_count, output_size);
+function tm_get_stream_bitarr(stream, input_wrap_count, input_size, wrap_count, output_size) {
+	tm_stream_skip(stream, input_wrap_count, input_size, wrap_count, output_size);
 
 	var out = bitarray_alloc(output_size);
 	for (var i = 0; i < output_size; i++) {
@@ -371,7 +371,7 @@ function bitarr_to_cycle_stream(arr) {
 
 // NOTE: `wrap_count' should depend on `length(pass++salt++file)'
 // salt should to be different for each key!
-function make_key(pass_v, salt_v, file_buffer, size, machine_size, wrap_count) {
+function make_key(pass_v, salt_v, file_buffer, size, machine_size, input_wrap_count, wrap_count) {
 	var pass_stream = vector_to_stream(pass_v);
 	var salt_stream = vector_to_stream(salt_v);
 	var file_v = binary_stream_to_bitarr(byte_stream_to_binary_stream(buffer_to_byte_stream(file_buffer)));
@@ -385,6 +385,6 @@ function make_key(pass_v, salt_v, file_buffer, size, machine_size, wrap_count) {
 
 	var stream = make_tm_env(machine_bits, input_cycle_stream);
 	var input_size = bitarray_length(input_bits);
-	return tm_get_stream_bitarr(stream, input_size, wrap_count, size);
+	return tm_get_stream_bitarr(stream, input_wrap_count, input_size, wrap_count, size);
 }
 

@@ -322,12 +322,12 @@ make_random_tm_env(uint32_t seed, size_t input_size, size_t machine_size) {
 }
 
 static bitarr
-tm_get_stream_bitarr(stream *s, size_t input_size, size_t wrap_count, size_t output_size) {
+tm_get_stream_bitarr(stream *s, size_t input_wrap_count, size_t input_size, size_t wrap_count, size_t output_size) {
 	bitarr out = bitarray_alloc(output_size);
 	size_t i;
 	bit x;
 
-	tm_stream_skip(s, input_size, wrap_count, output_size);
+	tm_stream_skip(s, input_wrap_count, input_size, wrap_count, output_size);
 	for (i = 0; i < output_size; i++) {
 		x = stream_read(s).binary;
 		bitarray_set_bit(out, i, x);
@@ -341,12 +341,13 @@ generate_example_key() {
 	size_t input_size     =      1000;
 	size_t wr_tape_size   =   5000000;
 	size_t wrap_count     =         0;
+	size_t in_wrap_count  =       100;
 	struct make_random_tm_env_ret env;
 	size_t i;
 	bit x;
 
 	env = make_random_tm_env(777, input_size, machine_size);
-	tm_stream_skip(&env.tm_stream, input_size, wrap_count, wr_tape_size);
+	tm_stream_skip(&env.tm_stream, in_wrap_count, input_size, wrap_count, wr_tape_size);
 
 	for (i = 0; i < wr_tape_size; i++) {
 		x = stream_read(&env.tm_stream).binary;
@@ -360,6 +361,7 @@ generate_example_binary_key() {
 	size_t input_size     =      1000;
 	size_t wr_tape_size   = 500000000;
 	size_t wrap_count     =         0;
+	size_t in_wrap_count  =       100;
 	struct make_random_tm_env_ret env;
 	stream byte_out;
 	size_t i;
@@ -367,7 +369,7 @@ generate_example_binary_key() {
 	byte_t x;
 
 	env = make_random_tm_env(777, input_size, machine_size);
-	tm_stream_skip(&env.tm_stream, input_size, wrap_count, wr_tape_size);
+	tm_stream_skip(&env.tm_stream, in_wrap_count, input_size, wrap_count, wr_tape_size);
 
 	byte_out = binary_stream_to_byte_stream(&env.tm_stream);
 

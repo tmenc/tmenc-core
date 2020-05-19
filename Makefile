@@ -79,7 +79,7 @@ test-c-rng: build/test build/test/test-rng.exe
 	diff test/rng-test-data.txt build/test/test-c-rng.txt
 
 test-js-cli: all
-	printf 'encrypt\n0a0bff\n0a0b00\nMakefile\n1000\n3\nLICENSE\nbuild/cli-encrypted\nEND' | $(NODE) build/cli.js
+	printf 'encrypt\n0a0bff\n0a0b00\nMakefile\n1000\n100\n3\nLICENSE\nbuild/cli-encrypted\nEND' | $(NODE) build/cli.js
 	printf 'decrypt\n0a0bff\nMakefile\nbuild/cli-encrypted\nbuild/cli-decrypted\nEND' | $(NODE) build/cli.js
 	diff LICENSE build/cli-decrypted
 
