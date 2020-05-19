@@ -245,5 +245,7 @@ void test_binary_stream_to_byte_stream() {
 	v2 = stream_to_vector(&vs2);
 
 	print_vector_of_bytes(v2);
+
+	assert_byte_vector_equal(v, v2);
 }
 
