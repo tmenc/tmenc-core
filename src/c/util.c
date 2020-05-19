@@ -364,9 +364,8 @@ byte_stream_to_binary_stream(stream *bytes) {
 	return ret;
 }
 
-
 struct pad_stream_closure {
-	stream* stream;
+	stream* s;
 	size_t block_size;
 	size_t i;
 	bit finished;
@@ -388,8 +387,8 @@ pad_stream_generator(void *state, bit *finished_q) {
 			return ret;
 		}
 	} else {
-		x = stream_read(ctx->stream);
-		if (stream_finished(ctx->stream)) {
+		x = stream_read(ctx->s);
+		if (stream_finished(ctx->s)) {
 			ctx->finished = 1;
 			if (((ctx->i) % (ctx->block_size)) == 0) {
 				*finished_q = 1;
@@ -406,13 +405,13 @@ pad_stream_generator(void *state, bit *finished_q) {
 }
 
 static stream
-pad_stream(size_t block_size, stream *stream) {
+pad_stream(size_t block_size, stream *s) {
 	struct pad_stream_closure *ctx;
 	stream ret;
 
 	ctx = malloc(sizeof(struct pad_stream_closure));
 	ctx->block_size = block_size;
-	ctx->stream = stream;
+	ctx->s = s;
 	ctx->i = 0;
 	ctx->finished = 0;
 
