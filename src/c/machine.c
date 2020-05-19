@@ -143,19 +143,19 @@ double_tape_create() {
 }
 
 static void
-double_tape_move_left(double_tape tape) {
-	if (tape.me->left == NULL) {
-		tape.me->left = double_tape_body_alloc(NULL, tape.me);
+double_tape_move_left(double_tape *tape) {
+	if (tape->me->left == NULL) {
+		tape->me->left = double_tape_body_alloc(NULL, tape->me);
 	}
-	tape.me = tape.me->left;
+	tape->me = tape->me->left;
 }
 
 static void
-double_tape_move_right(double_tape tape) {
-	if (tape.me->right == NULL) {
-		tape.me->right = double_tape_body_alloc(tape.me, NULL);
+double_tape_move_right(double_tape *tape) {
+	if (tape->me->right == NULL) {
+		tape->me->right = double_tape_body_alloc(tape->me, NULL);
 	}
-	tape.me = tape.me->right;
+	tape->me = tape->me->right;
 }
 
 static size_t
@@ -316,9 +316,9 @@ tm_env_generator(void *state, bit *finished_q) {
 		double_tape_set(env->memory_tape, new_register_value);
 
 		if (ret.direction_bit == 0) {
-			double_tape_move_left(env->memory_tape);
+			double_tape_move_left(&(env->memory_tape));
 		} else {
-			double_tape_move_right(env->memory_tape);
+			double_tape_move_right(&(env->memory_tape));
 		}
 
 		if (ret.wt_skip == 0) {
