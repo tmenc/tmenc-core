@@ -176,7 +176,8 @@ void test_byte_stream_to_binary_stream() {
 
 	vs = vector_to_stream(&v);
 	bs = byte_stream_to_binary_stream(&vs);
-	/* a = binary_binary_stream_to_bitarr(&bs); */
+	a = binary_stream_to_bitarr(&bs);
 
+	bitarray_print(a);
 }
 
