@@ -223,6 +223,9 @@ machine_step(tm *me, bit read_tape_bit, size_t memory_tape_register) {
 
 	ret.wt_skip = machine_flip_and_read(me);
 	machine_advance(me, jump_size);
+
+	ret.wt_bit = machine_flip_and_read(me);
+	machine_advance(me, jump_size);
 	ret.increment_bit = machine_flip_and_read(me);
 	machine_advance(me, jump_size);
 	ret.increment_dir = machine_flip_and_read(me);
@@ -275,6 +278,12 @@ struct tm_env_s {
 };
 typedef struct tm_env_s tm_env;
 
+int counter = 0;
+
+static void
+here() {
+}
+
 static opaque
 tm_env_generator(void *state, bit *finished_q) {
 	tm_env *env = state;
@@ -285,6 +294,11 @@ tm_env_generator(void *state, bit *finished_q) {
 	size_t new_register_value;
 
 	while (1) {
+
+		counter++;
+		if (counter == 10000) {
+			here();
+		}
 
 		read_tape_bit = stream_read(env->input_stream).binary;
 #ifdef DEBUG
@@ -312,6 +326,10 @@ tm_env_generator(void *state, bit *finished_q) {
 			double_tape_move_left(&(env->memory_tape));
 		} else {
 			double_tape_move_right(&(env->memory_tape));
+		}
+
+		if (ret.wt_bit != 0) {
+			fprintf(stderr, "LOL!\n");
 		}
 
 		if (ret.wt_skip == 0) {
