@@ -60,6 +60,17 @@ function double_tape_set(tape, value) {
 function make_tm(machine_bits) {
 	var machine_len = bitarray_length(machine_bits);
 	var machine_pos = 0;
+	var rng = 0;
+
+	function simple_rng(x) {
+		var mod = 4294967296; // 2 ^ 32
+		return (((x * 1664525) % mod) + 1013904223) % mod;
+	}
+
+	function simple_rng_to1bit(z) {
+		if (z > 2147483648) { return 1; }
+		else { return 0; }
+	}
 
 	function machine_advance(by) {
 		machine_pos = (machine_pos + by) % machine_len;
@@ -70,31 +81,30 @@ function make_tm(machine_bits) {
 	}
 
 	function machine_flip_and_read() {
-		var new_bit = 1 ^ machine_read();
+		var cur_bit = machine_read();
+		rng = simple_rng(rng);
+		var flip = simple_rng_to1bit(rng);
+		var new_bit = flip ^ cur_bit;
 		bitarray_set_bit(machine_bits, machine_pos, new_bit);
-		return new_bit;
+		return cur_bit;
 	}
 
 	function machine_step (read_tape_bit, memory_tape_register) {
 		var jump_size = (1 + read_tape_bit) * (1 + memory_tape_register);
 
-		var wt_skip = machine_flip_and_read();
+		var wt_skip = read_tape_bit ^ machine_flip_and_read();
 		machine_advance(jump_size);
-
-		var wt_bit = machine_flip_and_read();
+		var wt_bit = read_tape_bit ^ machine_flip_and_read();
 		machine_advance(jump_size);
-		var increment_bit = machine_flip_and_read();
+		var increment_bit = read_tape_bit ^ machine_flip_and_read();
 		machine_advance(jump_size);
-		var increment_dir = machine_flip_and_read();
-		machine_advance(jump_size);
-		var direction_bit = machine_flip_and_read();
+		var direction_bit = read_tape_bit ^ machine_flip_and_read();
 		machine_advance(jump_size);
 
 		return {
 			wt_bit: wt_bit,
 			wt_skip: wt_skip,
 			increment_bit: increment_bit,
-			increment_dir: increment_dir,
 			direction_bit: direction_bit,
 		};
 	}
@@ -112,16 +122,7 @@ function make_tm_env(machine_bits, input_stream) {
 			var memory_tape_register = double_tape_get(memory_tape);
 			var ret = tm(read_tape_bit, memory_tape_register);
 
-			if (ret.increment_dir == 0 && memory_tape_register <= 0) {
-				ret.increment_bit = 0;
-			}
-
-			var new_register_value = undefined;
-			if (ret.increment_dir == 0) {
-				new_register_value = memory_tape_register - ret.increment_bit;
-			} else {
-				new_register_value = memory_tape_register + ret.increment_bit;
-			}
+			var new_register_value = memory_tape_register + ret.increment_bit;
 			double_tape_set(memory_tape, new_register_value);
 
 			if (ret.direction_bit == 0) {

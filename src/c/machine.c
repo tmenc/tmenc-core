@@ -2,9 +2,10 @@
 #define DEBUG
 #define TRACE_ALLOCATIONS
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdio.h>  /* getc, putc */
+#include <stdlib.h> /* malloc, free */
 #include <stddef.h> /* size_t */
+#include <stdint.h> /* uint32_t */
 
 /*********
  * TYPES *
@@ -221,18 +222,35 @@ machine_read(tm *me) {
 	return bitarray_at(me->machine_bits, me->machine_pos);
 }
 
+static uint32_t
+simple_rng(uint32_t x) {
+	uint32_t a = 1664525;
+	uint32_t b = 1013904223;
+	return x * a + b;
+}
+
+static bit
+simple_rng_to1bit(uint32_t x) {
+	if (x > 2147483648UL) { return 1; }
+	else { return 0; }
+}
+
+static uint32_t rng = 0;
+
 static bit
 machine_flip_and_read(tm *me) {
-	bit new_bit = 1 ^ machine_read(me);
+	bit cur_bit = machine_read(me);
+	rng = simple_rng(rng);
+	bit flip = simple_rng_to1bit(rng);
+	bit new_bit = flip ^ cur_bit;
 	bitarray_set_bit(me->machine_bits, me->machine_pos, new_bit);
-	return new_bit;
+	return cur_bit;
 }
 
 struct tm_step_s {
 	bit wt_bit;
 	bit wt_skip;
 	bit increment_bit;
-	bit increment_dir;
 	bit direction_bit;
 };
 typedef struct tm_step_s tm_step;
@@ -240,18 +258,16 @@ typedef struct tm_step_s tm_step;
 static tm_step
 machine_step(tm *me, bit read_tape_bit, size_t memory_tape_register) {
 	tm_step ret;
-	size_t jump_size = (1 + ((size_t)read_tape_bit)) * (1 + memory_tape_register);
+	size_t jump_size = (1 + read_tape_bit) * (1 + memory_tape_register);
 
-	ret.wt_skip = machine_flip_and_read(me);
+	ret.wt_skip = read_tape_bit ^ machine_flip_and_read(me);
 	machine_advance(me, jump_size);
 
-	ret.wt_bit = machine_flip_and_read(me);
+	ret.wt_bit = read_tape_bit ^ machine_flip_and_read(me);
 	machine_advance(me, jump_size);
-	ret.increment_bit = machine_flip_and_read(me);
+	ret.increment_bit = read_tape_bit ^ machine_flip_and_read(me);
 	machine_advance(me, jump_size);
-	ret.increment_dir = machine_flip_and_read(me);
-	machine_advance(me, jump_size);
-	ret.direction_bit = machine_flip_and_read(me);
+	ret.direction_bit = read_tape_bit ^ machine_flip_and_read(me);
 	machine_advance(me, jump_size);
 
 	return ret;
@@ -319,15 +335,7 @@ tm_env_step(tm_env *env) {
 
 		ret = machine_step(&(env->tm), read_tape_bit, memory_tape_register);
 
-		if (ret.increment_dir == 0 && memory_tape_register <= 0) {
-			ret.increment_bit = 0;
-		}
-
-		if (ret.increment_dir == 0) {
-			new_register_value = memory_tape_register - ret.increment_bit;
-		} else {
-			new_register_value = memory_tape_register + ret.increment_bit;
-		}
+		new_register_value = memory_tape_register + ret.increment_bit;
 		double_tape_set(env->memory_tape, new_register_value);
 
 		if (ret.direction_bit == 0) {

@@ -3,17 +3,6 @@
 #include <assert.h>
 #include <stdint.h>
 
-uint32_t simple_rng(uint32_t x) {
-	uint32_t a = 1664525;
-	uint32_t b = 1013904223;
-	return x * a + b;
-}
-
-bit simple_rng_to1bit(uint32_t x) {
-	if (x > 2147483648UL) { return 1; }
-	else { return 0; }
-}
-
 void test_rng() {
 	uint32_t x = 200;
 	size_t i = 0;
