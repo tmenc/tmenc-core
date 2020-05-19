@@ -175,8 +175,8 @@ function generate_example_key() {
 }
 
 function generate_weak_rng_test() {
-	var rng = weak_rng_stream(777);
-	var n = 5 * 1000 * 1000;
+	var rng = weak_rng_stream(224);
+	var n = 100000;
 	for (var i = 0; i < n; i++) {
 		console.log(rng());
 	}

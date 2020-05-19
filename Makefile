@@ -52,6 +52,10 @@ test-js-hash: build/test build/test/test-hash.js
 test-js-misc: build/test build/test/test-misc.js
 	$(NODE) build/test/test-misc.js
 
+test-js-rng: build/test build/test/test-rng.js
+	$(NODE) build/test/test-rng.js > build/test/test-js-rng.txt
+	diff test/rng-test-data.txt build/test/test-js-rng.txt
+
 test-c-misc: build/test build/test/test-misc.exe
 	./build/test/test-misc.exe
 
