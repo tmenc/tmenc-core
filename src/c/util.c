@@ -422,3 +422,45 @@ pad_stream(size_t block_size, stream *s) {
 	return ret;
 }
 
+static opaque
+binary_stream_to_byte_stream_generator(void *state, bit *finished_q) {
+	stream *s = state;
+	byte_t count = 0;
+	byte_t acc = 0;
+	byte_t pow = 1;
+	opaque ret;
+	bit b;
+
+	while (1) {
+		b = stream_read(s).binary;
+		if (stream_finished(s)) {
+			if (!(count == 0)) {
+				printf("NOT PADDED TO 8 BITS!\n");
+			}
+			*finished_q = 1;
+			ret.other = NULL;
+			return ret;
+		}
+
+		acc += ((byte_t)b) * pow;
+		pow *= 2;
+		count++;
+
+		if (count == 8) {
+			ret.byte = acc;
+			return ret;
+		}
+	}
+}
+
+static stream
+binary_stream_to_byte_stream(size_t block_size, stream *s) {
+	stream ret;
+
+	ret.finished_q = 0;
+	ret.state = s;
+	ret.generator = binary_stream_to_byte_stream_generator;
+
+	return ret;
+}
+
