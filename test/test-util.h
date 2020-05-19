@@ -364,7 +364,8 @@ generate_example_key() {
 		/* } */
 		/* stream_read(&env.tm_stream); */
 		x = stream_read(&env.tm_stream).binary;
-		printf("%d\n", (int)x);
+		(void)x;
+		/* printf("%d\n", (int)x); */
 	}
 }
 
