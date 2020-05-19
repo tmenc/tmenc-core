@@ -24,6 +24,15 @@ void test_rng() {
 	}
 }
 
+void assert_byte_vector_equal(vector v1, vector v2) {
+	size_t i;
+
+	assert(v1.size == v2.size);
+	for (i = 0; i < v1.size; i++) {
+		assert(((v1.buffer[i].byte) == (v2.buffer[i].byte)));
+	}
+}
+
 void bitarray_zero_out(bitarr arr) {
 	size_t i;
 
