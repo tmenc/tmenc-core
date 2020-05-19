@@ -6,7 +6,7 @@ CFLAGS = -Ofast
 
 NODE = node --trace-uncaught
 
-NIST_TEST_DATA_FILE = $(HERE)/build/test/test-data~
+NIST_TEST_DATA_FILE = $(HERE)/build/test/test-data
 NIST_DIR = test/nist-sts
 NIST_EXECUTABLE = $(NIST_DIR)/assess
 NIST_MAKEFILE = $(NIST_DIR)/makefile
@@ -35,6 +35,9 @@ $(JS_TEST_SRCS): build/test src/js/machine.js src/js/util.js test/test-util.js $
 
 $(NIST_TEST_DATA_FILE): build/test/test-nist.exe
 	build/test/test-nist.exe > $@
+
+# $(NIST_TEST_DATA_FILE): build/test/test-nist.js
+# 	$(NODE) build/test/test-nist.js > $@
 
 test-benchmark: build/test/test-benchmark.exe
 	time sh -c 'build/test/test-benchmark.exe > build/test/benchmark.bin'
