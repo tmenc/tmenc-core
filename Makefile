@@ -19,7 +19,7 @@ all: build-js
 build-js: | build build-js-srcs
 tests: tests-build-js-srcs test-build-c-srcs
 
-test-all: test-nist-big test-nist-small test-js-hash test-js-misc test-js-cli test-c-misc test-c-rng
+test-all: test-nist-big test-nist-small test-js-hash test-js-misc test-js-rng test-js-cli test-c-misc test-c-rng
 
 tests-build-c-csrs: $(C_TEST_SRCS)
 tests-build-js-srcs: $(JS_TEST_SRCS)
