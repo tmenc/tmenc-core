@@ -106,6 +106,7 @@ function make_tm_env(machine_bits, input_stream) {
 	var memory_tape = double_tape_create();
 
 	return function() {
+		debugger;
 		while (true) {
 			var read_tape_bit = input_stream();
 			var memory_tape_register = double_tape_get(memory_tape);

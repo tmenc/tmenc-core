@@ -300,7 +300,7 @@ void test_binary_stream_to_byte_stream() {
 static stream
 make_default_tm_env(bitarr machine_bits, bitarr input_bits) {
 	stream *s = malloc(sizeof(stream));
-	*s = bitarr_to_cycle_stream(&input_bits);
+	*s = bitarr_to_cycle_stream(input_bits);
 	return make_tm_env(machine_bits, s);
 }
 

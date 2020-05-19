@@ -201,7 +201,7 @@ bitarr_to_stream(bitarr *arr) {
 }
 
 struct bitarr_to_cycle_stream_closure {
-	bitarr *arr;
+	bitarr arr;
 	size_t i;
 };
 
@@ -210,14 +210,14 @@ bitarr_to_cycle_stream_generator(void *state, bit *finished_q) {
 	struct bitarr_to_cycle_stream_closure *ctx = state;
 	opaque ret;
 
-	ret.binary = bitarray_at(*(ctx->arr), ctx->i);
-	ctx->i = (1 + ctx->i) % (ctx->arr->bit_size);
+	ret.binary = bitarray_at(ctx->arr, ctx->i);
+	ctx->i = (1 + ctx->i) % (ctx->arr.bit_size);
 
 	return ret;
 }
 
 static stream
-bitarr_to_cycle_stream(bitarr *arr) {
+bitarr_to_cycle_stream(bitarr arr) {
 	struct bitarr_to_cycle_stream_closure *ctx;
 	stream ret;
 
