@@ -19,7 +19,7 @@ all: build-js
 build-js: | build build-js-srcs
 tests: tests-build-js-srcs test-build-c-srcs
 
-test-all: test-nist-big test-nist-small test-js-hash test-js-misc test-js-cli test-c-misc
+test-all: test-nist-big test-nist-small test-js-hash test-js-misc test-js-cli test-c-misc test-c-rng
 
 tests-build-c-csrs: $(C_TEST_SRCS)
 tests-build-js-srcs: $(JS_TEST_SRCS)
@@ -54,6 +54,9 @@ test-js-misc: build/test build/test/test-misc.js
 
 test-c-misc: build/test build/test/test-misc.exe
 	./build/test/test-misc.exe
+
+test-c-rng: build/test build/test/test-rng.exe
+	./build/test/test-rng.exe
 
 test-js-cli: all
 	printf 'encrypt\n0a0bff\n0a0b00\nMakefile\n1000\n3\nLICENSE\nbuild/cli-encrypted\nEND' | $(NODE) build/cli.js
