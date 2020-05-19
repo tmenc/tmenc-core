@@ -1,13 +1,15 @@
 
 HERE = $(PWD)
 CC = gcc
-CFLAGS = -std=c89 -Werror -Wall -pedantic -O0 -g -Wno-unused-function
+# CFLAGS = -std=c89 -Werror -Wall -pedantic -O0 -g -Wno-unused-function
+CFLAGS = -Ofast
 
 NODE = node --trace-uncaught
 
 NIST_TEST_DATA_FILE = $(HERE)/build/test/test-data~
 NIST_DIR = test/nist-sts
 NIST_EXECUTABLE = $(NIST_DIR)/assess
+NIST_MAKEFILE = $(NIST_DIR)/makefile
 
 JS_TEST_FILES = $(shell ls -d -1 test/*.js)
 JS_TEST_SRCS = $(addprefix build/,$(JS_TEST_FILES))
@@ -78,9 +80,11 @@ test-js-cli: all
 build/test: build
 	mkdir -p $@
 
-$(NIST_EXECUTABLE):
-	git submodule update --init
+$(NIST_EXECUTABLE): $(NIST_MAKEFILE)
 	cd $(NIST_DIR) && $(MAKE)
+
+$(NIST_MAKEFILE):
+	git submodule update --init
 
 build-js-srcs: build/cli.js
 
