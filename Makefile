@@ -31,8 +31,10 @@ $(C_TEST_SRCS): build/test src/c/machine.c src/c/util.c test/test-util.h $(C_TES
 $(JS_TEST_SRCS): build/test src/js/machine.js src/js/util.js test/test-util.js $(JS_TEST_FILES)
 	cat src/js/machine.js src/js/util.js test/test-util.js $(@:build/%=%) > $@
 
-$(NIST_TEST_DATA_FILE): build/test/test-nist.js
-	$(NODE) build/test/test-nist.js > $(NIST_TEST_DATA_FILE)
+# $(NIST_TEST_DATA_FILE): build/test/test-nist.js
+# 	$(NODE) build/test/test-nist.js > $(NIST_TEST_DATA_FILE)
+$(NIST_TEST_DATA_FILE): build/test/test-nist.exe
+	build/test/test-nist.exe > $(NIST_TEST_DATA_FILE)
 
 test-nist-small: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 	cd $(NIST_DIR) && \
