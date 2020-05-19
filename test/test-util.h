@@ -56,14 +56,18 @@ weak_rng_stream(uint32_t seed) {
 static bitarr
 generate_n_weak_random_bits(uint32_t seed, size_t size) {
 	bitarr ret = bitarray_alloc(size);
+	stream weak_rng;
 	size_t i;
 	bit b;
 
+	weak_rng = weak_rng_stream(seed);
+
 	for (i = 0; i < size; i++) {
-		seed = simple_rng(seed);
-		b = simple_rng_to1bit(seed);
+		b = stream_read(&weak_rng).binary;
 		bitarray_set_bit(ret, i, b);
 	}
+
+	free(weak_rng.state);
 
 	return ret;
 }
