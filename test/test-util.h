@@ -249,3 +249,8 @@ void test_binary_stream_to_byte_stream() {
 	assert_byte_vector_equal(v, v2);
 }
 
+struct make_random_tm_env_ret {
+	bitarr machine_bits;
+	bitarr input_bits;
+};
+

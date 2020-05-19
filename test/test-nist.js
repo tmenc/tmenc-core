@@ -1,1 +1,1 @@
-generate_weak_rng_test();
+generate_example_key();

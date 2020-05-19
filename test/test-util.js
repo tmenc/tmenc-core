@@ -150,9 +150,9 @@ function generate_example_key() {
 	var wr_tape_size   =   5000000;
 	var wrap_count     =         3;
 
-	var stream = make_random_tm_env(777, input_size, machine_size, wr_tape_size);
+	var env = make_random_tm_env(777, input_size, machine_size, wr_tape_size);
 	var skip_count = input_size + wrap_count * wr_tape_size;
-	var write_tape = tm_run_for_wc(stream, skip_count, wr_tape_size);
+	var write_tape = tm_get_stream_bitarr(env.stream, input_size, wrap_count, wr_tape_size);
 
 	var n = bitarray_length(write_tape);
 	for (var i = 0; i < n; i++) {
