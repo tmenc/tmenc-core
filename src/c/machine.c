@@ -144,8 +144,6 @@ typedef struct double_tape_s double_tape;
 
 #define DOUBLE_TAPE_DEFAULT_VALUE 0
 
-int counter = 0;
-
 static struct double_tape_body_s*
 double_tape_body_alloc(struct double_tape_body_s *left, struct double_tape_body_s *right) {
 	struct double_tape_body_s *ret;
@@ -154,9 +152,6 @@ double_tape_body_alloc(struct double_tape_body_s *left, struct double_tape_body_
 	ret->current = DOUBLE_TAPE_DEFAULT_VALUE;
 	ret->left = left;
 	ret->right = right;
-
-	counter++;
-	fprintf(stderr, "ALLOCATED %d\n", counter);
 
 	return ret;
 }
