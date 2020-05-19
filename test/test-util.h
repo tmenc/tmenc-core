@@ -189,3 +189,52 @@ void test_byte_stream_to_binary_stream() {
 	bitarray_print(a);
 }
 
+
+void test_binary_stream_to_byte_stream() {
+	vector v = vector_create_empty();
+	vector v2;
+	stream vs;
+	stream bs;
+	stream bs2;
+	stream vs2;
+	bitarr a;
+	opaque o;
+
+	/* Hello world:
+	   72 101 108 108 111 32     119 111 114 108 100 */
+
+	o.byte = 72;
+	vector_push(&v, o);
+
+	o.byte = 101;
+	vector_push(&v, o);
+
+	o.byte = 108;
+	vector_push(&v, o);
+
+	o.byte = 108;
+	vector_push(&v, o);
+
+	o.byte = 111;
+	vector_push(&v, o);
+
+	o.byte = 0;
+	vector_push(&v, o);
+	o.size = 255;
+	vector_push(&v, o);
+
+	print_vector_of_bytes(v);
+
+	vs = vector_to_stream(&v);
+	bs = byte_stream_to_binary_stream(&vs);
+	a = binary_stream_to_bitarr(&bs);
+
+	bitarray_print(a);
+
+	bs2 = bitarr_to_stream(&a);
+	vs2 = binary_stream_to_byte_stream(&bs2);
+	v2 = stream_to_vector(&vs2);
+
+	print_vector_of_bytes(v2);
+}
+

@@ -157,6 +157,44 @@ binary_stream_to_bitarr(stream *s) {
 	}
 }
 
+struct bitarr_to_stream_closure {
+	bitarr *arr;
+	size_t i;
+};
+
+static opaque
+bitarr_to_stream_generator(void *state, bit *finished_q) {
+	struct bitarr_to_stream_closure *ctx = state;
+	opaque ret;
+
+	if (ctx->i < ctx->arr->bit_size) {
+		ret.binary = bitarray_at(*(ctx->arr), ctx->i);
+		ctx->i = 1 + ctx->i;
+	} else {
+		*finished_q = 1;
+		free(state);
+		ret.other = NULL;
+	}
+
+	return ret;
+}
+
+static stream
+bitarr_to_stream(bitarr *arr) {
+	struct bitarr_to_stream_closure *ctx;
+	stream ret;
+
+	ctx = malloc(sizeof(struct bitarr_to_stream_closure));
+	ctx->arr = arr;
+	ctx->i = 0;
+
+	ret.finished_q = 0;
+	ret.state = ctx;
+	ret.generator = bitarr_to_stream_generator;
+
+	return ret;
+}
+
 struct vector_to_stream_closure {
 	vector *vec;
 	size_t i;
@@ -454,7 +492,7 @@ binary_stream_to_byte_stream_generator(void *state, bit *finished_q) {
 }
 
 static stream
-binary_stream_to_byte_stream(size_t block_size, stream *s) {
+binary_stream_to_byte_stream(stream *s) {
 	stream ret;
 
 	ret.finished_q = 0;
