@@ -368,3 +368,44 @@ generate_example_binary_key() {
 	}
 }
 
+static void
+generate_entropy_estimator() {
+	size_t machine_size   =      1000;
+	size_t input_size     =      1000;
+	size_t wr_tape_size   =5000000000;
+	size_t wrap_count     =         0;
+	size_t in_wrap_count  =       100;
+	struct make_random_tm_env_ret env;
+	stream byte_out;
+	size_t i;
+	size_t to = wr_tape_size / (BITS_IN_SIZEOF * sizeof(byte_t));
+	byte_t x;
+
+	int cur = 0;
+	int max = 0;
+	int abs = 0;
+
+	env = make_random_tm_env(777, input_size, machine_size);
+	tm_stream_skip(&env.tm_stream, in_wrap_count, input_size, wrap_count, wr_tape_size);
+
+	for (i = 0; i < to; i++) {
+		x = stream_read(&env.tm_stream).binary;
+		if (x == 0) {
+			cur--;
+		} else {
+			cur++;
+		}
+
+		if (cur < 0) {
+			abs = -cur;
+		} else {
+			abs = cur;
+		}
+
+		if (abs > max) {
+			max = abs;
+			printf("{ %d, %lu }\n", max, i);
+		}
+	}
+}
+

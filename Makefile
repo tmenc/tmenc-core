@@ -85,6 +85,9 @@ test-js-cli: all
 	printf 'decrypt\n0a0bff\nMakefile\nbuild/cli-encrypted\nbuild/cli-decrypted\nEND' | $(NODE) build/cli.js
 	diff -q LICENSE build/cli-decrypted
 
+generate-entropy: build/test build/test/test-entropy.exe
+	./build/test/test-entropy.exe > build/test/entropy.txt
+
 build/test: build
 	mkdir -p $@
 
