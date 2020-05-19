@@ -21,7 +21,7 @@ all: build-js
 build-js: | build build-js-srcs
 tests: tests-build-js-srcs test-build-c-srcs
 
-test-all: test-nist-big test-nist-small test-key-compatibility test-js-hash test-js-misc test-js-rng test-js-cli test-c-misc test-c-rng
+test-all: test-nist-big test-nist-small test-key-compatibility test-js-hash test-js-misc test-js-rng test-js-cli test-c-misc test-c-rng test-benchmark
 
 tests-build-c-csrs: $(C_TEST_SRCS)
 tests-build-js-srcs: $(JS_TEST_SRCS)
@@ -35,6 +35,9 @@ $(JS_TEST_SRCS): build/test src/js/machine.js src/js/util.js test/test-util.js $
 
 $(NIST_TEST_DATA_FILE): build/test/test-nist.exe
 	build/test/test-nist.exe > $@
+
+test-benchmark: build/test/test-benchmark.exe
+	time sh -c 'build/test/test-benchmark.exe > build/test/benchmark.bin'
 
 test-nist-small: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 	cd $(NIST_DIR) && \
