@@ -9,7 +9,7 @@ function bitarray_copy(x) {
 }
 
 function generate_n_weak_random_bits(seed, n) {
-	var rng = init_simple_rng_ref(seed);
+	var rng = weak_rng_stream(seed);
 	var ret = bitarray_alloc(n);
 	for (var i = 0; i < n; i++) {
 		bitarray_set_bit(ret, i, rng())
@@ -18,7 +18,7 @@ function generate_n_weak_random_bits(seed, n) {
 }
 
 function test_rng_ref() {
-	var rng = init_simple_rng_ref(200);
+	var rng = weak_rng_stream(200);
 	for (var i = 0; i < 10; i++) {
 		console.log(rng());
 	}
@@ -161,7 +161,7 @@ function generate_example_key() {
 }
 
 function generate_weak_rng_test() {
-	var rng = init_simple_rng_ref(777);
+	var rng = weak_rng_stream(777);
 	var n = 5 * 1000 * 1000;
 	for (var i = 0; i < n; i++) {
 		console.log(rng());

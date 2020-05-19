@@ -1,6 +1,6 @@
 
 // works on uint32_t
-function init_simple_rng_ref(seed) {
+function weak_rng_stream(seed) {
 	var x = seed;
 	var mod = 4294967296; // 2 ^ 32
 	function to1bit (z) {
@@ -344,7 +344,7 @@ function make_machine_from_secret(pass_vector, salt_vector, file_vector, machine
 	// This is really ugly
 	// But we are doing this only to normalize machine bits
 	// Nothing important
-	var weak_rng = init_simple_rng_ref(777);
+	var weak_rng = weak_rng_stream(777);
 	var pass_cv  = vector_to_cycle_vector(pass_vector);
 	var salt_cv  = vector_to_cycle_vector(salt_vector);
 	var file_cv  = vector_to_cycle_vector(file_vector);
