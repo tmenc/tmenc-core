@@ -1,18 +1,4 @@
 
-// works on uint32_t
-function weak_rng_stream(seed) {
-	var x = seed;
-	var mod = 4294967296; // 2 ^ 32
-	function to1bit (z) {
-		if (z > 2147483648) { return 1; }
-		else { return 0; }
-	}
-	return function () {
-		x = (((x * 1664525) % mod) + 1013904223) % mod;
-		return to1bit(x);
-	};
-}
-
 function END_OF_STREAM_TOKEN() {
 	return END_OF_STREAM_TOKEN;
 }
@@ -344,7 +330,6 @@ function make_machine_from_secret(pass_vector, salt_vector, file_vector, machine
 	// This is really ugly
 	// But we are doing this only to normalize machine bits
 	// Nothing important
-	var weak_rng = weak_rng_stream(777);
 	var pass_cv  = vector_to_cycle_vector(pass_vector);
 	var salt_cv  = vector_to_cycle_vector(salt_vector);
 	var file_cv  = vector_to_cycle_vector(file_vector);
@@ -352,7 +337,7 @@ function make_machine_from_secret(pass_vector, salt_vector, file_vector, machine
 	var output = bitarray_alloc(machine_size);
 
 	for (var i = 0; i < machine_size; i++) {
-		bitarray_set_bit(output, i, weak_rng() ^ pass_cv(i) ^ salt_cv(i) ^ file_cv(i));
+		bitarray_set_bit(output, i, pass_cv(i) ^ salt_cv(i) ^ file_cv(i));
 	}
 
 	return output;

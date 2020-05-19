@@ -24,6 +24,10 @@ void test_rng() {
 	}
 }
 
+static stream
+weak_rng_stream(uint32_t seed) {
+}
+
 static bitarr
 generate_n_weak_random_bits(uint32_t seed, size_t size) {
 	bitarr ret = bitarray_alloc(size);
