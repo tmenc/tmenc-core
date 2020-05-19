@@ -23,9 +23,11 @@ bitarray_push(bitarr *arr, bit o) {
 		new_bit_size = ((arr->bit_capacity) + 1) * 2;
 		size = bit_length_to_byte_length(new_bit_size);
 		arr->buffer = realloc(arr->buffer, size);
+#ifdef DEBUG
 		if (arr->buffer == NULL) {
-			printf("COULD NOT GROW VECTOR TO SIZE %lu\n", (unsigned long)size);
+			fprintf(stderr, "COULD NOT GROW VECTOR TO SIZE %lu\n", (unsigned long)size);
 		}
+#endif
 		arr->bit_capacity = size * CONTAINER_BITS;
 	}
 
@@ -58,9 +60,11 @@ vector_create_empty() {
 	ret.size = 0;
 	ret.capacity = 128;
 	ret.buffer = dynalloc((ret.capacity) * sizeof(opaque));
+#ifdef DEBUG
 	if (ret.buffer == NULL) {
-		printf("COULD NOT ALLOCATE EMPTY VECTOR\n");
+		fprintf(stderr, "COULD NOT ALLOCATE EMPTY VECTOR\n");
 	}
+#endif
 	return ret;
 }
 
@@ -74,9 +78,11 @@ vector_push(vector *vec, opaque object) {
 	if ((vec->size) >= (vec->capacity)) {
 		vec->capacity = (vec->capacity + 1) * 2;
 		vec->buffer = realloc(vec->buffer, (vec->capacity) * (sizeof(opaque)));
+#ifdef DEBUG
 		if (vec->buffer == NULL) {
-			printf("COULD NOT GROW VECTOR TO SIZE %lu\n", (unsigned long)(vec->capacity));
+			fprintf(stderr, "COULD NOT GROW VECTOR TO SIZE %lu\n", (unsigned long)(vec->capacity));
 		}
+#endif
 	}
 	vec->buffer[vec->size] = object;
 	vec->size++;
@@ -511,9 +517,11 @@ binary_stream_to_byte_stream_generator(void *state, bit *finished_q) {
 	while (1) {
 		b = stream_read(s).binary;
 		if (stream_finished(s)) {
+#ifdef DEBUG
 			if (!(count == 0)) {
-				printf("NOT PADDED TO 8 BITS!\n");
+				fprintf(stderr, "NOT PADDED TO 8 BITS!\n");
 			}
+#endif
 			*finished_q = 1;
 			ret.other = NULL;
 			return ret;
@@ -567,7 +575,9 @@ hex_to_byte(char hex_char) {
 		case 'f': return 15;
 		case 'F': return 15;
 		default: {
-			printf("GOT A NON HEX CHAR!\n");
+#ifdef DEBUG
+			fprintf(stderr, "GOT A NON HEX CHAR!\n");
+#endif
 			return 255;
 		}
 	}
