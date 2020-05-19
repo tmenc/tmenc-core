@@ -175,6 +175,11 @@ void test_byte_stream_to_binary_stream() {
 	o.byte = 111;
 	vector_push(&v, o);
 
+	o.byte = 0;
+	vector_push(&v, o);
+	o.size = 255;
+	vector_push(&v, o);
+
 	print_vector_of_bytes(v);
 
 	vs = vector_to_stream(&v);
