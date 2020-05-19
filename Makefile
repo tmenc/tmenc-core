@@ -20,7 +20,7 @@ all: build-js
 build-js: | build build-js-srcs
 tests: tests-build-js-srcs test-build-c-srcs
 
-test-all: test-nist-big test-nist-small test-js-hash test-js-misc test-js-rng test-js-cli test-c-misc test-c-rng
+test-all: test-nist-big test-nist-small test-key-compatibility test-js-hash test-js-misc test-js-rng test-js-cli test-c-misc test-c-rng
 
 tests-build-c-csrs: $(C_TEST_SRCS)
 tests-build-js-srcs: $(JS_TEST_SRCS)
@@ -32,10 +32,8 @@ $(C_TEST_SRCS): build/test src/c/machine.c src/c/util.c test/test-util.h $(C_TES
 $(JS_TEST_SRCS): build/test src/js/machine.js src/js/util.js test/test-util.js $(JS_TEST_FILES)
 	cat src/js/machine.js src/js/util.js test/test-util.js $(@:build/%=%) > $@
 
-# $(NIST_TEST_DATA_FILE): build/test/test-nist.js
-# 	$(NODE) build/test/test-nist.js > $(NIST_TEST_DATA_FILE)
 $(NIST_TEST_DATA_FILE): build/test/test-nist.exe
-	time build/test/test-nist.exe > $(NIST_TEST_DATA_FILE)
+	build/test/test-nist.exe > $(NIST_TEST_DATA_FILE)
 
 test-nist-small: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 	cd $(NIST_DIR) && \
@@ -48,6 +46,10 @@ test-nist-big: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 		STREAM_LEN=1000000 scripts/run-on-file.sh $(NIST_TEST_DATA_FILE) 2>&1 | \
 		tee "$(HERE)/build/$@-result"
 	test/check-nist-result.sh "0" "$(HERE)/build/$@-result"
+
+test-key-compatibility: $(NIST_TEST_DATA_FILE)
+	$(NODE) build/test/test-nist.js > js-$(NIST_TEST_DATA_FILE)
+	diff $(NIST_TEST_DATA_FILE) js-$(NIST_TEST_DATA_FILE)
 
 test-js-hash: build/test build/test/test-hash.js
 	$(NODE) build/test/test-hash.js
