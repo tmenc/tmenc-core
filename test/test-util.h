@@ -349,18 +349,22 @@ static void
 generate_example_key() {
 	size_t machine_size   =      1000;
 	size_t input_size     =      1000;
-	size_t wr_tape_size   =   5000000;
+	size_t wr_tape_size   =    500000;
 	size_t wrap_count     =         3;
 	struct make_random_tm_env_ret env;
 	size_t i;
-	bit x;
+	/* bit x; */
 
 	env = make_random_tm_env(777, input_size, machine_size);
 	tm_stream_skip(&env.tm_stream, input_size, wrap_count, wr_tape_size);
 
 	for (i = 0; i < wr_tape_size; i++) {
-		x = stream_read(&env.tm_stream).binary;
-		printf("%d\n", (int)x);
+		/* if (i % 1000 == 0) { */
+			fprintf(stderr, "HERE\n");
+		/* } */
+		stream_read(&env.tm_stream);
+		/* x = stream_read(&env.tm_stream).binary; */
+		/* printf("%d\n", (int)x); */
 	}
 }
 
