@@ -43,7 +43,7 @@ weak_rng_stream(uint32_t seed) {
 	struct weak_rng_stream_closure *ctx;
 	stream ret;
 
-	ctx = malloc(sizeof(struct weak_rng_stream_closure));
+	ctx = dynalloc(sizeof(struct weak_rng_stream_closure));
 	ctx->seed = seed;
 
 	ret.finished_q = 0;
@@ -299,7 +299,7 @@ void test_binary_stream_to_byte_stream() {
 
 static stream
 make_default_tm_env(bitarr machine_bits, bitarr input_bits) {
-	stream *s = malloc(sizeof(stream));
+	stream *s = dynalloc(sizeof(stream));
 	*s = bitarr_to_cycle_stream(input_bits);
 	return make_tm_env(machine_bits, s);
 }

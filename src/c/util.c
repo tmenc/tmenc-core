@@ -57,7 +57,7 @@ vector_create_empty() {
 	vector ret;
 	ret.size = 0;
 	ret.capacity = 128;
-	ret.buffer = malloc((ret.capacity) * sizeof(opaque));
+	ret.buffer = dynalloc((ret.capacity) * sizeof(opaque));
 	if (ret.buffer == NULL) {
 		printf("COULD NOT ALLOCATE EMPTY VECTOR\n");
 	}
@@ -121,7 +121,7 @@ range_stream(size_t n) {
 	struct range_stream_closure *ctx;
 	stream ret;
 
-	ctx = malloc(sizeof(struct range_stream_closure));
+	ctx = dynalloc(sizeof(struct range_stream_closure));
 	ctx->current = 0;
 	ctx->max = n;
 
@@ -189,7 +189,7 @@ bitarr_to_stream(bitarr *arr) {
 	struct bitarr_to_stream_closure *ctx;
 	stream ret;
 
-	ctx = malloc(sizeof(struct bitarr_to_stream_closure));
+	ctx = dynalloc(sizeof(struct bitarr_to_stream_closure));
 	ctx->arr = arr;
 	ctx->i = 0;
 
@@ -221,7 +221,7 @@ bitarr_to_cycle_stream(bitarr arr) {
 	struct bitarr_to_cycle_stream_closure *ctx;
 	stream ret;
 
-	ctx = malloc(sizeof(struct bitarr_to_cycle_stream_closure));
+	ctx = dynalloc(sizeof(struct bitarr_to_cycle_stream_closure));
 	ctx->arr = arr;
 	ctx->i = 0;
 
@@ -259,7 +259,7 @@ vector_to_stream(vector *vec) {
 	struct vector_to_stream_closure *ctx;
 	stream ret;
 
-	ctx = malloc(sizeof(struct vector_to_stream_closure));
+	ctx = dynalloc(sizeof(struct vector_to_stream_closure));
 	ctx->vec = vec;
 	ctx->i = 0;
 
@@ -304,8 +304,8 @@ append_streams(size_t len, stream **streams_vector) {
 	size_t i;
 	stream ret;
 
-	ctx = malloc(sizeof(struct append_streams_closure));
-	ctx->streams_vector = malloc(len * sizeof(stream*));
+	ctx = dynalloc(sizeof(struct append_streams_closure));
+	ctx->streams_vector = dynalloc(len * sizeof(stream*));
 
 	for (i = 0; i < len; i++) {
 		ctx->streams_vector[i] = streams_vector[i];
@@ -359,7 +359,7 @@ static struct integer_to_binary_stream_s*
 integer_to_binary_stream_init(size_t size, size_t n) {
 	struct integer_to_binary_stream_s *ret;
 
-	ret = malloc(sizeof(struct integer_to_binary_stream_s));
+	ret = dynalloc(sizeof(struct integer_to_binary_stream_s));
 	ret->i = 0;
 	ret->n = n;
 	ret->size = size;
@@ -428,7 +428,7 @@ byte_stream_to_binary_stream(stream *bytes) {
 	struct byte_stream_to_binary_stream_closure *ctx;
 	stream ret;
 
-	ctx = malloc(sizeof(struct byte_stream_to_binary_stream_closure));
+	ctx = dynalloc(sizeof(struct byte_stream_to_binary_stream_closure));
 	ctx->conv = NULL;
 	ctx->bytes = bytes;
 
@@ -486,7 +486,7 @@ pad_stream(size_t block_size, stream *s) {
 	struct pad_stream_closure *ctx;
 	stream ret;
 
-	ctx = malloc(sizeof(struct pad_stream_closure));
+	ctx = dynalloc(sizeof(struct pad_stream_closure));
 	ctx->block_size = block_size;
 	ctx->s = s;
 	ctx->i = 0;

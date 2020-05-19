@@ -24,6 +24,12 @@ union opaque_u {
 };
 typedef union opaque_u opaque;
 
+static void*
+dynalloc(size_t size) {
+	printf("allocating %lu\n", (unsigned long)size);
+	return malloc(size);
+}
+
 /************
  * BITARRAY *
  ************/
@@ -92,7 +98,7 @@ bitarray_alloc(size_t bit_size) {
 	size_t size;
 
 	size = bit_length_to_byte_length(bit_size);
-	ret.buffer = malloc(size);
+	ret.buffer = dynalloc(size);
 	if (ret.buffer == NULL) {
 		printf("COULD NOT ALLOCATE BUFFER OF SIZE %lu\n", (unsigned long)size);
 	}
@@ -123,7 +129,7 @@ static struct double_tape_body_s*
 double_tape_body_alloc(struct double_tape_body_s *left, struct double_tape_body_s *right) {
 	struct double_tape_body_s *ret;
 
-	ret = malloc(sizeof(struct double_tape_s));
+	ret = dynalloc(sizeof(struct double_tape_s));
 	if (ret == NULL) {
 		printf("COULD NOT ALLOCATE DOUBLE TAPE\n");
 	}
@@ -329,7 +335,7 @@ make_tm_env(bitarr machine_bits, stream *input_stream) {
 	tm_env *env;
 	stream ret;
 
-	env = malloc(sizeof(tm_env));
+	env = dynalloc(sizeof(tm_env));
 	env->tm = make_tm(machine_bits);
 	env->memory_tape = double_tape_create();
 	env->input_stream = input_stream;
