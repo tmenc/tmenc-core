@@ -47,9 +47,9 @@ test-nist-big: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 		tee "$(HERE)/build/$@-result"
 	test/check-nist-result.sh "0" "$(HERE)/build/$@-result"
 
-test-key-compatibility: $(NIST_TEST_DATA_FILE)
-	$(NODE) build/test/test-nist.js > js-$(NIST_TEST_DATA_FILE)
-	diff $(NIST_TEST_DATA_FILE) js-$(NIST_TEST_DATA_FILE)
+test-key-compatibility: $(NIST_TEST_DATA_FILE) build/test/test-nist.js
+	$(NODE) build/test/test-nist.js > $(NIST_TEST_DATA_FILE)-js
+	diff $(NIST_TEST_DATA_FILE) $(NIST_TEST_DATA_FILE)-js
 
 test-js-hash: build/test build/test/test-hash.js
 	$(NODE) build/test/test-hash.js
