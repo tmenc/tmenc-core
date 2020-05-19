@@ -430,6 +430,7 @@ pad_stream_generator(void *state, bit *finished_q) {
 			ctx->finished = 1;
 			if (((ctx->i) % (ctx->block_size)) == 0) {
 				*finished_q = 1;
+				free(state);
 				ret.other = NULL;
 				return ret;
 			} else {
