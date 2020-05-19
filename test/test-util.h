@@ -354,21 +354,13 @@ generate_example_key() {
 	struct make_random_tm_env_ret env;
 	size_t i;
 	bit x;
-	/* size_t x; */
 
 	env = make_random_tm_env(777, input_size, machine_size);
 	tm_stream_skip(&env.tm_stream, input_size, wrap_count, wr_tape_size);
 
 	for (i = 0; i < wr_tape_size; i++) {
-		/* if (i % 1000 == 0) { */
-		/* 	fprintf(stderr, "HERE\n"); */
-		/* } */
-		/* stream_read(&env.tm_stream); */
 		x = stream_read(&env.tm_stream).binary;
-		/* x = stream_read(&env.tm_stream).size; */
-		/* (void)x; */
-		printf("%lu\n", (size_t)x);
-		/* printf("%d\n", 2); */
+		printf("%d\n", (int)x);
 	}
 }
 

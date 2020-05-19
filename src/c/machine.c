@@ -278,12 +278,6 @@ struct tm_env_s {
 };
 typedef struct tm_env_s tm_env;
 
-int counter = 0;
-
-static void
-here() {
-}
-
 static opaque
 tm_env_generator(void *state, bit *finished_q) {
 	tm_env *env = state;
@@ -294,11 +288,6 @@ tm_env_generator(void *state, bit *finished_q) {
 	size_t new_register_value;
 
 	while (1) {
-
-		counter++;
-		if (counter == 10000) {
-			here();
-		}
 
 		read_tape_bit = stream_read(env->input_stream).binary;
 #ifdef DEBUG
