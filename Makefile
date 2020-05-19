@@ -61,7 +61,7 @@ test-nist-big: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 
 test-key-compatibility: $(NIST_TEST_DATA_FILE) build/test/test-nist.js
 	$(NODE) build/test/test-nist.js > $(NIST_TEST_DATA_FILE)-js
-	diff $(NIST_TEST_DATA_FILE) $(NIST_TEST_DATA_FILE)-js
+	diff -q $(NIST_TEST_DATA_FILE) $(NIST_TEST_DATA_FILE)-js
 
 test-js-hash: build/test build/test/test-hash.js
 	$(NODE) build/test/test-hash.js
@@ -71,19 +71,19 @@ test-js-misc: build/test build/test/test-misc.js
 
 test-js-rng: build/test build/test/test-rng.js
 	$(NODE) build/test/test-rng.js > build/test/test-js-rng.txt
-	diff test/rng-test-data.txt build/test/test-js-rng.txt
+	diff -q test/rng-test-data.txt build/test/test-js-rng.txt
 
 test-c-misc: build/test build/test/test-misc.exe
 	./build/test/test-misc.exe
 
 test-c-rng: build/test build/test/test-rng.exe
 	./build/test/test-rng.exe > build/test/test-c-rng.txt
-	diff test/rng-test-data.txt build/test/test-c-rng.txt
+	diff -q test/rng-test-data.txt build/test/test-c-rng.txt
 
 test-js-cli: all
 	printf 'encrypt\n0a0bff\n0a0b00\nMakefile\n1000\n100\n3\nLICENSE\nbuild/cli-encrypted\nEND' | $(NODE) build/cli.js
 	printf 'decrypt\n0a0bff\nMakefile\nbuild/cli-encrypted\nbuild/cli-decrypted\nEND' | $(NODE) build/cli.js
-	diff LICENSE build/cli-decrypted
+	diff -q LICENSE build/cli-decrypted
 
 build/test: build
 	mkdir -p $@
