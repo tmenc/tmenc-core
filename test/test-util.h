@@ -349,7 +349,7 @@ static void
 generate_example_key() {
 	size_t machine_size   =      1000;
 	size_t input_size     =      1000;
-	size_t wr_tape_size   =    500000;
+	size_t wr_tape_size   =   5000000;
 	size_t wrap_count     =         3;
 	struct make_random_tm_env_ret env;
 	size_t i;
