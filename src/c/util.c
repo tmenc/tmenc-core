@@ -157,6 +157,44 @@ binary_stream_to_bitarr(stream *s) {
 	}
 }
 
+struct vector_to_stream_closure {
+	vector *vec;
+	size_t i;
+};
+
+static opaque
+vector_to_stream_generator(void *state, bit *finished_q) {
+	struct vector_to_stream_closure *ctx = state;
+	opaque ret;
+
+	if (ctx->i < ctx->vec->size) {
+		ret = ctx->vec->buffer[ctx->i];
+		ctx->i = 1 + ctx->i;
+	} else {
+		*finished_q = 1;
+		free(state);
+		ret.other = NULL;
+	}
+
+	return ret;
+}
+
+static stream
+vector_to_stream(vector *vec) {
+	struct vector_to_stream_closure *ctx;
+	stream ret;
+
+	ctx = malloc(sizeof(struct vector_to_stream_closure));
+	ctx->vec = vec;
+	ctx->i = 0;
+
+	ret.finished_q = 0;
+	ret.state = ctx;
+	ret.generator = vector_to_stream_generator;
+
+	return ret;
+}
+
 struct append_streams_closure {
 	size_t len;
 	stream **streams_vector;
@@ -322,44 +360,6 @@ byte_stream_to_binary_stream(stream *bytes) {
 	ret.finished_q = 0;
 	ret.state = ctx;
 	ret.generator = byte_stream_to_binary_stream_generator;
-
-	return ret;
-}
-
-struct vector_to_stream_closure {
-	vector *vec;
-	size_t i;
-};
-
-static opaque
-vector_to_stream_generator(void *state, bit *finished_q) {
-	struct vector_to_stream_closure *ctx = state;
-	opaque ret;
-
-	if (ctx->i < ctx->vec->size) {
-		ret = ctx->vec->buffer[ctx->i];
-		ctx->i = 1 + ctx->i;
-	} else {
-		*finished_q = 1;
-		free(state);
-		ret.other = NULL;
-	}
-
-	return ret;
-}
-
-static stream
-vector_to_stream(vector *vec) {
-	struct vector_to_stream_closure *ctx;
-	stream ret;
-
-	ctx = malloc(sizeof(struct vector_to_stream_closure));
-	ctx->vec = vec;
-	ctx->i = 0;
-
-	ret.finished_q = 0;
-	ret.state = ctx;
-	ret.generator = vector_to_stream_generator;
 
 	return ret;
 }
