@@ -1,8 +1,7 @@
 
 HERE = $(PWD)
-CC = /usr/bin/gcc
-# CFLAGS = -std=c89 -Werror -Wall -pedantic -O0 -g -Wno-unused-function
-CFLAGS = -Ofast
+CC = gcc
+CFLAGS = -std=c89 -Werror -Wall -pedantic -O0 -g -Wno-unused-function
 
 NODE = node --trace-uncaught
 
@@ -80,7 +79,7 @@ build/test: build
 	mkdir -p $@
 
 $(NIST_EXECUTABLE):
-	# git submodule update --init
+	git submodule update --init
 	cd $(NIST_DIR) && $(MAKE)
 
 build-js-srcs: build/cli.js
