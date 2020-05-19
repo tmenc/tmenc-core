@@ -195,6 +195,38 @@ bitarr_to_stream(bitarr *arr) {
 	return ret;
 }
 
+struct bitarr_to_cycle_stream_closure {
+	bitarr *arr;
+	size_t i;
+};
+
+static opaque
+bitarr_to_cycle_stream_generator(void *state, bit *finished_q) {
+	struct bitarr_to_cycle_stream_closure *ctx = state;
+	opaque ret;
+
+	ret.binary = bitarray_at(*(ctx->arr), ctx->i);
+	ctx->i = (1 + ctx->i) % (ctx->arr->bit_size);
+
+	return ret;
+}
+
+static stream
+bitarr_to_cycle_stream(bitarr *arr) {
+	struct bitarr_to_cycle_stream_closure *ctx;
+	stream ret;
+
+	ctx = malloc(sizeof(struct bitarr_to_cycle_stream_closure));
+	ctx->arr = arr;
+	ctx->i = 0;
+
+	ret.finished_q = 0;
+	ret.state = ctx;
+	ret.generator = bitarr_to_cycle_stream_generator;
+
+	return ret;
+}
+
 struct vector_to_stream_closure {
 	vector *vec;
 	size_t i;
