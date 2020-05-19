@@ -137,7 +137,7 @@ static struct double_tape_body_s*
 double_tape_body_alloc(struct double_tape_body_s *left, struct double_tape_body_s *right) {
 	struct double_tape_body_s *ret;
 
-	ret = dynalloc(sizeof(struct double_tape_s));
+	ret = silent_dynalloc(sizeof(struct double_tape_s));
 	if (ret == NULL) {
 		printf("COULD NOT ALLOCATE DOUBLE TAPE\n");
 	}
