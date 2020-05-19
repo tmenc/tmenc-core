@@ -56,7 +56,8 @@ test-c-misc: build/test build/test/test-misc.exe
 	./build/test/test-misc.exe
 
 test-c-rng: build/test build/test/test-rng.exe
-	./build/test/test-rng.exe
+	./build/test/test-rng.exe > build/test/test-c-rng.txt
+	diff test/rng-test-data.txt build/test/test-c-rng.txt
 
 test-js-cli: all
 	printf 'encrypt\n0a0bff\n0a0b00\nMakefile\n1000\n3\nLICENSE\nbuild/cli-encrypted\nEND' | $(NODE) build/cli.js
