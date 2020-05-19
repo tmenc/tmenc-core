@@ -2,6 +2,11 @@
  * BITARR AS VECTOR *
  ********************/
 
+static void
+maybe_free(void *ptr) {
+
+}
+
 static bitarr
 bitarray_create_empty() {
 	bitarr ret = bitarray_alloc(1024);
@@ -29,8 +34,8 @@ bitarray_push(bitarr *arr, bit o) {
 }
 
 static void
-bitarray_free(bitarr *arr) {
-	free(arr->buffer);
+bitarray_maybe_free(bitarr *arr) {
+	maybe_free(arr->buffer);
 	arr->buffer = NULL;
 	arr->bit_capacity = 0;
 	arr->bit_size = 0;
@@ -78,8 +83,8 @@ vector_push(vector *vec, opaque object) {
 }
 
 static void
-vector_free(vector *vec) {
-	free(vec->buffer);
+vector_maybe_free(vector *vec) {
+	maybe_free(vec->buffer);
 	vec->buffer = NULL;
 	vec->capacity = 0;
 	vec->size = 0;
@@ -101,7 +106,7 @@ range_stream_generator(void *state, bit *finished_q) {
 
 	if (ctx->current == ctx->max) {
 		*finished_q = 1;
-		free(state);
+		maybe_free(state);
 		ret.other = NULL;
 		return ret;
 	}
@@ -172,7 +177,7 @@ bitarr_to_stream_generator(void *state, bit *finished_q) {
 		ctx->i = 1 + ctx->i;
 	} else {
 		*finished_q = 1;
-		free(state);
+		maybe_free(state);
 		ret.other = NULL;
 	}
 
@@ -242,7 +247,7 @@ vector_to_stream_generator(void *state, bit *finished_q) {
 		ctx->i = 1 + ctx->i;
 	} else {
 		*finished_q = 1;
-		free(state);
+		maybe_free(state);
 		ret.other = NULL;
 	}
 
@@ -285,8 +290,8 @@ append_streams_generator(void *state, bit *finished_q) {
 			x = stream_read(ctx->cur);
 		} else {
 			*finished_q = 1;
-			free(ctx->streams_vector);
-			free(ctx);
+			maybe_free(ctx->streams_vector);
+			maybe_free(ctx);
 			break;
 		}
 	}
@@ -343,7 +348,7 @@ integer_to_binary_stream_generator(void *state, bit *finished_q) {
 
 	*finished_q = 1;
 	if (ctx->auto_free) {
-		free(ctx);
+		maybe_free(ctx);
 	}
 
 	ret.other = NULL;
@@ -406,7 +411,7 @@ byte_stream_to_binary_stream_generator(void *state, bit *finished_q) {
 		n = stream_read(ctx->bytes).byte;
 		if (stream_finished(ctx->bytes)) {
 			*finished_q = 1;
-			free(state);
+			maybe_free(state);
 			ret.other = NULL;
 			return ret;
 		}
@@ -450,7 +455,7 @@ pad_stream_generator(void *state, bit *finished_q) {
 	if (ctx->finished) {
 		if (((ctx->i) % (ctx->block_size)) == 0) {
 			*finished_q = 1;
-			free(state);
+			maybe_free(state);
 			ret.other = NULL;
 			return ret;
 		} else {
@@ -463,7 +468,7 @@ pad_stream_generator(void *state, bit *finished_q) {
 			ctx->finished = 1;
 			if (((ctx->i) % (ctx->block_size)) == 0) {
 				*finished_q = 1;
-				free(state);
+				maybe_free(state);
 				ret.other = NULL;
 				return ret;
 			} else {

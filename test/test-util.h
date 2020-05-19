@@ -67,7 +67,7 @@ generate_n_weak_random_bits(uint32_t seed, size_t size) {
 		bitarray_set_bit(ret, i, b);
 	}
 
-	free(weak_rng.state);
+	maybe_free(weak_rng.state);
 
 	return ret;
 }
