@@ -169,6 +169,9 @@ void test_byte_stream_to_binary_stream() {
 	o.byte = 108;
 	vector_push(&v, o);
 
+	o.byte = 108;
+	vector_push(&v, o);
+
 	o.byte = 111;
 	vector_push(&v, o);
 
