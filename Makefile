@@ -1,8 +1,8 @@
 
 HERE = $(PWD)
-CC = gcc
-CFLAGS = -std=c89 -Werror -Wall -pedantic -O0 -g -Wno-unused-function
-# CFLAGS = -Ofast
+CC = /usr/bin/gcc
+# CFLAGS = -std=c89 -Werror -Wall -pedantic -O0 -g -Wno-unused-function
+CFLAGS = -Ofast
 
 NODE = node --trace-uncaught
 
@@ -33,17 +33,20 @@ $(JS_TEST_SRCS): build/test src/js/machine.js src/js/util.js test/test-util.js $
 	cat src/js/machine.js src/js/util.js test/test-util.js $(@:build/%=%) > $@
 
 $(NIST_TEST_DATA_FILE): build/test/test-nist.exe
-	build/test/test-nist.exe > $@
+	time build/test/test-nist.exe > $@
 
 test-nist-small: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 	cd $(NIST_DIR) && \
+		OUTPUT_DIRECTORY="$(HERE)/build/$@" \
 		scripts/run-on-file.sh $(NIST_TEST_DATA_FILE) 2>&1 | \
 		tee "$(HERE)/build/$@-result"
 	test/check-nist-result.sh "10" "$(HERE)/build/$@-result"
 
 test-nist-big: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 	cd $(NIST_DIR) && \
-		STREAM_LEN=1000000 scripts/run-on-file.sh $(NIST_TEST_DATA_FILE) 2>&1 | \
+		STREAM_LEN=1000000 \
+		OUTPUT_DIRECTORY="$(HERE)/build/$@" \
+		scripts/run-on-file.sh $(NIST_TEST_DATA_FILE) 2>&1 | \
 		tee "$(HERE)/build/$@-result"
 	test/check-nist-result.sh "0" "$(HERE)/build/$@-result"
 
@@ -77,7 +80,7 @@ build/test: build
 	mkdir -p $@
 
 $(NIST_EXECUTABLE):
-	git submodule update --init
+	# git submodule update --init
 	cd $(NIST_DIR) && $(MAKE)
 
 build-js-srcs: build/cli.js
