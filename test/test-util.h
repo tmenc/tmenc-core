@@ -352,6 +352,15 @@ generate_example_key() {
 	size_t wr_tape_size   =   5000000;
 	size_t wrap_count     =         3;
 	struct make_random_tm_env_ret env;
+	size_t i;
+	bit x;
 
+	env = make_random_tm_env(777, input_size, machine_size, wr_tape_size);
+	tm_stream_skip(&env.tm_stream, input_size, wrap_count, wr_tape_size);
+
+	for (i = 0; i < wr_tape_size; i++) {
+		x = stream_read(&env.tm_stream).binary;
+		printf("%d\n", (int)x);
+	}
 }
 
