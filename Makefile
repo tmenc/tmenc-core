@@ -92,5 +92,5 @@ clean:
 	rm -rf build
 	cd $(NIST_DIR) && $(MAKE) clean ; true
 
-.PHONY: all cli clean nist-executable test-key-compatibility
+.PHONY: all cli clean nist-executable test-key-compatibility test-all test-nist-big test-nist-small test-key-compatibility test-js-hash test-js-misc test-js-rng test-js-cli test-c-misc test-c-rng build-js tests
 
