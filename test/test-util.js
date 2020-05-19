@@ -164,11 +164,11 @@ function generate_example_key() {
 	var wrap_count     =         3;
 
 	var env = make_random_tm_env(777, input_size, machine_size, wr_tape_size);
-	var write_tape = tm_get_stream_bitarr(env.stream, input_size, wrap_count, wr_tape_size);
+	var write_tape = tm_stream_skip(env.stream, input_size, wrap_count, wr_tape_size);
 
-	var n = bitarray_length(write_tape);
-	for (var i = 0; i < n; i++) {
-		console.log(bitarray_at(write_tape, i));
+	for (var i = 0; i < output_size; i++) {
+		var x = env.stream();
+		console.log(x);
 	}
 }
 
