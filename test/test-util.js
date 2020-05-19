@@ -166,7 +166,7 @@ function generate_example_key() {
 	var env = make_random_tm_env(777, input_size, machine_size, wr_tape_size);
 	var write_tape = tm_stream_skip(env.stream, input_size, wrap_count, wr_tape_size);
 
-	for (var i = 0; i < output_size; i++) {
+	for (var i = 0; i < wr_tape_size; i++) {
 		var x = env.stream();
 		console.log(x);
 	}
