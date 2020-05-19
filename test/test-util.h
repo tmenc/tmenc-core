@@ -355,7 +355,7 @@ generate_example_key() {
 	size_t i;
 	bit x;
 
-	env = make_random_tm_env(777, input_size, machine_size, wr_tape_size);
+	env = make_random_tm_env(777, input_size, machine_size);
 	tm_stream_skip(&env.tm_stream, input_size, wrap_count, wr_tape_size);
 
 	for (i = 0; i < wr_tape_size; i++) {
