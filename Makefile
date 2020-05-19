@@ -6,7 +6,7 @@ CFLAGS = -Ofast
 
 NODE = node --trace-uncaught
 
-NIST_TEST_DATA_FILE = build/test/test-data~
+NIST_TEST_DATA_FILE = $(HERE)/build/test/test-data~
 NIST_DIR = test/nist-sts
 NIST_EXECUTABLE = $(NIST_DIR)/assess
 NIST_MAKEFILE = $(NIST_DIR)/makefile
