@@ -364,3 +364,62 @@ byte_stream_to_binary_stream(stream *bytes) {
 	return ret;
 }
 
+
+struct pad_stream_closure {
+	stream* stream;
+	size_t block_size;
+	size_t i;
+	bit finished;
+};
+
+static opaque
+pad_stream_generator(void *state, bit *finished_q) {
+	struct pad_stream_closure *ctx = state;
+	opaque ret;
+	opaque x;
+
+	if (ctx->finished) {
+		if (((ctx->i) % (ctx->block_size)) == 0) {
+			*finished_q = 1;
+			ret.other = NULL;
+			return ret;
+		} else {
+			ret.size = 0; /* ASSUMPTION: bit,byte are also gonna be 0 */
+			return ret;
+		}
+	} else {
+		x = stream_read(ctx->stream);
+		if (stream_finished(ctx->stream)) {
+			ctx->finished = 1;
+			if (((ctx->i) % (ctx->block_size)) == 0) {
+				*finished_q = 1;
+				ret.other = NULL;
+				return ret;
+			} else {
+				ret.size = 0; /* ASSUMPTION: bit,byte are also gonna be 0 */
+				return ret;
+			}
+		} else {
+			return x;
+		}
+	}
+}
+
+static stream
+pad_stream(size_t block_size, stream *stream) {
+	struct pad_stream_closure *ctx;
+	stream ret;
+
+	ctx = malloc(sizeof(struct pad_stream_closure));
+	ctx->block_size = block_size;
+	ctx->stream = stream;
+	ctx->i = 0;
+	ctx->finished = 0;
+
+	ret.finished_q = 0;
+	ret.state = ctx;
+	ret.generator = byte_stream_to_binary_stream_generator;
+
+	return ret;
+}
+
