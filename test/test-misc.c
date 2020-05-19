@@ -7,6 +7,7 @@ int main() {
 	test_append_streams();
 	test_integer_to_binary_stream();
 	test_byte_stream_to_binary_stream();
+	test_binary_stream_to_byte_stream();
 
 	return 0;
 }
