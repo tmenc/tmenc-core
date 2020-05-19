@@ -1,5 +1,6 @@
 
 #define DEBUG
+#define TRACE_ALLOCATIONS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,7 +27,14 @@ typedef union opaque_u opaque;
 
 static void*
 dynalloc(size_t size) {
-	printf("allocating %lu\n", (unsigned long)size);
+#ifdef TRACE_ALLOCATIONS
+	fprintf(stderr, "allocating %lu\n", (unsigned long)size);
+#endif
+	return malloc(size);
+}
+
+static void*
+silent_dynalloc(size_t size) {
 	return malloc(size);
 }
 
