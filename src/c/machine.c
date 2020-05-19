@@ -25,6 +25,15 @@ union opaque_u {
 };
 typedef union opaque_u opaque;
 
+/***************
+ * ALLOCATIONS *
+ ***************/
+
+static void
+maybe_free(void *ptr) {
+	free(ptr);
+}
+
 static void*
 dynalloc(size_t size) {
 #ifdef TRACE_ALLOCATIONS

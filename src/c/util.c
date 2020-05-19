@@ -2,11 +2,6 @@
  * BITARR AS VECTOR *
  ********************/
 
-static void
-maybe_free(void *ptr) {
-
-}
-
 static bitarr
 bitarray_create_empty() {
 	bitarr ret = bitarray_alloc(1024);
