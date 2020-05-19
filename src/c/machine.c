@@ -66,7 +66,7 @@ bitarray_at(bitarr arr, size_t at) {
 
 #ifdef DEBUG
 	if (at >= arr.bit_size) {
-		printf("OUT OF BOUNDS: %lu ; BIT_SIZE = %lu\n", (unsigned long)at, (unsigned long)arr.bit_size);
+		fprintf(stderr, "OUT OF BOUNDS: %lu ; BIT_SIZE = %lu\n", (unsigned long)at, (unsigned long)arr.bit_size);
 	}
 #endif
 
@@ -84,7 +84,7 @@ bitarray_set_bit(bitarr arr, size_t at, bit value) {
 
 #ifdef DEBUG
 	if (at >= arr.bit_size) {
-		printf("OUT OF BOUNDS: %lu ; BIT_SIZE = %lu\n", (unsigned long)at, (unsigned long)arr.bit_size);
+		fprintf(stderr, "OUT OF BOUNDS: %lu ; BIT_SIZE = %lu\n", (unsigned long)at, (unsigned long)arr.bit_size);
 	}
 #endif
 
@@ -107,9 +107,11 @@ bitarray_alloc(size_t bit_size) {
 
 	size = bit_length_to_byte_length(bit_size);
 	ret.buffer = dynalloc(size);
+#ifdef DEBUG
 	if (ret.buffer == NULL) {
-		printf("COULD NOT ALLOCATE BUFFER OF SIZE %lu\n", (unsigned long)size);
+		fprintf(stderr, "COULD NOT ALLOCATE BUFFER OF SIZE %lu\n", (unsigned long)size);
 	}
+#endif
 	ret.bit_capacity = size * CONTAINER_BITS;
 	ret.bit_size = bit_size;
 
@@ -138,10 +140,6 @@ double_tape_body_alloc(struct double_tape_body_s *left, struct double_tape_body_
 	struct double_tape_body_s *ret;
 
 	ret = silent_dynalloc(sizeof(struct double_tape_s));
-	if (ret == NULL) {
-		printf("COULD NOT ALLOCATE DOUBLE TAPE\n");
-	}
-
 	ret->current = DOUBLE_TAPE_DEFAULT_VALUE;
 	ret->left = left;
 	ret->right = right;
@@ -306,7 +304,7 @@ tm_env_generator(void *state, bit *finished_q) {
 		read_tape_bit = stream_read(env->input_stream).binary;
 #ifdef DEBUG
 		if (stream_finished(env->input_stream)) {
-			printf("tm input_stream finished but it should never do that\n");
+			fprintf(stderr, "tm input_stream finished but it should never do that\n");
 		}
 #endif
 
