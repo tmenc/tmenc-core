@@ -89,7 +89,7 @@ generate-entropy: build/test build/test/test-entropy.exe
 	./build/test/test-entropy.exe > build/test/entropy.txt
 
 build/test: build
-	mkdir -p $@
+	mkdir -p $@ || true
 
 $(NIST_EXECUTABLE): $(NIST_MAKEFILE)
 	cd $(NIST_DIR) && $(MAKE)
@@ -100,7 +100,7 @@ $(NIST_MAKEFILE):
 build-js-srcs: build/cli.js
 
 build:
-	mkdir $@
+	mkdir $@ || true
 
 build/cli.js: src/js/machine.js src/js/util.js src/js/cli.js
 	cat $^ > $@
