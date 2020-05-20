@@ -590,3 +590,39 @@ tm_stream_skip(stream *s, size_t input_wrap_count, size_t input_size, size_t wra
 	}
 }
 
+static opaque
+file_to_byte_stream_generator(void *state, bit *finished_q) {
+	FILE *fp = state;
+	opaque ret;
+	int x;
+
+	x = getc(fp);
+	if (x == EOF) {
+		fclose(fp);
+		*finished_q = 1;
+		ret.size = 0;
+	} else {
+		ret.byte = (byte_t)x;
+	}
+
+	return ret;
+}
+
+static stream*
+file_to_byte_stream(char *filepath) {
+	stream *ret;
+
+	FILE *fp = fopen(filepath, "r");
+	if (fp == NULL) {
+		fprintf(stderr, "COULD NOT OPEN FILE %s!\n", filepath);
+		return NULL;
+	}
+
+	ret = dynalloc(sizeof(stream));
+	ret->finished_q = 0;
+	ret->state = fp;
+	ret->generator = file_to_byte_stream_generator;
+
+	return ret;
+}
+
