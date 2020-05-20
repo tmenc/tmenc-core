@@ -319,7 +319,7 @@ function byte_stream_to_byte_buffer(stream) {
 	return buf;
 }
 
-function make_machine_from_secret(pass_vector, salt_vector, file_vector, machine_size) {
+function make_machine_from_secret(salt_vector, machine_size) {
 	function vector_to_cycle_vector(a) {
 		var len = a.length;
 		return function(i) {
@@ -327,17 +327,11 @@ function make_machine_from_secret(pass_vector, salt_vector, file_vector, machine
 		}
 	}
 
-	// This is really ugly
-	// But we are doing this only to normalize machine bits
-	// Nothing important
-	var pass_cv  = vector_to_cycle_vector(pass_vector);
 	var salt_cv  = vector_to_cycle_vector(salt_vector);
-	var file_cv  = vector_to_cycle_vector(file_vector);
-
 	var output = bitarray_alloc(machine_size);
 
 	for (var i = 0; i < machine_size; i++) {
-		bitarray_set_bit(output, i, pass_cv(i) ^ salt_cv(i) ^ file_cv(i));
+		bitarray_set_bit(output, i, salt_cv(i));
 	}
 
 	return output;
@@ -377,7 +371,7 @@ function make_key(pass_v, salt_v, file_buffer, size, machine_size, input_wrap_co
 	var file_v = binary_stream_to_bitarr(byte_stream_to_binary_stream(buffer_to_byte_stream(file_buffer)));
 	var file_stream = vector_to_stream(file_v);
 
-	var machine_bits = make_machine_from_secret(pass_v, salt_v, file_v, machine_size);
+	var machine_bits = make_machine_from_secret(salt_v, machine_size);
 
 	var input_stream = append_streams([pass_stream, salt_stream, file_stream]);
 	var input_bits = binary_stream_to_bitarr(input_stream);
