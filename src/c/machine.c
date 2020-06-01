@@ -240,9 +240,12 @@ static uint32_t rng = 0;
 static bit
 machine_flip_and_read(tm *me) {
 	bit cur_bit = machine_read(me);
+	bit flip;
+	bit new_bit;
+
 	rng = simple_rng(rng);
-	bit flip = simple_rng_to1bit(rng);
-	bit new_bit = flip ^ cur_bit;
+	flip = simple_rng_to1bit(rng);
+	new_bit = flip ^ cur_bit;
 	bitarray_set_bit(me->machine_bits, me->machine_pos, new_bit);
 	return cur_bit;
 }

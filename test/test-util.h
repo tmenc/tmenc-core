@@ -376,7 +376,6 @@ generate_entropy_estimator() {
 	size_t wrap_count     =         0;
 	size_t in_wrap_count  =       100;
 	struct make_random_tm_env_ret env;
-	stream byte_out;
 	size_t i;
 	size_t to = wr_tape_size / (BITS_IN_SIZEOF * sizeof(byte_t));
 	byte_t x;
