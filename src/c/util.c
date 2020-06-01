@@ -626,3 +626,68 @@ file_to_byte_stream(char *filepath) {
 	return ret;
 }
 
+static bitarr
+tm_get_stream_bitarr(stream *s, size_t input_wrap_count, size_t input_size, size_t wrap_count, size_t output_size) {
+	bitarr out = bitarray_alloc(output_size);
+	size_t i;
+	bit x;
+
+	tm_stream_skip(s, input_wrap_count, input_size, wrap_count, output_size);
+	for (i = 0; i < output_size; i++) {
+		x = stream_read(s).binary;
+		bitarray_set_bit(out, i, x);
+	}
+	return out;
+}
+
+static bitarr
+make_machine_from_secret(bitarr *salt_v, size_t machine_size)
+{
+	size_t len = salt_v->bit_size;
+	bitarr output;
+	size_t i;
+
+	output = bitarray_alloc(machine_size);
+
+	for (i = 0; i < machine_size; i++) {
+		bitarray_set_bit(output, i, bitarray_at(*salt_v, i % len));
+	}
+
+	return output;
+}
+
+static bitarr
+make_key(bitarr *pass_v, bitarr *salt_v, char *filepath, size_t size, size_t machine_size, size_t input_wrap_count, size_t wrap_count)
+{
+	stream pass_stream;
+	stream salt_stream;
+	stream *file_byte_stream;
+	stream file_stream;
+	bitarr machine_bits;
+	stream **input_stream_vec;
+	stream input_stream;
+	bitarr input_bits;
+	stream input_cycle_stream;
+	stream env_stream;
+	size_t input_size;
+
+	pass_stream = bitarr_to_stream(pass_v);
+	salt_stream = bitarr_to_stream(salt_v);
+	file_byte_stream = file_to_byte_stream(filepath);
+	file_stream = byte_stream_to_binary_stream(file_byte_stream);
+
+	machine_bits = make_machine_from_secret(salt_v, machine_size);
+
+	input_stream_vec = dynalloc(3 * sizeof(stream*));
+	input_stream_vec[0] = &pass_stream;
+	input_stream_vec[1] = &salt_stream;
+	input_stream_vec[2] = &file_stream;
+	input_stream = append_streams(3, input_stream_vec);
+	input_bits = binary_stream_to_bitarr(&input_stream);
+	input_cycle_stream = bitarr_to_cycle_stream(input_bits);
+
+	env_stream = make_tm_env(machine_bits, &input_cycle_stream);
+	input_size = bitarray_length(input_bits);
+	return tm_get_stream_bitarr(&env_stream, input_wrap_count, input_size, wrap_count, size);
+}
+

@@ -320,18 +320,11 @@ function byte_stream_to_byte_buffer(stream) {
 }
 
 function make_machine_from_secret(salt_vector, machine_size) {
-	function vector_to_cycle_vector(a) {
-		var len = a.length;
-		return function(i) {
-			return a[i % len];
-		}
-	}
-
-	var salt_cv  = vector_to_cycle_vector(salt_vector);
+	var len = a.length;
 	var output = bitarray_alloc(machine_size);
 
 	for (var i = 0; i < machine_size; i++) {
-		bitarray_set_bit(output, i, salt_cv(i));
+		bitarray_set_bit(output, i, salt_vector[i % len]);
 	}
 
 	return output;
@@ -344,12 +337,12 @@ function tm_stream_skip(stream, input_wrap_count, input_size, wrap_count, output
 	}
 }
 
-function tm_get_stream_bitarr(stream, input_wrap_count, input_size, wrap_count, output_size) {
-	tm_stream_skip(stream, input_wrap_count, input_size, wrap_count, output_size);
+function tm_get_stream_bitarr(env_stream, input_wrap_count, input_size, wrap_count, output_size) {
+	tm_stream_skip(env_stream, input_wrap_count, input_size, wrap_count, output_size);
 
 	var out = bitarray_alloc(output_size);
 	for (var i = 0; i < output_size; i++) {
-		bitarray_set_bit(out, i, stream());
+		bitarray_set_bit(out, i, env_stream());
 	}
 	return out;
 }
@@ -377,8 +370,8 @@ function make_key(pass_v, salt_v, file_buffer, size, machine_size, input_wrap_co
 	var input_bits = binary_stream_to_bitarr(input_stream);
 	var input_cycle_stream = bitarr_to_cycle_stream(input_bits);
 
-	var stream = make_tm_env(machine_bits, input_cycle_stream);
+	var env_stream = make_tm_env(machine_bits, input_cycle_stream);
 	var input_size = bitarray_length(input_bits);
-	return tm_get_stream_bitarr(stream, input_wrap_count, input_size, wrap_count, size);
+	return tm_get_stream_bitarr(env_stream, input_wrap_count, input_size, wrap_count, size);
 }
 

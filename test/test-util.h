@@ -310,20 +310,6 @@ make_random_tm_env(uint32_t seed, size_t input_size, size_t machine_size) {
 	return ret;
 }
 
-static bitarr
-tm_get_stream_bitarr(stream *s, size_t input_wrap_count, size_t input_size, size_t wrap_count, size_t output_size) {
-	bitarr out = bitarray_alloc(output_size);
-	size_t i;
-	bit x;
-
-	tm_stream_skip(s, input_wrap_count, input_size, wrap_count, output_size);
-	for (i = 0; i < output_size; i++) {
-		x = stream_read(s).binary;
-		bitarray_set_bit(out, i, x);
-	}
-	return out;
-}
-
 static void
 generate_example_key() {
 	size_t machine_size   =      1000;
