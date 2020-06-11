@@ -664,7 +664,7 @@ make_key(bitarr *pass_v, bitarr *salt_v, char *filepath, size_t size, size_t mac
 	stream *file_byte_stream;
 	stream file_stream;
 	bitarr machine_bits;
-	stream **input_stream_vec;
+	stream *input_stream_vec[3];
 	stream input_stream;
 	bitarr input_bits;
 	stream input_cycle_stream;
@@ -678,11 +678,12 @@ make_key(bitarr *pass_v, bitarr *salt_v, char *filepath, size_t size, size_t mac
 
 	machine_bits = make_machine_from_secret(salt_v, machine_size);
 
-	input_stream_vec = dynalloc(3 * sizeof(stream*));
 	input_stream_vec[0] = &pass_stream;
 	input_stream_vec[1] = &salt_stream;
 	input_stream_vec[2] = &file_stream;
 	input_stream = append_streams(3, input_stream_vec);
+	maybe_free(input_stream_vec);
+
 	input_bits = binary_stream_to_bitarr(&input_stream);
 	input_cycle_stream = bitarr_to_cycle_stream(input_bits);
 
