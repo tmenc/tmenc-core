@@ -350,7 +350,7 @@ generate_example_key() {
 
 	for (i = 0; i < wr_tape_size; i++) {
 		x = stream_read(&env.tm_stream).binary;
-		putc(x, stdout);
+		printf("%d\n", (int)x);
 	}
 }
 
