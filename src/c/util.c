@@ -682,8 +682,6 @@ make_key(bitarr *pass_v, bitarr *salt_v, char *filepath, size_t size, size_t mac
 	input_stream_vec[1] = &salt_stream;
 	input_stream_vec[2] = &file_stream;
 	input_stream = append_streams(3, input_stream_vec);
-	maybe_free(input_stream_vec);
-
 	input_bits = binary_stream_to_bitarr(&input_stream);
 	input_cycle_stream = bitarr_to_cycle_stream(input_bits);
 
