@@ -612,7 +612,7 @@ static stream*
 file_to_byte_stream(char *filepath) {
 	stream *ret;
 
-	FILE *fp = fopen(filepath, "r");
+	FILE *fp = fopen(filepath, "rb");
 	if (fp == NULL) {
 		fprintf(stderr, "COULD NOT OPEN FILE %s!\n", filepath);
 		return NULL;
