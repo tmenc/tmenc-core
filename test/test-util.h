@@ -394,3 +394,31 @@ generate_entropy_estimator() {
 	}
 }
 
+static void
+test_make_key()
+{
+	bitarr pass_v;
+	bitarr salt_v;
+	char *filepath;
+	size_t size;
+	size_t machine_size;
+	size_t input_wrap_count;
+	size_t wrap_count;
+	bitarr key;
+
+	pass_v = bitarray_alloc(8);
+	pass_v.buffer[0] = 77;
+	salt_v = bitarray_alloc(8);
+	salt_v.buffer[0] = 182;
+
+	filepath = "LICENSE";
+	size = 8;
+	machine_size = 8;
+	input_wrap_count = 0;
+	wrap_count = 0;
+
+	key = make_key(&pass_v, &salt_v, filepath, size, machine_size, input_wrap_count, wrap_count);
+
+	bitarray_print(key);
+}
+
