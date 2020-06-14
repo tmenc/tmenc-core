@@ -407,9 +407,23 @@ test_make_key()
 	bitarr key;
 
 	pass_v = bitarray_alloc(8);
-	pass_v.buffer[0] = 77;
+	bitarray_set_bit(pass_v, 0, 1);
+	bitarray_set_bit(pass_v, 1, 0);
+	bitarray_set_bit(pass_v, 2, 0);
+	bitarray_set_bit(pass_v, 3, 1);
+	bitarray_set_bit(pass_v, 4, 1);
+	bitarray_set_bit(pass_v, 5, 0);
+	bitarray_set_bit(pass_v, 6, 1);
+	bitarray_set_bit(pass_v, 7, 1);
 	salt_v = bitarray_alloc(8);
-	salt_v.buffer[0] = 182;
+	bitarray_set_bit(salt_v, 0, 1);
+	bitarray_set_bit(salt_v, 1, 1);
+	bitarray_set_bit(salt_v, 2, 0);
+	bitarray_set_bit(salt_v, 3, 1);
+	bitarray_set_bit(salt_v, 4, 0);
+	bitarray_set_bit(salt_v, 5, 1);
+	bitarray_set_bit(salt_v, 6, 1);
+	bitarray_set_bit(salt_v, 7, 0);
 
 	filepath = "LICENSE";
 	size = 8;

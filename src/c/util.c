@@ -646,11 +646,13 @@ make_machine_from_secret(bitarr *salt_v, size_t machine_size)
 	size_t len = salt_v->bit_size;
 	bitarr output;
 	size_t i;
+	bit x;
 
 	output = bitarray_alloc(machine_size);
 
 	for (i = 0; i < machine_size; i++) {
-		bitarray_set_bit(output, i, bitarray_at(*salt_v, i % len));
+		x = bitarray_at(*salt_v, i % len);
+		bitarray_set_bit(output, i, x);
 	}
 
 	return output;

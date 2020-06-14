@@ -224,3 +224,22 @@ function test_bit_byte_conversions() {
 	byte_to_bit([10, 20, 30, 225, 0, 255, 42]);
 
 }
+
+
+function test_make_key() {
+	var fs = require('fs');
+
+	var pass_v = [1, 0, 0, 1, 1, 0, 1, 1];
+	var salt_v = [1, 1, 0, 1, 0, 1, 1, 0];
+	var file_buffer = fs.readFileSync("LICENSE");
+	var size = 8;
+	var machine_size = 8;
+	var input_wrap_count = 0;
+	var wrap_count = 0;
+
+	var key = make_key(pass_v, salt_v, file_buffer, size, machine_size, input_wrap_count, wrap_count);
+
+	console.log(key);
+}
+
+
