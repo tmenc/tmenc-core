@@ -61,12 +61,25 @@ generate_n_weak_random_bits(uint32_t seed, size_t size) {
 	return ret;
 }
 
-void assert_byte_vector_equal(vector v1, vector v2) {
+static void
+assert_byte_vector_equal(vector v1, vector v2)
+{
 	size_t i;
 
 	assert(v1.size == v2.size);
 	for (i = 0; i < v1.size; i++) {
 		assert(((v1.buffer[i].byte) == (v2.buffer[i].byte)));
+	}
+}
+
+static void
+assert_bitarray_equal(bitarr v1, bitarr v2)
+{
+	size_t i;
+
+	assert(v1.bit_size == v2.bit_size);
+	for (i = 0; i < v1.bit_size; i++) {
+		assert(((bitarray_at(v1, i)) == (bitarray_at(v2, i))));
 	}
 }
 
@@ -405,6 +418,7 @@ test_make_key()
 	size_t input_wrap_count;
 	size_t wrap_count;
 	bitarr key;
+	bitarr correct_v;
 
 	pass_v = bitarray_alloc(8);
 	bitarray_set_bit(pass_v, 0, 1);
@@ -428,11 +442,23 @@ test_make_key()
 	filepath = "LICENSE";
 	size = 8;
 	machine_size = 8;
-	input_wrap_count = 0;
-	wrap_count = 0;
+	input_wrap_count = 10;
+	wrap_count = 10;
 
 	key = make_key(&pass_v, &salt_v, filepath, size, machine_size, input_wrap_count, wrap_count);
 
+	correct_v = bitarray_alloc(8);
+	bitarray_set_bit(correct_v, 0, 1);
+	bitarray_set_bit(correct_v, 1, 1);
+	bitarray_set_bit(correct_v, 2, 0);
+	bitarray_set_bit(correct_v, 3, 1);
+	bitarray_set_bit(correct_v, 4, 1);
+	bitarray_set_bit(correct_v, 5, 1);
+	bitarray_set_bit(correct_v, 6, 0);
+	bitarray_set_bit(correct_v, 7, 0);
+
 	bitarray_print(key);
+	bitarray_print(correct_v);
+	assert_bitarray_equal(correct_v, key);
 }
 

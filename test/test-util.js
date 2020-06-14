@@ -194,7 +194,7 @@ function arr_equal(a, b) {
 
 function assert_arr_equal(a, b) {
 	if (!(arr_equal(a, b))) {
-		debugger;
+		// debugger;
 		throw "ASSERT FAILED";
 	}
 }
@@ -234,12 +234,12 @@ function test_make_key() {
 	var file_buffer = fs.readFileSync("LICENSE");
 	var size = 8;
 	var machine_size = 8;
-	var input_wrap_count = 0;
-	var wrap_count = 0;
+	var input_wrap_count = 10;
+	var wrap_count = 10;
 
 	var key = make_key(pass_v, salt_v, file_buffer, size, machine_size, input_wrap_count, wrap_count);
-
-	console.log(key);
+	// console.log(key);
+	assert_arr_equal(key, [1, 1, 0, 1, 1, 1, 0, 0]);
 }
 
 
