@@ -402,7 +402,7 @@ generate_entropy_estimator() {
 
 		if (abs > max) {
 			max = abs;
-			printf("{ %d, %lu }\n", max, i);
+			printf("{ %d, %lu }\n", max, (unsigned long)i);
 		}
 	}
 }
