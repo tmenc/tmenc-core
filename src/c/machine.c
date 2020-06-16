@@ -159,10 +159,9 @@ double_tape_body_alloc(struct double_tape_body_s *left, struct double_tape_body_
 
 static double_tape*
 double_tape_create() {
-	/* double_tape *ret = dynalloc(sizeof(double_tape)); */
-	/* ret->me = double_tape_body_alloc(NULL, NULL); */
-	/* return ret; */
-	return NULL;
+	double_tape *ret = dynalloc(sizeof(double_tape));
+	ret->me = double_tape_body_alloc(NULL, NULL);
+	return ret;
 }
 
 static void
