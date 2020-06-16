@@ -386,6 +386,30 @@ generate_example_binary_key() {
 }
 
 static void
+default_benchmark() {
+	size_t machine_size   =      1000;
+	size_t input_size     =      1000;
+	size_t wr_tape_size   =  90000000;
+	size_t wrap_count     =         0;
+	size_t in_wrap_count  =       100;
+	struct make_random_tm_env_ret env;
+	stream byte_out;
+	size_t i;
+	size_t to = wr_tape_size / (BITS_IN_SIZEOF * sizeof(byte_t));
+	byte_t x;
+
+	env = make_random_tm_env(777, input_size, machine_size);
+	tm_stream_skip(&env.tm_stream, in_wrap_count, input_size, wrap_count, wr_tape_size);
+
+	byte_out = binary_stream_to_byte_stream(&env.tm_stream);
+
+	for (i = 0; i < to; i++) {
+		x = stream_read(&byte_out).byte;
+		/* putc(x, stdout); */
+	}
+}
+
+static void
 generate_entropy_estimator() {
 	size_t machine_size   =      1000;
 	size_t input_size     =      1000;

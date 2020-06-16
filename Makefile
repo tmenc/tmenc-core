@@ -39,10 +39,19 @@ $(NIST_TEST_DATA_FILE): build/test/test-nist.exe
 # $(NIST_TEST_DATA_FILE): build/test/test-nist.js
 # 	$(NODE) build/test/test-nist.js > $@
 
-benchmark: build/test/test-benchmark.exe
-	time sh -c 'build/test/test-benchmark.exe > build/test/benchmark.bin'
-	ls -lh build/test/benchmark.bin
-	stat -c %s build/test/benchmark.bin
+benchmark:
+	$(MAKE) 'CFLAGS=-Ofast' 'build/test/test-benchmark.exe' && \
+	RESULT=$$(time -f '%e' sh -c 'build/test/test-benchmark.exe &> /dev/null' 2>&1) && \
+	TRIMED=$$(echo $$RESULT | awk 'END { print $$(NF)}') && \
+	echo "TIME: $$TRIMED" && \
+	GIT=$$(git rev-parse HEAD) && \
+	echo "$$GIT,$$TRIMED" > ./benchmarks.csv && \
+	true
+
+# ls -lh build/test/benchmark.bin
+# stat -c %s build/test/benchmark.bin
+
+.ONESHELL: benchmark
 
 test-nist-small: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 	cd $(NIST_DIR) && \

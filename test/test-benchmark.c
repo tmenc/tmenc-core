@@ -1,6 +1,6 @@
 
 int main() {
-	generate_example_binary_key();
+	default_benchmark();
 	return 0;
 }
 
