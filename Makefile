@@ -39,20 +39,29 @@ $(NIST_TEST_DATA_FILE): build/test/test-nist.exe
 # $(NIST_TEST_DATA_FILE): build/test/test-nist.js
 # 	$(NODE) build/test/test-nist.js > $@
 
+BENCHMARK_COMMIT =
+
+benchmark-dirty:
+	$(MAKE) benchmark BENCHMARK_COMMIT=false
+
 benchmark:
-	$(MAKE) 'CFLAGS=-Ofast' 'build/test/test-benchmark.exe' && \
+	if [ -z "$(BENCHMARK_COMMIT)" ] ; then if ! [ -z "$$(git status --short 2>&1)" ] ; then echo "STASH CHANGES FIRST!" ; exit 1 ; fi ; fi
+	$(MAKE) 'CFLAGS=-Ofast' 'build/test/test-benchmark.exe'
+
 	RESULT=$$(time -f 'BENCHMARK %e' build/test/test-benchmark.exe 2>&1) && \
 	echo "RESULT: $$RESULT" > /tmp/hello && \
 	TRIMED=$$(echo $$RESULT | grep -o -E -e 'BENCHMARK [0-9]+(\.[0-9]+)?' | grep -o -E -e '[0-9\.]+') && \
 	echo "TIME: $$TRIMED" && \
 	GIT=$$(git rev-parse HEAD) && \
-	echo "$$GIT,$$TRIMED" > ./benchmarks.csv && \
+	SRC=$$(tar -cf - src test | md5sum | cut '-d ' -f 1) && \
+	if [ -z "$(BENCHMARK_COMMIT)" ] ; \
+	then echo "$$SRC,$$GIT,$$TRIMED" >> ./benchmarks.csv && \
+	git commit --all --message "BENCHMARK $$TRIMED" ; \
+	fi && \
 	true
 
 # ls -lh build/test/benchmark.bin
 # stat -c %s build/test/benchmark.bin
-
-.ONESHELL: benchmark
 
 test-nist-small: $(NIST_EXECUTABLE) $(NIST_TEST_DATA_FILE)
 	cd $(NIST_DIR) && \
