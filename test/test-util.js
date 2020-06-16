@@ -158,7 +158,7 @@ function test_tm_hashing() {
 }
 
 function generate_example_key() {
-	var machine_size   =      1000;
+	var machine_size   =      1024;
 	var input_size     =      1000;
 	var wr_tape_size   =   5000000;
 	var wrap_count     =         0;

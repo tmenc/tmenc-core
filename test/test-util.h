@@ -343,7 +343,7 @@ make_random_tm_env(uint32_t seed, size_t input_size, size_t machine_size) {
 
 static void
 generate_example_key() {
-	size_t machine_size   =      1000;
+	size_t machine_size   =      1024;
 	size_t input_size     =      1000;
 	size_t wr_tape_size   =   5000000;
 	size_t wrap_count     =         0;
@@ -363,7 +363,7 @@ generate_example_key() {
 
 static void
 generate_example_binary_key() {
-	size_t machine_size   =      1000;
+	size_t machine_size   =      1024;
 	size_t input_size     =      1000;
 	size_t wr_tape_size   = 500000000;
 	size_t wrap_count     =         0;
@@ -387,7 +387,7 @@ generate_example_binary_key() {
 
 static void
 default_benchmark() {
-	size_t machine_size   =      1000;
+	size_t machine_size   =      1024;
 	size_t input_size     =      1000;
 	size_t wr_tape_size   =  90000000;
 	size_t wrap_count     =         0;
@@ -411,7 +411,7 @@ default_benchmark() {
 
 static void
 generate_entropy_estimator() {
-	size_t machine_size   =      1000;
+	size_t machine_size   =      1024;
 	size_t input_size     =      1000;
 	size_t wr_tape_size   = 400000000;
 	size_t wrap_count     =         0;
