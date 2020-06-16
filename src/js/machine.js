@@ -92,8 +92,6 @@ function make_tm(machine_bits) {
 	function machine_step (read_tape_bit, memory_tape_register) {
 		var jump_size = (1 + read_tape_bit) * (1 + memory_tape_register);
 
-		var wt_skip = read_tape_bit ^ machine_flip_and_read();
-		machine_advance(jump_size);
 		var wt_bit = read_tape_bit ^ machine_flip_and_read();
 		machine_advance(jump_size);
 		var increment_bit = read_tape_bit ^ machine_flip_and_read();
@@ -103,7 +101,6 @@ function make_tm(machine_bits) {
 
 		return {
 			wt_bit: wt_bit,
-			wt_skip: wt_skip,
 			increment_bit: increment_bit,
 			direction_bit: direction_bit,
 		};
@@ -116,24 +113,19 @@ function make_tm_env(machine_bits, input_stream) {
 	var memory_tape = double_tape_create();
 
 	return function() {
-		debugger;
-		while (true) {
-			var read_tape_bit = input_stream();
-			var memory_tape_register = double_tape_get(memory_tape);
-			var ret = tm(read_tape_bit, memory_tape_register);
+		var read_tape_bit = input_stream();
+		var memory_tape_register = double_tape_get(memory_tape);
+		var ret = tm(read_tape_bit, memory_tape_register);
 
-			var new_register_value = memory_tape_register + ret.increment_bit;
-			double_tape_set(memory_tape, new_register_value);
+		var new_register_value = memory_tape_register + ret.increment_bit;
+		double_tape_set(memory_tape, new_register_value);
 
-			if (ret.direction_bit == 0) {
-				double_tape_move_left(memory_tape);
-			} else {
-				double_tape_move_right(memory_tape);
-			}
-
-			if (ret.wt_skip == 0) {
-				return ret.wt_bit;
-			}
+		if (ret.direction_bit == 0) {
+			double_tape_move_left(memory_tape);
+		} else {
+			double_tape_move_right(memory_tape);
 		}
+
+		return ret.wt_bit;
 	};
 }

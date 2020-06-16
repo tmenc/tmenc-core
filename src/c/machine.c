@@ -261,7 +261,6 @@ machine_flip_and_read(tm *me) {
 
 struct tm_step_s {
 	bit wt_bit;
-	bit wt_skip;
 	bit increment_bit;
 	bit direction_bit;
 };
@@ -271,9 +270,6 @@ static tm_step
 machine_step(tm *me, bit read_tape_bit, size_t memory_tape_register) {
 	tm_step ret;
 	size_t jump_size = (1 + read_tape_bit) * (1 + memory_tape_register);
-
-	ret.wt_skip = read_tape_bit ^ machine_flip_and_read(me);
-	machine_advance(me, jump_size);
 
 	ret.wt_bit = read_tape_bit ^ machine_flip_and_read(me);
 	machine_advance(me, jump_size);
@@ -334,32 +330,27 @@ tm_env_step(tm_env *env) {
 	bit read_tape_bit;
 	tm_step ret;
 
-	while (1) {
-
-		read_tape_bit = stream_read(env->input_stream).binary;
+	read_tape_bit = stream_read(env->input_stream).binary;
 #ifdef DEBUG
-		if (stream_finished(env->input_stream)) {
-			fprintf(stderr, "tm input_stream finished but it should never do that\n");
-		}
+	if (stream_finished(env->input_stream)) {
+		fprintf(stderr, "tm input_stream finished but it should never do that\n");
+	}
 #endif
 
-		memory_tape_register = double_tape_get(env->memory_tape);
+	memory_tape_register = double_tape_get(env->memory_tape);
 
-		ret = machine_step(&(env->tm), read_tape_bit, memory_tape_register);
+	ret = machine_step(&(env->tm), read_tape_bit, memory_tape_register);
 
-		new_register_value = memory_tape_register + ret.increment_bit;
-		double_tape_set(env->memory_tape, new_register_value);
+	new_register_value = memory_tape_register + ret.increment_bit;
+	double_tape_set(env->memory_tape, new_register_value);
 
-		if (ret.direction_bit == 0) {
-			double_tape_move_left(env->memory_tape);
-		} else {
-			double_tape_move_right(env->memory_tape);
-		}
-
-		if (ret.wt_skip == 0) {
-			return ret.wt_bit;
-		}
+	if (ret.direction_bit == 0) {
+		double_tape_move_left(env->memory_tape);
+	} else {
+		double_tape_move_right(env->memory_tape);
 	}
+
+	return ret.wt_bit;
 }
 
 static opaque
