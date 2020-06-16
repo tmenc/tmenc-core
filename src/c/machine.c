@@ -335,6 +335,7 @@ tm_env_step(tm_env *env) {
 #endif
 
 		memory_tape_register = double_tape_get(env->memory_tape);
+		memory_tape_register = 0;
 
 		ret = machine_step(&(env->tm), read_tape_bit, memory_tape_register);
 
