@@ -370,7 +370,7 @@ make_tm_env(bitarr machine_bits, stream *input_stream) {
 	rng = 0;
 	env = dynalloc(sizeof(tm_env));
 	env->tm = make_tm(machine_bits);
-	env->memory_tape = double_tape_create();
+	/* env->memory_tape = double_tape_create(); */
 	env->input_stream = input_stream;
 
 	ret.state = env;
