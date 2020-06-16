@@ -182,8 +182,7 @@ double_tape_move_right(double_tape *tape) {
 
 static size_t
 double_tape_get(double_tape *tape) {
-	/* return tape->me->current; */
-	return 0;
+	return tape->me->current;
 }
 
 static void
