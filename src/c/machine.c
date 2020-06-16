@@ -159,30 +159,32 @@ double_tape_body_alloc(struct double_tape_body_s *left, struct double_tape_body_
 
 static double_tape*
 double_tape_create() {
-	double_tape *ret = dynalloc(sizeof(double_tape));
-	ret->me = double_tape_body_alloc(NULL, NULL);
-	return ret;
+	/* double_tape *ret = dynalloc(sizeof(double_tape)); */
+	/* ret->me = double_tape_body_alloc(NULL, NULL); */
+	/* return ret; */
+	return NULL;
 }
 
 static void
 double_tape_move_left(double_tape *tape) {
-	if (tape->me->left == NULL) {
+	/* if (tape->me->left == NULL) { */
 		/* tape->me->left = double_tape_body_alloc(NULL, tape->me); */
-	}
+	/* } */
 	/* tape->me = tape->me->left; */
 }
 
 static void
 double_tape_move_right(double_tape *tape) {
-	if (tape->me->right == NULL) {
+	/* if (tape->me->right == NULL) { */
 		/* tape->me->right = double_tape_body_alloc(tape->me, NULL); */
-	}
+	/* } */
 	/* tape->me = tape->me->right; */
 }
 
 static size_t
 double_tape_get(double_tape *tape) {
-	return tape->me->current;
+	/* return tape->me->current; */
+	return 0;
 }
 
 static void
