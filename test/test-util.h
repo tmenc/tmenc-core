@@ -396,7 +396,6 @@ default_benchmark() {
 	stream byte_out;
 	size_t i;
 	size_t to = wr_tape_size / (BITS_IN_SIZEOF * sizeof(byte_t));
-	byte_t x;
 
 	env = make_random_tm_env(777, input_size, machine_size);
 	tm_stream_skip(&env.tm_stream, in_wrap_count, input_size, wrap_count, wr_tape_size);
@@ -404,8 +403,7 @@ default_benchmark() {
 	byte_out = binary_stream_to_byte_stream(&env.tm_stream);
 
 	for (i = 0; i < to; i++) {
-		x = stream_read(&byte_out).byte;
-		/* putc(x, stdout); */
+		stream_read(&byte_out);
 	}
 }
 
