@@ -48,8 +48,7 @@ benchmark:
 	if [ -z "$(BENCHMARK_COMMIT)" ] ; then if ! [ -z "$$(git status --short 2>&1)" ] ; then echo "STASH CHANGES FIRST!" ; exit 1 ; fi ; fi
 	$(MAKE) 'CFLAGS=-Ofast' 'build/test/test-benchmark.exe'
 
-	RESULT=$$(time -f 'BENCHMARK %e' sh -c 'build/test/test-benchmark.exe 1>/dev/null 2>/dev/null' 2>&1) && \
-	TRIMED=$$(echo $$RESULT | grep -o -E -e 'BENCHMARK [0-9]+(\.[0-9]+)?' | grep -o -E -e '[0-9\.]+') && \
+	TRIMED=$$(sh measure-time.sh) && \
 	echo "TIME: $$TRIMED" && \
 	GIT=$$(git rev-parse HEAD) && \
 	SRC=$$(tar -cf - src test | md5sum | cut '-d ' -f 1) && \
