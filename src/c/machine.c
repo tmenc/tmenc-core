@@ -169,7 +169,7 @@ double_tape_move_left(double_tape *tape) {
 	if (tape->me->left == NULL) {
 		tape->me->left = double_tape_body_alloc(NULL, tape->me);
 	}
-	tape->me = tape->me->left;
+	/* tape->me = tape->me->left; */
 }
 
 static void
@@ -177,7 +177,7 @@ double_tape_move_right(double_tape *tape) {
 	if (tape->me->right == NULL) {
 		tape->me->right = double_tape_body_alloc(tape->me, NULL);
 	}
-	tape->me = tape->me->right;
+	/* tape->me = tape->me->right; */
 }
 
 static size_t
