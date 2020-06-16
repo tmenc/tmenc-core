@@ -187,7 +187,7 @@ double_tape_get(double_tape *tape) {
 
 static void
 double_tape_set(double_tape *tape, size_t value) {
-	tape->me->current = value;
+	/* tape->me->current = value; */
 }
 
 /******
