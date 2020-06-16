@@ -371,7 +371,7 @@ static void
 generate_entropy_estimator() {
 	size_t machine_size   =      1000;
 	size_t input_size     =      1000;
-	size_t wr_tape_size   =5000000000;
+	size_t wr_tape_size   = 400000000;
 	size_t wrap_count     =         0;
 	size_t in_wrap_count  =       100;
 	struct make_random_tm_env_ret env;
