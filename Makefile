@@ -60,6 +60,27 @@ benchmark:
 	fi && \
 	true
 
+unchanged-referencefile:
+	$(MAKE) $(NIST_TEST_DATA_FILE) 'CFLAGS=-Ofast'
+	mv $(NIST_TEST_DATA_FILE) $(NIST_TEST_DATA_FILE)-reference
+
+unchanged-checkfile-remake:
+	$(MAKE) $(NIST_TEST_DATA_FILE) 'CFLAGS=-Ofast'
+	mv $(NIST_TEST_DATA_FILE) $(NIST_TEST_DATA_FILE)-check
+
+unchanged-checkfile:
+	if git stash | grep -q -i -e 'No local changes to save' ; then echo "NOTHING CHANGED" ; exit 1 ; fi
+	if [ -f $(NIST_TEST_DATA_FILE)-reference ] ; \
+	then cp $(NIST_TEST_DATA_FILE)-reference $(NIST_TEST_DATA_FILE)-check || exit 1 ; \
+	else $(MAKE) unchanged-checkfile-remake || exit 1 ; \
+	fi
+	git stash pop
+
+unchanged-check:
+	$(MAKE) unchanged-checkfile
+	$(MAKE) $(NIST_TEST_DATA_FILE) 'CFLAGS=-Ofast'
+	diff -q $(NIST_TEST_DATA_FILE) $(NIST_TEST_DATA_FILE)-check
+
 # ls -lh build/test/benchmark.bin
 # stat -c %s build/test/benchmark.bin
 
