@@ -48,7 +48,7 @@ benchmark:
 	if [ -z "$(BENCHMARK_COMMIT)" ] ; then if ! [ -z "$$(git status --short 2>&1)" ] ; then echo "STASH CHANGES FIRST!" ; exit 1 ; fi ; fi
 	$(MAKE) 'CFLAGS=-Ofast' 'build/test/test-benchmark.exe'
 
-	TRIMED=$$(sh measure-time.sh) && \
+	TRIMED=$$(python measure-time.py | tail -n 1) && \
 	echo "TIME: $$TRIMED" && \
 	GIT=$$(git rev-parse HEAD) && \
 	SRC=$$(tar -cf - src test | md5sum | cut '-d ' -f 1) && \
