@@ -313,7 +313,7 @@ stream_read(stream *s) {
 
 struct tm_env_s {
 	struct tm_s  tm;
-	double_tape  memory_tape;
+	/* double_tape  memory_tape; */
 	stream      *input_stream;
 };
 typedef struct tm_env_s tm_env;
@@ -334,18 +334,19 @@ tm_env_step(tm_env *env) {
 		}
 #endif
 
-		memory_tape_register = double_tape_get(env->memory_tape);
+		/* memory_tape_register = double_tape_get(env->memory_tape); */
+		memory_tape_register = 1;
 
 		ret = machine_step(&(env->tm), read_tape_bit, memory_tape_register);
 
 		new_register_value = memory_tape_register + ret.increment_bit;
-		double_tape_set(env->memory_tape, new_register_value);
+		/* double_tape_set(env->memory_tape, new_register_value); */
 
-		if (ret.direction_bit == 0) {
-			double_tape_move_left(&(env->memory_tape));
-		} else {
-			double_tape_move_right(&(env->memory_tape));
-		}
+		/* if (ret.direction_bit == 0) { */
+		/* 	double_tape_move_left(&(env->memory_tape)); */
+		/* } else { */
+		/* 	double_tape_move_right(&(env->memory_tape)); */
+		/* } */
 
 		if (ret.wt_skip == 0) {
 			return ret.wt_bit;
