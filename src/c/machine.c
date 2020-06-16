@@ -9,6 +9,7 @@
 
 #ifdef DEBUG
 #include <assert.h>
+#include <string.h>
 #endif
 
 /*********
@@ -124,6 +125,7 @@ bitarray_alloc(size_t bit_size) {
 	size = bit_length_to_byte_length(bit_size);
 	ret.buffer = dynalloc(size);
 #ifdef DEBUG
+	memset(ret.buffer, 0, size);
 	if (ret.buffer == NULL) {
 		fprintf(stderr, "COULD NOT ALLOCATE BUFFER OF SIZE %lu\n", (unsigned long)size);
 		assert(0);
