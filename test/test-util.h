@@ -431,6 +431,7 @@ test_make_key()
 	bitarray_set_bit(pass_v, i++, 0);
 	bitarray_set_bit(pass_v, i++, 1);
 	bitarray_set_bit(pass_v, i++, 1);
+
 	salt_v = bitarray_alloc(8);
 	i = 0;
 	bitarray_set_bit(salt_v, i++, 1);
@@ -441,6 +442,9 @@ test_make_key()
 	bitarray_set_bit(salt_v, i++, 1);
 	bitarray_set_bit(salt_v, i++, 1);
 	bitarray_set_bit(salt_v, i++, 0);
+
+	bitarray_print(pass_v);
+	bitarray_print(salt_v);
 
 	filepath = "LICENSE";
 	size = 12;
