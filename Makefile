@@ -41,8 +41,9 @@ $(NIST_TEST_DATA_FILE): build/test/test-nist.exe
 
 benchmark:
 	$(MAKE) 'CFLAGS=-Ofast' 'build/test/test-benchmark.exe' && \
-	RESULT=$$(time -f '%e' sh -c 'build/test/test-benchmark.exe &> /dev/null' 2>&1) && \
-	TRIMED=$$(echo $$RESULT | awk 'END { print $$(NF)}') && \
+	RESULT=$$(time -f 'BENCHMARK %e' build/test/test-benchmark.exe 2>&1) && \
+	echo "RESULT: $$RESULT" > /tmp/hello && \
+	TRIMED=$$(echo $$RESULT | grep -o -E -e 'BENCHMARK [0-9]+(\.[0-9]+)?' | grep -o -E -e '[0-9\.]+') && \
 	echo "TIME: $$TRIMED" && \
 	GIT=$$(git rev-parse HEAD) && \
 	echo "$$GIT,$$TRIMED" > ./benchmarks.csv && \
