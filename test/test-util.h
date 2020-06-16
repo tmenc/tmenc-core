@@ -13,6 +13,24 @@ void test_rng() {
 	}
 }
 
+static opaque
+const_zero_stream_generator(void *state, bit *finished_q) {
+	opaque ret;
+	ret.size = 0;
+	return ret;
+}
+
+static stream
+const_zero_stream() {
+	stream ret;
+
+	ret.finished_q = 0;
+	ret.state = NULL;
+	ret.generator = const_zero_stream_generator;
+
+	return ret;
+}
+
 struct weak_rng_stream_closure {
 	uint32_t seed;
 };
@@ -404,6 +422,30 @@ generate_entropy_estimator() {
 			max = abs;
 			printf("{ %d, %lu }\n", max, (unsigned long)i);
 		}
+	}
+}
+
+static void
+test_basic_out()
+{
+	bit machine_bits_array[3] = { 1, 0, 1 };
+	bitarr machine_bits;
+	size_t i;
+	stream zero;
+	stream env_stream;
+	bit x;
+
+	machine_bits = bitarray_alloc(3);
+	for (i = 0; i < 3; i++) {
+		bitarray_set_bit(machine_bits, i, machine_bits_array[i]);
+	}
+
+	zero = const_zero_stream();
+
+	env_stream = make_tm_env(machine_bits, &zero);
+	for (i = 0; i < 10; i++) {
+		x = stream_read(&env_stream).binary;
+		printf("%d\n", (int)x);
 	}
 }
 

@@ -8,6 +8,7 @@ int main() {
 	test_integer_to_binary_stream();
 	test_byte_stream_to_binary_stream();
 	test_binary_stream_to_byte_stream();
+	test_basic_out();
 	test_make_key();
 
 	printf("all passed");
