@@ -7,6 +7,10 @@
 #include <stddef.h> /* size_t */
 #include <stdint.h> /* uint32_t */
 
+#ifdef DEBUG
+#include <assert.h>
+#endif
+
 /*********
  * TYPES *
  *********/
@@ -77,6 +81,7 @@ bitarray_at(bitarr arr, size_t at) {
 #ifdef DEBUG
 	if (at >= arr.bit_size) {
 		fprintf(stderr, "OUT OF BOUNDS: %lu ; BIT_SIZE = %lu\n", (unsigned long)at, (unsigned long)arr.bit_size);
+		assert(0);
 	}
 #endif
 
@@ -95,6 +100,7 @@ bitarray_set_bit(bitarr arr, size_t at, bit value) {
 #ifdef DEBUG
 	if (at >= arr.bit_size) {
 		fprintf(stderr, "OUT OF BOUNDS: %lu ; BIT_SIZE = %lu\n", (unsigned long)at, (unsigned long)arr.bit_size);
+		assert(0);
 	}
 #endif
 
@@ -120,6 +126,7 @@ bitarray_alloc(size_t bit_size) {
 #ifdef DEBUG
 	if (ret.buffer == NULL) {
 		fprintf(stderr, "COULD NOT ALLOCATE BUFFER OF SIZE %lu\n", (unsigned long)size);
+		assert(0);
 	}
 #endif
 	ret.bit_capacity = size * CONTAINER_BITS;
@@ -166,18 +173,18 @@ double_tape_create() {
 
 static void
 double_tape_move_left(double_tape *tape) {
-	/* if (tape->me->left == NULL) { */
-		/* tape->me->left = double_tape_body_alloc(NULL, tape->me); */
-	/* } */
-	/* tape->me = tape->me->left; */
+	if (tape->me->left == NULL) {
+		tape->me->left = double_tape_body_alloc(NULL, tape->me);
+	}
+	tape->me = tape->me->left;
 }
 
 static void
 double_tape_move_right(double_tape *tape) {
-	/* if (tape->me->right == NULL) { */
-		/* tape->me->right = double_tape_body_alloc(tape->me, NULL); */
-	/* } */
-	/* tape->me = tape->me->right; */
+	if (tape->me->right == NULL) {
+		tape->me->right = double_tape_body_alloc(tape->me, NULL);
+	}
+	tape->me = tape->me->right;
 }
 
 static size_t
@@ -187,7 +194,7 @@ double_tape_get(double_tape *tape) {
 
 static void
 double_tape_set(double_tape *tape, size_t value) {
-	/* tape->me->current = value; */
+	tape->me->current = value;
 }
 
 /******
@@ -335,7 +342,6 @@ tm_env_step(tm_env *env) {
 #endif
 
 		memory_tape_register = double_tape_get(env->memory_tape);
-		memory_tape_register = 0;
 
 		ret = machine_step(&(env->tm), read_tape_bit, memory_tape_register);
 
