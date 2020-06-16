@@ -158,7 +158,7 @@ static struct double_tape_body_s*
 double_tape_body_alloc(struct double_tape_body_s *left, struct double_tape_body_s *right) {
 	struct double_tape_body_s *ret;
 
-	ret = silent_dynalloc(sizeof(struct double_tape_s));
+	ret = silent_dynalloc(sizeof(*ret));
 	ret->current = DOUBLE_TAPE_DEFAULT_VALUE;
 	ret->left = left;
 	ret->right = right;
