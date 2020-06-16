@@ -49,7 +49,6 @@ benchmark:
 	$(MAKE) 'CFLAGS=-Ofast' 'build/test/test-benchmark.exe'
 
 	RESULT=$$(time -f 'BENCHMARK %e' sh -c 'build/test/test-benchmark.exe 1>/dev/null 2>/dev/null' 2>&1) && \
-	echo "RESULT: $$RESULT" > /tmp/hello && \
 	TRIMED=$$(echo $$RESULT | grep -o -E -e 'BENCHMARK [0-9]+(\.[0-9]+)?' | grep -o -E -e '[0-9\.]+') && \
 	echo "TIME: $$TRIMED" && \
 	GIT=$$(git rev-parse HEAD) && \
