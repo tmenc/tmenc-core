@@ -157,10 +157,10 @@ double_tape_body_alloc(struct double_tape_body_s *left, struct double_tape_body_
 	return ret;
 }
 
-static double_tape
+static double_tape*
 double_tape_create() {
-	double_tape ret;
-	ret.me = double_tape_body_alloc(NULL, NULL);
+	double_tape *ret = dynalloc(sizeof(double_tape));
+	ret->me = double_tape_body_alloc(NULL, NULL);
 	return ret;
 }
 
@@ -181,13 +181,13 @@ double_tape_move_right(double_tape *tape) {
 }
 
 static size_t
-double_tape_get(double_tape tape) {
-	return tape.me->current;
+double_tape_get(double_tape *tape) {
+	return tape->me->current;
 }
 
 static void
-double_tape_set(double_tape tape, size_t value) {
-	tape.me->current = value;
+double_tape_set(double_tape *tape, size_t value) {
+	tape->me->current = value;
 }
 
 /******
@@ -313,7 +313,7 @@ stream_read(stream *s) {
 
 struct tm_env_s {
 	struct tm_s  tm;
-	/* double_tape  memory_tape; */
+	double_tape *memory_tape;
 	stream      *input_stream;
 };
 typedef struct tm_env_s tm_env;
@@ -334,19 +334,18 @@ tm_env_step(tm_env *env) {
 		}
 #endif
 
-		/* memory_tape_register = double_tape_get(env->memory_tape); */
-		memory_tape_register = 1;
+		memory_tape_register = double_tape_get(env->memory_tape);
 
 		ret = machine_step(&(env->tm), read_tape_bit, memory_tape_register);
 
 		new_register_value = memory_tape_register + ret.increment_bit;
-		/* double_tape_set(env->memory_tape, new_register_value); */
+		double_tape_set(env->memory_tape, new_register_value);
 
-		/* if (ret.direction_bit == 0) { */
-		/* 	double_tape_move_left(&(env->memory_tape)); */
-		/* } else { */
-		/* 	double_tape_move_right(&(env->memory_tape)); */
-		/* } */
+		if (ret.direction_bit == 0) {
+			double_tape_move_left(env->memory_tape);
+		} else {
+			double_tape_move_right(env->memory_tape);
+		}
 
 		if (ret.wt_skip == 0) {
 			return ret.wt_bit;
@@ -370,7 +369,7 @@ make_tm_env(bitarr machine_bits, stream *input_stream) {
 	rng = 0;
 	env = dynalloc(sizeof(tm_env));
 	env->tm = make_tm(machine_bits);
-	/* env->memory_tape = double_tape_create(); */
+	env->memory_tape = double_tape_create();
 	env->input_stream = input_stream;
 
 	ret.state = env;
