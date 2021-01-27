@@ -510,7 +510,7 @@ test_make_key()
 	bitarray_print(pass_v);
 	bitarray_print(salt_v);
 
-	filepath = "LICENSE";
+	filepath = "test/testfile";
 	size = 12;
 	machine_size = 23;
 	input_wrap_count = 11;
@@ -520,16 +520,16 @@ test_make_key()
 
 	correct_v = bitarray_alloc(12);
 	i = 0;
-	bitarray_set_bit(correct_v, i++, 1);
-	bitarray_set_bit(correct_v, i++, 0);
-	bitarray_set_bit(correct_v, i++, 1);
-	bitarray_set_bit(correct_v, i++, 1);
-	bitarray_set_bit(correct_v, i++, 1);
 	bitarray_set_bit(correct_v, i++, 0);
 	bitarray_set_bit(correct_v, i++, 1);
 	bitarray_set_bit(correct_v, i++, 0);
 	bitarray_set_bit(correct_v, i++, 1);
 	bitarray_set_bit(correct_v, i++, 1);
+	bitarray_set_bit(correct_v, i++, 0);
+	bitarray_set_bit(correct_v, i++, 1);
+	bitarray_set_bit(correct_v, i++, 0);
+	bitarray_set_bit(correct_v, i++, 1);
+	bitarray_set_bit(correct_v, i++, 0);
 	bitarray_set_bit(correct_v, i++, 0);
 	bitarray_set_bit(correct_v, i++, 0);
 
