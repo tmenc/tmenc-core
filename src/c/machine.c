@@ -240,7 +240,7 @@ simple_rng(uint32_t x) {
 
 static bit
 simple_rng_to1bit(uint32_t x) {
-	if (x > 2147483648UL) { return 1; }
+	if (x >= 2147483648UL) { return 1; }
 	else { return 0; }
 }
 

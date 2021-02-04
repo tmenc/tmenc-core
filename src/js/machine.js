@@ -68,7 +68,7 @@ function make_tm(machine_bits) {
 	}
 
 	function simple_rng_to1bit(z) {
-		if (z > 2147483648) { return 1; }
+		if (z >= 2147483648) { return 1; }
 		else { return 0; }
 	}
 
