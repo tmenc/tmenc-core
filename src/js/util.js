@@ -212,7 +212,8 @@ function hex_to_numbers(ascii) {
 
 function hex_to_binary_stream(ascii) {
 	var pop = hex_to_numbers(ascii);
-	return byte_stream_to_binary_stream(pop);
+	// return byte_stream_to_binary_stream(pop);
+	return function () { return END_OF_STREAM_TOKEN; }
 }
 
 function ascii_to_binary_stream(ascii) {
