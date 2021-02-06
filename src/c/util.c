@@ -611,11 +611,6 @@ hex_to_binary_stream_generator(void *state, bit *finished_q) {
 	}
 }
 
-static stream
-hex_to_binary_stream(char *ascii) {
-	
-}
-
 static void
 tm_stream_skip(stream *s, size_t input_wrap_count, size_t input_size, size_t wrap_count, size_t output_size) {
 	size_t skip_count = (input_wrap_count * input_size) + (wrap_count * output_size);
