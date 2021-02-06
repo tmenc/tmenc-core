@@ -8,7 +8,7 @@
 int mode = 0;
 
 static
-fail(void) {
+void fail(void) {
 	exit(1);
 }
 
@@ -85,6 +85,7 @@ void encrypt_file(void) {
 	char output_file[512];
 
 	char *keyfile_buffer;
+	char *input_file_buffer;
 
 	ask_user("pass", pass, sizeof(pass));
 	ask_user("salt", salt, sizeof(salt));
@@ -97,6 +98,11 @@ void encrypt_file(void) {
 
 	keyfile_buffer = read_file(keyfile);
 	input_file_buffer = read_file(input_file);
+
+	(void)keyfile_buffer;
+	(void)input_file_buffer;
+
+	exit(1);
 }
 
 static
