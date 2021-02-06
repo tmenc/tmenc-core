@@ -22,7 +22,7 @@ read_file(char *path) {
 	size = ftell(fp);
 	fseek(fp, 0, SEEK_SET);
 
-	buf = malloc(size);
+	buf = dynalloc(size);
 	if (buf == NULL) {
 		fprintf(stderr, "Could not allocate enough memory\n");
 		fail();
