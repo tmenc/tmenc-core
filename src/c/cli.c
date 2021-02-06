@@ -87,8 +87,8 @@ encrypt_file(void) {
 	char input_file[512];
 	char output_file[512];
 
-	char *keyfile_buffer;
-	char *input_file_buffer;
+	struct buffer keyfile_buffer;
+	struct buffer input_file_buffer;
 	stream *salt_binary_stream = dynalloc(sizeof(stream));
 	bitarr salt_s;
 	stream *input_file_byte_stream = dynalloc(sizeof(stream));
@@ -107,7 +107,7 @@ encrypt_file(void) {
 	input_file_buffer = read_file(input_file);
 	*salt_binary_stream = hex_to_binary_stream(salt);
 	salt_s = binary_stream_to_bitarr(salt_binary_stream);
-	*input_file_byte_stream = buffer_to_byte_stream(input_file_buffer)
+	*input_file_byte_stream = buffer_to_byte_stream(&input_file_buffer);
 	*input_file_stream = byte_stream_to_binary_stream(input_file_byte_stream);
 
 	(void)keyfile_buffer;

@@ -315,7 +315,7 @@ buffer_to_byte_stream_generator(void *state, bit *finished_q) {
 	opaque ret;
 
 	if (ctx->i < ctx->buf->size) {
-		ret = ctx->buf->memory[ctx->i];
+		ret.byte = ctx->buf->memory[ctx->i];
 		ctx->i = 1 + ctx->i;
 	} else {
 		*finished_q = 1;
@@ -327,7 +327,7 @@ buffer_to_byte_stream_generator(void *state, bit *finished_q) {
 }
 
 static stream
-buffer_to_byte_stream(char *buf) {
+buffer_to_byte_stream(struct buffer *buf) {
 	struct buffer_to_byte_stream_closure *ctx;
 	stream ret;
 
