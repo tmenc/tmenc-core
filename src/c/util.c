@@ -586,7 +586,7 @@ struct hex_to_byte_stream_closure {
 
 static opaque
 hex_to_byte_stream_generator(void *state, bit *finished_q) {
-	hex_to_byte_stream_closure *cl = state;
+	struct hex_to_byte_stream_closure *cl = state;
 	opaque ret;
 	char x;
 	char y;
