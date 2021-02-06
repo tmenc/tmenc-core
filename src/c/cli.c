@@ -86,7 +86,8 @@ encrypt_file(void) {
 
 	char *keyfile_buffer;
 	char *input_file_buffer;
-	char *salt;
+	stream *salt_binary_stream;
+	bitarr salt_s;
 
 	ask_user("pass", pass, sizeof(pass));
 	ask_user("salt", salt, sizeof(salt));
@@ -99,10 +100,13 @@ encrypt_file(void) {
 
 	keyfile_buffer = read_file(keyfile);
 	input_file_buffer = read_file(input_file);
-	salt_s = binary_stream_to_bitarr(hex_to_binary_stream(salt));
+	salt_binary_stream = dynalloc(sizeof(stream));
+	*salt_binary_stream = hex_to_binary_stream(salt);
+	salt_s = binary_stream_to_bitarr(salt_binary_stream);
 
 	(void)keyfile_buffer;
 	(void)input_file_buffer;
+	(void)salt_s;
 
 	exit(1);
 }
