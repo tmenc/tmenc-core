@@ -294,6 +294,44 @@ vector_to_stream(vector *vec) {
 	return ret;
 }
 
+struct buffer_to_byte_stream_closure {
+	buffer *buf;
+	size_t i;
+};
+
+static opaque
+buffer_to_byte_stream_generator(void *state, bit *finished_q) {
+	struct buffer_to_byte_stream_closure *ctx = state;
+	opaque ret;
+
+	if (ctx->buf[ctx->i]) {
+		ret = ctx->vec->buffer[ctx->i];
+		ctx->i = 1 + ctx->i;
+	} else {
+		*finished_q = 1;
+		maybe_free(state);
+		ret.other = NULL;
+	}
+
+	return ret;
+}
+
+static stream
+buffer_to_byte_stream(char *buf) {
+	struct buffer_to_byte_stream_closure *ctx;
+	stream ret;
+
+	ctx = dynalloc(sizeof(struct buffer_to_byte_stream_closure));
+	ctx->buf = buf;
+	ctx->i = 0;
+
+	ret.finished_q = 0;
+	ret.state = ctx;
+	ret.generator = buffer_to_byte_stream_generator;
+
+	return ret;
+}
+
 struct append_streams_closure {
 	size_t len;
 	stream **streams_vector;
