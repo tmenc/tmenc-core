@@ -1,3 +1,5 @@
+#include <stdio.h>  /* getc, putc, fprintf */
+
 /****************
  * SIZED BUFFER *
  ****************/

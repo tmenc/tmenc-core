@@ -2,12 +2,12 @@
 #define DEBUG
 #define TRACE_ALLOCATIONS
 
-#include <stdio.h>  /* getc, putc */
 #include <stdlib.h> /* malloc, free */
 #include <stddef.h> /* size_t */
 #include <stdint.h> /* uint32_t */
 
 #ifdef DEBUG
+#include <stdio.h>  /* getc, putc, fprintf */
 #include <assert.h>
 #include <string.h>
 #endif

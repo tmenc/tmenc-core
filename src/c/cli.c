@@ -1,5 +1,4 @@
-
-#include <stdio.h>
+#include <stdio.h>  /* getc, putc, fprintf */
 #include <string.h>
 
 /* 0 - unknown
