@@ -121,9 +121,9 @@ build/cli.exe: build build/cli.c
 	$(CC) $(CFLAGS) -o $@ build/cli.c
 
 test-c-cli: build/cli.exe
-	printf 'encrypt\n0a0bff\n0a0b00\nMakefile\n1000\n100\n3\ntest/testfile\nbuild/cli-encrypted\nEND' | build/cli.exe
-	printf 'decrypt\n0a0bff\nMakefile\nbuild/cli-encrypted\nbuild/cli-decrypted\nEND' | build/cli.exe
-	diff -q test/testfile build/cli-decrypted
+	printf 'encrypt\n0a0bff\n0a0b00\nMakefile\n1000\n100\n3\ntest/testfile\nbuild/cli-encrypted-c\nEND' | build/cli.exe
+	printf 'decrypt\n0a0bff\nMakefile\nbuild/cli-encrypted-c\nbuild/cli-decrypted-c\nEND' | build/cli.exe
+	diff -q test/testfile build/cli-decrypted-c
 
 test-c-misc: build/test build/test/test-misc.exe
 	./build/test/test-misc.exe
