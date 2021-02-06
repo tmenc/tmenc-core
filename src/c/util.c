@@ -495,7 +495,7 @@ pad_stream(size_t block_size, stream *s) {
 
 	ret.finished_q = 0;
 	ret.state = ctx;
-	ret.generator = byte_stream_to_binary_stream_generator;
+	ret.generator = pad_stream_generator;
 
 	return ret;
 }
@@ -615,12 +615,12 @@ hex_to_byte_stream_generator(void *state, bit *finished_q) {
 }
 
 static stream
-hex_to_byte_stream(char *hex) {
+hex_to_byte_stream(char *ascii) {
 	struct hex_to_byte_stream_closure *ctx;
 	stream ret;
 	int len = 0;
 
-	while (hex[len]) {
+	while (ascii[len]) {
 		len++;
 	}
 	len++;
@@ -628,13 +628,20 @@ hex_to_byte_stream(char *hex) {
 	ctx = dynalloc(sizeof(struct hex_to_byte_stream_closure));
 	ctx->len = len;
 	ctx->i = -2;
-	ctx->buf = hex;
+	ctx->buf = ascii;
 
 	ret.finished_q = 0;
 	ret.state = ctx;
 	ret.generator = hex_to_byte_stream_generator;
 
 	return ret;
+}
+
+static stream
+hex_to_binary_stream(char *ascii) {
+	stream *bytes = dynalloc(sizeof(stream));
+	*bytes = hex_to_byte_stream(ascii);
+	return byte_stream_to_binary_stream(bytes);
 }
 
 static void
