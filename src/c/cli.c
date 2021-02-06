@@ -2,12 +2,37 @@
 #include <stdio.h>
 #include <string.h>
 
-#define BUFFER_LEN 512
-
 /* 0 - unknown
  * 1 - encrypt
  * 2 - decrypt */
 int mode = 0;
+
+static
+int read_line(char *input, int input_size) {
+	int i;
+	int c;
+
+	for (i = 0; i < input_size; i++) {
+		c = getc(stdin);
+		if (c == EOF || c == '\n' || c == '\0') {
+			input[i] = 0;
+			return 0;
+		}
+
+		input[i] = c;
+	}
+
+	return 1;
+}
+
+static
+void ask_user(char *what, char *where, int where_size) {
+	fprintf(stderr, "%s: ", what);
+	if (read_line(where, where_size)) {
+		fprintf(stderr, "Bad string. Maximum size is: %d\n", where_size - 1);
+		fail();
+	}
+}
 
 static
 fail(void) {
@@ -26,14 +51,29 @@ void decrypt_file(void) {
 
 static
 void encrypt_file(void) {
-	
+	char pass[512];
+	char salt[8192];
+	char keyfile[512];
+	char machine_size[32];
+	char input_wrap_count[32];
+	char wrap_count[32];
+	char input_file[512];
+	char output_file[512];
+
+	ask_user("pass", pass, sizeof(pass));
+	ask_user("salt", salt, sizeof(salt));
+	ask_user("keyfile", keyfile, sizeof(keyfile));
+	ask_user("machine_size", machine_size, sizeof(machine_size));
+	ask_user("input_wrap_count", input_wrap_count, sizeof(input_wrap_count));
+	ask_user("wrap_count", wrap_count, sizeof(wrap_count));
+	ask_user("input_file", input_file, sizeof(input_file));
+	ask_user("output_file", output_file, sizeof(output_file));
 }
 
 static
 void set_mode(void) {
-	char answer[BUFFER_LEN];
-	printf("entrypt/decrypt: ");
-	fgets(answer, BUFFER_LEN, stdin);
+	char answer[20];
+	ask_user("entrypt/decrypt", answer, sizeof(answer));
 
 	if (string_equal_p(answer, "encrypt")) {
 		mode = 1;
