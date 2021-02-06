@@ -1,3 +1,12 @@
+/****************
+ * SIZED BUFFER *
+ ****************/
+
+struct buffer {
+	char *memory;
+	size_t size;
+};
+
 /********************
  * BITARR AS VECTOR *
  ********************/
@@ -97,14 +106,15 @@ vector_maybe_free(vector *vec) {
 }
 
 static vector
-buffer_to_vector(char *buf, int size) {
+buffer_to_vector(struct buffer buf) {
 	opaque *obuf;
 	vector ret;
+	size_t size = buf.size;
 	int i;
 
 	obuf = dynalloc(size * sizeof(opaque));
 	for (i = 0; i < size; i++) {
-		obuf[i].byte = buf[i];
+		obuf[i].byte = buf.memory[i];
 	}
 
 	ret.buffer = obuf;
@@ -295,7 +305,7 @@ vector_to_stream(vector *vec) {
 }
 
 struct buffer_to_byte_stream_closure {
-	buffer *buf;
+	struct buffer *buf;
 	size_t i;
 };
 
@@ -304,8 +314,8 @@ buffer_to_byte_stream_generator(void *state, bit *finished_q) {
 	struct buffer_to_byte_stream_closure *ctx = state;
 	opaque ret;
 
-	if (ctx->buf[ctx->i]) {
-		ret = ctx->vec->buffer[ctx->i];
+	if (ctx->i < ctx->buf->size) {
+		ret = ctx->buf->memory[ctx->i];
 		ctx->i = 1 + ctx->i;
 	} else {
 		*finished_q = 1;

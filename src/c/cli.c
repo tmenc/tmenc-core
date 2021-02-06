@@ -12,11 +12,12 @@ fail(void) {
 	exit(1);
 }
 
-static char*
+static struct buffer
 read_file(char *path) {
 	int size;
 	char *buf;
 	FILE *fp = fopen(path, "rb");
+	struct buffer ret;
 
 	fseek(fp, 0, SEEK_END);
 	size = ftell(fp);
@@ -33,7 +34,9 @@ read_file(char *path) {
 		fail();
 	}
 
-	return buf;
+	ret.memory = buf;
+	ret.size = size;
+	return ret;
 }
 
 static int
