@@ -50,10 +50,10 @@ struct vector_s {
 typedef struct vector_s vector;
 
 static vector
-vector_create_empty() {
+vector_create_alloced(int size) {
 	vector ret;
 	ret.size = 0;
-	ret.capacity = 128;
+	ret.capacity = size;
 	ret.buffer = dynalloc((ret.capacity) * sizeof(opaque));
 #ifdef DEBUG
 	if (ret.buffer == NULL) {
@@ -61,6 +61,11 @@ vector_create_empty() {
 	}
 #endif
 	return ret;
+}
+
+static vector
+vector_create_empty() {
+	return vector_create_alloced(128);
 }
 
 static size_t
@@ -89,6 +94,24 @@ vector_maybe_free(vector *vec) {
 	vec->buffer = NULL;
 	vec->capacity = 0;
 	vec->size = 0;
+}
+
+static vector
+buffer_to_vector(char *buf, int size) {
+	opaque *obuf;
+	vector ret;
+	int i;
+
+	obuf = dynalloc(size * sizeof(opaque));
+	for (i = 0; i < size; i++) {
+		obuf[i].byte = buf[i];
+	}
+
+	ret.buffer = obuf;
+	ret.size = size;
+	ret.capacity = size;
+
+	return ret;
 }
 
 /********

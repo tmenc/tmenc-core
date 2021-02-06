@@ -36,6 +36,30 @@ read_file(char *path) {
 	return buf;
 }
 
+static vector
+read_file_to_vector(char *path) {
+	int size;
+	char *buf;
+	FILE *fp = fopen(path, "rb");
+
+	fseek(fp, 0, SEEK_END);
+	size = ftell(fp);
+	fseek(fp, 0, SEEK_SET);
+
+	buf = dynalloc(size * sizeof(char));
+	if (buf == NULL) {
+		fprintf(stderr, "Could not allocate enough memory\n");
+		fail();
+	}
+
+	if ((int)fread(buf, sizeof(*buf), size, fp) < size) {
+		fprintf(stderr, "Failed on file read\n");
+		fail();
+	}
+
+	return buffer_to_vector(buf, size);
+}
+
 static int
 read_line(char *input, int input_size) {
 	int i;
