@@ -160,7 +160,7 @@ function ascii_to_numbers(ascii) {
 	};
 }
 
-function hex_to_numbers(ascii) {
+function hex_to_byte_stream(ascii) {
 	var i = -2;
 
 	var hex_table = {
@@ -211,7 +211,7 @@ function hex_to_numbers(ascii) {
 }
 
 function hex_to_binary_stream(ascii) {
-	var pop = hex_to_numbers(ascii);
+	var pop = hex_to_byte_stream(ascii);
 	return byte_stream_to_binary_stream(pop);
 }
 

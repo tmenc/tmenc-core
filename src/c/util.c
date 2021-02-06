@@ -578,37 +578,63 @@ hex_to_byte(char hex_char) {
 	}
 }
 
+struct hex_to_byte_stream_closure {
+	int len;
+	int i;
+	char *buf;
+};
+
 static opaque
-hex_to_binary_stream_generator(void *state, bit *finished_q) {
-	stream *s = state;
-	byte_t count = 0;
-	byte_t acc = 0;
-	byte_t pow = 1;
+hex_to_byte_stream_generator(void *state, bit *finished_q) {
+	hex_to_byte_stream_closure *cl = state;
 	opaque ret;
-	bit b;
+	char x;
+	char y;
 
-	while (1) {
-		b = stream_read(s).binary;
-		if (stream_finished(s)) {
+	cl->i = cl->i + 2;
+	if (cl->i < cl->len) {
+		x = hex_to_byte(cl->buf[cl->i]);
+		y = 0;
+		if (cl->i + 1 < cl->len) {
+			y = hex_to_byte(cl->buf[cl->i + 1]);
+		}
+
 #ifdef DEBUG
-			if (!(count == 0)) {
-				fprintf(stderr, "NOT PADDED TO 8 BITS!\n");
-			}
+		if (x > 15 || y > 15) {
+			fprintf(stderr, "Expected hex character!\n");
+		}
 #endif
-			*finished_q = 1;
-			ret.other = NULL;
-			return ret;
-		}
 
-		acc += ((byte_t)b) * pow;
-		pow *= 2;
-		count++;
-
-		if (count == 8) {
-			ret.byte = acc;
-			return ret;
-		}
+		ret.byte = x * 16 + y;
+		return ret;
+	} else {
+		*finished_q = 1;
+		ret.other = NULL;
+		return ret;
 	}
+}
+
+static stream
+hex_to_byte_stream(char *hex) {
+	struct hex_to_byte_stream_closure *ctx;
+	stream ret;
+	int len = 0;
+
+	while (hex[len]) {
+		len++;
+	}
+	len++;
+
+	ctx = dynalloc(sizeof(struct hex_to_byte_stream_closure));
+	ctx->len = len;
+	ctx->i = -2;
+	ctx->buf = hex;
+
+	ret.finished_q = 0;
+	ret.state = ctx;
+	ret.generator = hex_to_byte_stream_generator;
+
+	return ret;
 }
 
 static void
