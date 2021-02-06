@@ -8,6 +8,35 @@
 int mode = 0;
 
 static
+fail(void) {
+	exit(1);
+}
+
+static
+char* read_file(char *path) {
+	int size;
+	char *buf;
+	FILE *fp = fopen(path, "rb");
+
+	fseek(fp, 0, SEEK_END);
+	size = ftell(fp);
+	fseek(fp, 0, SEEK_SET);
+
+	buf = malloc(size);
+	if (buf == NULL) {
+		fprintf(stderr, "Could not allocate enough memory\n");
+		fail();
+	}
+
+	if ((int)fread(buf, sizeof(*buf), size, fp) < size) {
+		fprintf(stderr, "Failed on file read\n");
+		fail();
+	}
+
+	return buf;
+}
+
+static
 int read_line(char *input, int input_size) {
 	int i;
 	int c;
@@ -35,11 +64,6 @@ void ask_user(char *what, char *where, int where_size) {
 }
 
 static
-fail(void) {
-	exit(1);
-}
-
-static
 int string_equal_p(char *a, char *b) {
 	return (strcmp(a, b) == 0);
 }
@@ -60,6 +84,8 @@ void encrypt_file(void) {
 	char input_file[512];
 	char output_file[512];
 
+	char *file_buffer;
+
 	ask_user("pass", pass, sizeof(pass));
 	ask_user("salt", salt, sizeof(salt));
 	ask_user("keyfile", keyfile, sizeof(keyfile));
@@ -68,6 +94,8 @@ void encrypt_file(void) {
 	ask_user("wrap_count", wrap_count, sizeof(wrap_count));
 	ask_user("input_file", input_file, sizeof(input_file));
 	ask_user("output_file", output_file, sizeof(output_file));
+
+	
 }
 
 static
