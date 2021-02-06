@@ -623,7 +623,6 @@ hex_to_byte_stream(char *ascii) {
 	while (ascii[len]) {
 		len++;
 	}
-	len++;
 
 	ctx = dynalloc(sizeof(struct hex_to_byte_stream_closure));
 	ctx->len = len;
