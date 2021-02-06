@@ -114,7 +114,7 @@ test-js-rng: build/test build/test/test-rng.js
 test-c-misc: build/test build/test/test-misc.exe
 	./build/test/test-misc.exe
 
-build/cli.c: src/c/cli.c src/c/machine.c src/c/util.c
+build/cli.c: src/c/machine.c src/c/util.c src/c/cli.c
 	cat $^ > $@
 
 build/cli.exe: build build/cli.c
