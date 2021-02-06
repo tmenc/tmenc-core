@@ -134,8 +134,8 @@ test-c-rng: build/test build/test/test-rng.exe
 
 test-js-cli: all
 	printf 'encrypt\n0a0bff\n0a0b00\nMakefile\n1000\n100\n3\ntest/testfile\nbuild/cli-encrypted\nEND' | $(NODE) build/cli.js
+	# diff -q test/testfile-encrypted build/cli-encrypted
 	printf 'decrypt\n0a0bff\nMakefile\nbuild/cli-encrypted\nbuild/cli-decrypted\nEND' | $(NODE) build/cli.js
-	# printf 'decrypt\n1\nLICENSE\nbuild/cli-encrypted\nbuild/cli-decrypted\nEND' | $(NODE) build/cli.js
 	diff -q test/testfile build/cli-decrypted
 
 generate-entropy: build/test build/test/test-entropy.exe

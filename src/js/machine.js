@@ -62,8 +62,6 @@ function make_tm(machine_bits) {
 	var machine_pos = 0;
 	var rng = 0;
 
-	console.log('machine_bits:', machine_bits);
-
 	function simple_rng(x) {
 		var mod = 4294967296; // 2 ^ 32
 		return (((x * 1664525) % mod) + 1013904223) % mod;
