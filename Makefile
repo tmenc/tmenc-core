@@ -121,8 +121,8 @@ build/cli.exe: build build/cli.c
 	$(CC) $(CFLAGS) -o $@ build/cli.c
 
 test-c-cli: build/cli.exe
-	printf 'encrypt\n0a0bff\n0a0b00\nMakefile\n1000\n100\n3\ntest/testfile\nbuild/cli-encrypted\nEND' | $(NODE) build/cli.js
-	printf 'decrypt\n0a0bff\nMakefile\nbuild/cli-encrypted\nbuild/cli-decrypted\nEND' | $(NODE) build/cli.js
+	printf 'encrypt\n0a0bff\n0a0b00\nMakefile\n1000\n100\n3\ntest/testfile\nbuild/cli-encrypted\nEND' | build/cli.exe
+	printf 'decrypt\n0a0bff\nMakefile\nbuild/cli-encrypted\nbuild/cli-decrypted\nEND' | build/cli.exe
 	diff -q test/testfile build/cli-decrypted
 
 test-c-misc: build/test build/test/test-misc.exe
