@@ -7,13 +7,13 @@
  * 2 - decrypt */
 int mode = 0;
 
-static
-void fail(void) {
+static void
+fail(void) {
 	exit(1);
 }
 
-static
-char* read_file(char *path) {
+static char*
+read_file(char *path) {
 	int size;
 	char *buf;
 	FILE *fp = fopen(path, "rb");
@@ -36,8 +36,8 @@ char* read_file(char *path) {
 	return buf;
 }
 
-static
-int read_line(char *input, int input_size) {
+static int
+read_line(char *input, int input_size) {
 	int i;
 	int c;
 
@@ -54,8 +54,8 @@ int read_line(char *input, int input_size) {
 	return 1;
 }
 
-static
-void ask_user(char *what, char *where, int where_size) {
+static void
+ask_user(char *what, char *where, int where_size) {
 	fprintf(stderr, "%s: ", what);
 	if (read_line(where, where_size)) {
 		fprintf(stderr, "Bad string. Maximum size is: %d\n", where_size - 1);
@@ -63,18 +63,18 @@ void ask_user(char *what, char *where, int where_size) {
 	}
 }
 
-static
-int string_equal_p(char *a, char *b) {
+static int
+string_equal_p(char *a, char *b) {
 	return (strcmp(a, b) == 0);
 }
 
-static
-void decrypt_file(void) {
+static void
+decrypt_file(void) {
 	/* TODO */
 }
 
-static
-void encrypt_file(void) {
+static void
+encrypt_file(void) {
 	char pass[512];
 	char salt[8192];
 	char keyfile[512];
@@ -86,6 +86,7 @@ void encrypt_file(void) {
 
 	char *keyfile_buffer;
 	char *input_file_buffer;
+	char *salt;
 
 	ask_user("pass", pass, sizeof(pass));
 	ask_user("salt", salt, sizeof(salt));
@@ -98,6 +99,7 @@ void encrypt_file(void) {
 
 	keyfile_buffer = read_file(keyfile);
 	input_file_buffer = read_file(input_file);
+	salt_s = binary_stream_to_bitarr(hex_to_binary_stream(salt));
 
 	(void)keyfile_buffer;
 	(void)input_file_buffer;
@@ -105,8 +107,8 @@ void encrypt_file(void) {
 	exit(1);
 }
 
-static
-void set_mode(void) {
+static void
+set_mode(void) {
 	char answer[20];
 	ask_user("entrypt/decrypt", answer, sizeof(answer));
 
@@ -120,8 +122,8 @@ void set_mode(void) {
 	}
 }
 
-static
-void entry(void) {
+static void
+entry(void) {
 	set_mode();
 	if (mode == 1) {
 		encrypt_file();
@@ -130,7 +132,8 @@ void entry(void) {
 	}
 }
 
-int main(int argc, char **argv) {
+int
+main(int argc, char **argv) {
 	entry();
 	return 0;
 }

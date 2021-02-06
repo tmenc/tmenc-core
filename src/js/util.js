@@ -161,7 +161,7 @@ function ascii_to_numbers(ascii) {
 }
 
 function hex_to_numbers(ascii) {
-	var i = -1;
+	var i = -2;
 
 	var hex_table = {
 		'0': 0,
@@ -189,13 +189,18 @@ function hex_to_numbers(ascii) {
 	};
 
 	function pop() {
-		i = i + 1;
+		i = i + 2;
 		if (i < ascii.length) {
 			var x = hex_table[ascii[i]];
-			if (x == undefined) {
+			var y = 0; // NOTE: this is padding. TODO: better solution?
+			if (i + 1 < ascii.length) {
+				y = hex_table[ascii[i + 1]];
+			}
+
+			if (x == undefined || y == undefined) {
 				throw "Expected hex character!";
 			} else {
-				return x;
+				return x * 16 + y;
 			}
 		} else {
 			return END_OF_STREAM_TOKEN;

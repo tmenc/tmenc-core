@@ -578,6 +578,44 @@ hex_to_byte(char hex_char) {
 	}
 }
 
+static opaque
+hex_to_binary_stream_generator(void *state, bit *finished_q) {
+	stream *s = state;
+	byte_t count = 0;
+	byte_t acc = 0;
+	byte_t pow = 1;
+	opaque ret;
+	bit b;
+
+	while (1) {
+		b = stream_read(s).binary;
+		if (stream_finished(s)) {
+#ifdef DEBUG
+			if (!(count == 0)) {
+				fprintf(stderr, "NOT PADDED TO 8 BITS!\n");
+			}
+#endif
+			*finished_q = 1;
+			ret.other = NULL;
+			return ret;
+		}
+
+		acc += ((byte_t)b) * pow;
+		pow *= 2;
+		count++;
+
+		if (count == 8) {
+			ret.byte = acc;
+			return ret;
+		}
+	}
+}
+
+static stream
+hex_to_binary_stream(char *ascii) {
+	
+}
+
 static void
 tm_stream_skip(stream *s, size_t input_wrap_count, size_t input_size, size_t wrap_count, size_t output_size) {
 	size_t skip_count = (input_wrap_count * input_size) + (wrap_count * output_size);
