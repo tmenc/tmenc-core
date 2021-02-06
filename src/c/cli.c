@@ -84,7 +84,7 @@ void encrypt_file(void) {
 	char input_file[512];
 	char output_file[512];
 
-	char *file_buffer;
+	char *keyfile_buffer;
 
 	ask_user("pass", pass, sizeof(pass));
 	ask_user("salt", salt, sizeof(salt));
@@ -95,7 +95,8 @@ void encrypt_file(void) {
 	ask_user("input_file", input_file, sizeof(input_file));
 	ask_user("output_file", output_file, sizeof(output_file));
 
-	
+	keyfile_buffer = read_file(keyfile);
+	input_file_buffer = read_file(input_file);
 }
 
 static
