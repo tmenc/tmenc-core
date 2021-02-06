@@ -114,6 +114,20 @@ test-js-rng: build/test build/test/test-rng.js
 test-c-misc: build/test build/test/test-misc.exe
 	./build/test/test-misc.exe
 
+build/cli.c: src/c/cli.c src/c/machine.c src/c/util.c
+	cat $^ > $@
+
+build/cli.exe: build build/cli.c
+	$(CC) $(CFLAGS) -o $@ build/cli.c
+
+test-c-cli: build/cli.exe
+	printf 'encrypt\n0a0bff\n0a0b00\nMakefile\n1000\n100\n3\ntest/testfile\nbuild/cli-encrypted\nEND' | $(NODE) build/cli.js
+	printf 'decrypt\n0a0bff\nMakefile\nbuild/cli-encrypted\nbuild/cli-decrypted\nEND' | $(NODE) build/cli.js
+	diff -q test/testfile build/cli-decrypted
+
+test-c-misc: build/test build/test/test-misc.exe
+	./build/test/test-misc.exe
+
 test-c-rng: build/test build/test/test-rng.exe
 	./build/test/test-rng.exe > build/test/test-c-rng.txt
 	diff -q test/rng-test-data.txt build/test/test-c-rng.txt
@@ -126,7 +140,7 @@ test-js-cli: all
 generate-entropy: build/test build/test/test-entropy.exe
 	./build/test/test-entropy.exe > build/test/entropy.txt
 
-build/test: build
+build/test:
 	mkdir -p $@ || true
 
 $(NIST_EXECUTABLE): $(NIST_MAKEFILE)

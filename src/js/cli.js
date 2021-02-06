@@ -80,23 +80,23 @@ function handle_file_buffer(encryptQ, pass_s, salt, file_buffer, machine_size, i
 }
 
 function encrypt_file() {
-	function read_cb(pass_s, salt_s, keyfile, machine_size_s, input_wrap_count_s, wrap_count_s, input_file, output_file) {
+	function read_cb(pass_s, salt_s, keyfile, machine_size, input_wrap_count_s, wrap_count_s, input_file, output_file) {
 		var keyfile_buffer = fs.readFileSync(keyfile);
 		var input_file_buffer = fs.readFileSync(input_file);
 		var salt = binary_stream_to_bitarr(hex_to_binary_stream(salt_s));
 		var input_file_stream = byte_stream_to_binary_stream(buffer_to_byte_stream(input_file_buffer));
 		var input_file_bitarr = binary_stream_to_bitarr(input_file_stream);
-		var machine_size = parseInt(machine_size_s);
+		var machine_size_int = parseInt(machine_size);
 		var input_wrap_count = parseInt(input_wrap_count_s);
 		var wrap_count = parseInt(wrap_count_s);
-		return handle_file_buffer(true, pass_s, salt, keyfile_buffer, machine_size, input_wrap_count, wrap_count, input_file_bitarr, output_file);
+		return handle_file_buffer(true, pass_s, salt, keyfile_buffer, machine_size_int, input_wrap_count, wrap_count, input_file_bitarr, output_file);
 	}
 
 	read_things(['pass', 'salt', 'keyfile', 'machine_size', 'input_wrap_count', 'wrap_count', 'input_file', 'output_file'], read_cb);
 }
 
 function decrypt_file() {
-	function read_cb(pass_s, keyfile, input_file, output_file) {
+	function read_cb(pass, keyfile, input_file, output_file) {
 		var keyfile_buffer = fs.readFileSync(keyfile);
 
 		var input_file_buffer = fs.readFileSync(input_file);
@@ -113,7 +113,7 @@ function decrypt_file() {
 		console.log('salt_len:', salt_len);
 		console.log('xored_len:', xored_len);
 
-		return handle_file_buffer(false, pass_s, salt, keyfile_buffer, machine_size, input_wrap_count, wrap_count, xored_bitarr, output_file);
+		return handle_file_buffer(false, pass, salt, keyfile_buffer, machine_size, input_wrap_count, wrap_count, xored_bitarr, output_file);
 	}
 	read_things(['pass', 'keyfile', 'input_file', 'output_file'], read_cb);
 }
