@@ -571,7 +571,7 @@ hex_to_byte(char hex_char) {
 		case 'F': return 15;
 		default: {
 #ifdef DEBUG
-			fprintf(stderr, "GOT A NON HEX CHAR!\n");
+			fprintf(stderr, "GOT A NON HEX CHAR <%c>(= %d)!\n", hex_char, hex_char);
 #endif
 			return 255;
 		}
