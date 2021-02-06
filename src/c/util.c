@@ -1,4 +1,4 @@
-#include <stdio.h>  /* getc, putc, fprintf */
+#include <stdio.h>  /* fprintf, fopen */
 
 /****************
  * SIZED BUFFER *

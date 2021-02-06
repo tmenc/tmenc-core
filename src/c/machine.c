@@ -1,5 +1,5 @@
 
-#define DEBUG
+/* #define DEBUG */
 #define TRACE_ALLOCATIONS
 
 #include <stdlib.h> /* malloc, free */
@@ -7,9 +7,12 @@
 #include <stdint.h> /* uint32_t */
 
 #ifdef DEBUG
-#include <stdio.h>  /* getc, putc, fprintf */
+#include <stdio.h>  /* fprintf */
 #include <assert.h>
 #include <string.h>
+#endif
+#ifdef TRACE_ALLOCATIONS
+#include <stdio.h>  /* fprintf */
 #endif
 
 /*********
