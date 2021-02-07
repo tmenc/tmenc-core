@@ -830,3 +830,61 @@ make_key(bitarr *pass_v, bitarr *salt_v, char *filepath, size_t size, size_t mac
 	return tm_get_stream_bitarr(&env_stream, input_wrap_count, input_size, wrap_count, size);
 }
 
+static void
+fail(void) {
+	exit(1);
+}
+
+static int
+parse_u16(char *str) {
+	int re;
+	int i;
+	int p = 1;
+	int c;
+	int u16_max = 1;
+
+	for (i = 0; i < 16; i++) {
+		u16_max *= 2;
+	}
+	u16_max--;
+
+	i = 0;
+	while (str[i]) {
+		i++;
+	}
+
+	while (--i + 1) {
+		switch (str[i]) {
+			case '0': c = 0; break;
+			case '1': c = 1; break;
+			case '2': c = 2; break;
+			case '3': c = 3; break;
+			case '4': c = 4; break;
+			case '5': c = 5; break;
+			case '6': c = 6; break;
+			case '7': c = 7; break;
+			case '8': c = 8; break;
+			case '9': c = 9; break;
+			default: return -1;
+		}
+
+		re += c * p;
+		if (re < 0 || re > u16_max) {
+			return -1;
+		}
+
+		p *= 10;
+	}
+
+	return re;
+}
+
+static int
+parse_u16_orfail(char *str) {
+	int re = parse_u16(str);
+	if (re < 0) {
+		fail();
+	}
+	return re;
+}
+

@@ -6,11 +6,6 @@
  * 2 - decrypt */
 int mode = 0;
 
-static void
-fail(void) {
-	exit(1);
-}
-
 static struct buffer
 read_file(char *path) {
 	int size;
@@ -92,6 +87,9 @@ encrypt_file(void) {
 	bitarr salt_s;
 	stream *input_file_byte_stream = dynalloc(sizeof(stream));
 	stream *input_file_stream = dynalloc(sizeof(stream));
+	bitarr *input_file_bitarr = dynalloc(sizeof(bitarr));
+	int machine_size_int;
+	int input_wrap_count_int;
 
 	ask_user("pass", pass, sizeof(pass));
 	ask_user("salt", salt, sizeof(salt));
@@ -103,15 +101,20 @@ encrypt_file(void) {
 	ask_user("output_file", output_file, sizeof(output_file));
 
 	keyfile_buffer = read_file(keyfile);
-	input_file_buffer = read_file(input_file);
+	input_file_buffer = read_file(input_file); /* TODO: don't store input file in memoery */
 	*salt_binary_stream = hex_to_binary_stream(salt);
 	salt_s = binary_stream_to_bitarr(salt_binary_stream);
 	*input_file_byte_stream = buffer_to_byte_stream(&input_file_buffer);
 	*input_file_stream = byte_stream_to_binary_stream(input_file_byte_stream);
+	*input_file_bitarr = binary_stream_to_bitarr(input_file_stream);
+	machine_size_int = parse_u16_orfail(machine_size);
+	input_wrap_count_int = parse_u16_orfail(input_wrap_count);
 
 	(void)keyfile_buffer;
 	(void)input_file_buffer;
 	(void)salt_s;
+	(void)machine_size_int;
+	(void)input_wrap_count_int;
 
 	exit(1);
 }
