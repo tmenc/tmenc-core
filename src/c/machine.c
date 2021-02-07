@@ -1,5 +1,5 @@
 
-/* #define DEBUG */
+#define DEBUG
 #define TRACE_ALLOCATIONS
 
 #include <stdlib.h> /* malloc, free */
