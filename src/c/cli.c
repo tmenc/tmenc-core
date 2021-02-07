@@ -90,6 +90,7 @@ encrypt_file(void) {
 	bitarr *input_file_bitarr = dynalloc(sizeof(bitarr));
 	int machine_size_int;
 	int input_wrap_count_int;
+	int wrap_count_int;
 
 	ask_user("pass", pass, sizeof(pass));
 	ask_user("salt", salt, sizeof(salt));
@@ -109,6 +110,7 @@ encrypt_file(void) {
 	*input_file_bitarr = binary_stream_to_bitarr(input_file_stream);
 	machine_size_int = parse_u16_orfail(machine_size);
 	input_wrap_count_int = parse_u16_orfail(input_wrap_count);
+	wrap_count_int = parse_u16_orfail(wrap_count);
 
 	(void)keyfile_buffer;
 	(void)input_file_buffer;
