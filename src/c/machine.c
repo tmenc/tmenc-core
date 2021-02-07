@@ -306,11 +306,15 @@ static opaque
 stream_read(stream *s) {
 	opaque ret;
 
+#ifdef DEBUG
 	if (s->finished_q) {
 		ret.other = NULL;
 	} else {
+#endif
 		ret = s->generator(s->state, &(s->finished_q));
+#ifdef DEBUG
 	}
+#endif
 
 	return ret;
 }
