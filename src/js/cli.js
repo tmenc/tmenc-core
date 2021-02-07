@@ -57,7 +57,7 @@ function handle_file_buffer(encryptQ, pass_s, salt, file_buffer, machine_size, i
 	var xored_stream = xor_with_key(key, input_file_bitarr);
 
 	if (encryptQ) {
-		var salt_stream = vector_to_stream(salt);
+		var salt_stream = bitarr_to_stream(salt);
 		var salt_len = salt.length;
 		var salt_len_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, salt_len);
 		var key_size_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, key_size);
@@ -106,7 +106,7 @@ function decrypt_file() {
 		var input_wrap_count = binary_stream_read_integer(SIZE_BLOCK_LEN, input_file_stream);
 		var wrap_count = binary_stream_read_integer(SIZE_BLOCK_LEN, input_file_stream);
 		var salt_len = binary_stream_read_integer(SIZE_BLOCK_LEN, input_file_stream);
-		var salt = stream_read_n_vector(salt_len, input_file_stream);
+		var salt = stream_read_n_bitarr(salt_len, input_file_stream);
 		var xored_len = binary_stream_read_integer(SIZE_BLOCK_LEN, input_file_stream);
 		var xored_bitarr = binary_stream_to_bitarr(stream_read_n_stream(xored_len, input_file_stream));
 

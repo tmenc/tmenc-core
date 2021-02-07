@@ -27,6 +27,10 @@ function vector_to_stream(vec) {
 	}
 }
 
+function bitarr_to_stream(arr) {
+	return vector_to_stream(bitarr_to_vector_inplace(arr));
+}
+
 function append_streams(streams_vector) {
 	var pos = 0;
 	var cur = streams_vector[0];
@@ -262,6 +266,10 @@ function stream_read_n_vector(n, stream) {
 	return vec;
 }
 
+function stream_read_n_bitarr(n, stream) {
+	return vector_to_bitarr_inplace(stream_read_n_vector(n, stream));
+}
+
 function stream_read_n_stream(n, stream) {
 	var i = -1;
 	return function() {
@@ -302,6 +310,10 @@ function buffer_to_byte_stream(js_Buffer) {
 
 function vector_to_bitarr_inplace(vec) {
 	return vec;
+}
+
+function bitarr_to_vector_inplace(arr) {
+	return arr;
 }
 
 function binary_stream_to_bitarr(stream) {
