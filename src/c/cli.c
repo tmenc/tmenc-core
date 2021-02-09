@@ -71,6 +71,14 @@ decrypt_file(void) {
 }
 
 static void
+handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfile_buffer, int machine_size, int input_wrap_count, int wrap_count, bitarr input_file_bitarr, char *output_file) {
+	bitarr pass = binary_stream_to_bitarr(hex_to_binary_stream(pass_s));
+	int key_size = bitarray_length(input_file_bitarr);
+
+	bitarr key = make_key_from_parameters(&pass, &salt, keyfile_buffer, machine_size, input_wrap_count, wrap_count, key_size);
+}
+
+static void
 encrypt_file(void) {
 	char pass[512];
 	char salt[8192];
@@ -84,7 +92,7 @@ encrypt_file(void) {
 	struct buffer keyfile_buffer;
 	struct buffer input_file_buffer;
 	stream *salt_binary_stream = dynalloc(sizeof(stream));
-	bitarr salt_s;
+	bitarr salt_a;
 	stream *input_file_byte_stream = dynalloc(sizeof(stream));
 	stream *input_file_stream = dynalloc(sizeof(stream));
 	bitarr *input_file_bitarr = dynalloc(sizeof(bitarr));
@@ -104,7 +112,7 @@ encrypt_file(void) {
 	keyfile_buffer = read_file(keyfile);
 	input_file_buffer = read_file(input_file); /* TODO: don't store input file in memoery */
 	*salt_binary_stream = hex_to_binary_stream(salt);
-	salt_s = binary_stream_to_bitarr(salt_binary_stream);
+	salt_a = binary_stream_to_bitarr(salt_binary_stream);
 	*input_file_byte_stream = buffer_to_byte_stream(&input_file_buffer);
 	*input_file_stream = byte_stream_to_binary_stream(input_file_byte_stream);
 	*input_file_bitarr = binary_stream_to_bitarr(input_file_stream);

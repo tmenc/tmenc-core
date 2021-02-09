@@ -23,7 +23,7 @@ tests: tests-build-js-srcs test-build-c-srcs
 
 test-all: test-nist-big test-nist-small js-hash test-changes
 
-test-changes: test-key-compatibility test-js-misc test-js-rng test-js-cli test-c-misc test-c-rng
+test-changes: test-key-compatibility test-js-misc test-js-rng test-js-cli test-c-misc test-c-rng test-js-cli
 
 tests-build-c-csrs: $(C_TEST_SRCS)
 tests-build-js-srcs: $(JS_TEST_SRCS)
@@ -127,9 +127,6 @@ test-c-cli: build/cli.exe
 	diff -q test/testfile-encrypted build/cli-encrypted-c
 	printf 'decrypt\n0a0bff\ntest/test-keyfile.txt\nbuild/cli-encrypted-c\nbuild/cli-decrypted-c\nEND' | build/cli.exe
 	diff -q test/testfile build/cli-decrypted-c
-
-test-c-misc: build/test build/test/test-misc.exe
-	./build/test/test-misc.exe
 
 test-c-rng: build/test build/test/test-rng.exe
 	./build/test/test-rng.exe > build/test/test-c-rng.txt
