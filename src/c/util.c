@@ -837,7 +837,7 @@ fail(void) {
 
 static int
 parse_u16(char *str) {
-	int re;
+	int re = 0;
 	int i;
 	int p = 1;
 	int c;
