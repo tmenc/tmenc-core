@@ -484,6 +484,7 @@ test_make_key()
 	bitarr key;
 	bitarr correct_v;
 	size_t i;
+	struct buffer keyfile_buffer;
 
 	pass_v = bitarray_alloc(8);
 	i = 0;
@@ -511,12 +512,13 @@ test_make_key()
 	bitarray_print(salt_v);
 
 	filepath = "test/testfile";
+	keyfile_buffer = read_file(filepath);
 	size = 12;
 	machine_size = 23;
 	input_wrap_count = 11;
 	wrap_count = 17;
 
-	key = make_key(&pass_v, &salt_v, filepath, size, machine_size, input_wrap_count, wrap_count);
+	key = make_key(&pass_v, &salt_v, keyfile_buffer, size, machine_size, input_wrap_count, wrap_count);
 
 	correct_v = bitarray_alloc(12);
 	i = 0;

@@ -6,51 +6,6 @@
  * 2 - decrypt */
 int mode = 0;
 
-static struct buffer
-read_file(char *path) {
-	int size;
-	char *buf;
-	FILE *fp = fopen(path, "rb");
-	struct buffer ret;
-
-	fseek(fp, 0, SEEK_END);
-	size = ftell(fp);
-	fseek(fp, 0, SEEK_SET);
-
-	buf = dynalloc(size);
-	if (buf == NULL) {
-		fprintf(stderr, "Could not allocate enough memory\n");
-		fail();
-	}
-
-	if ((int)fread(buf, sizeof(*buf), size, fp) < size) {
-		fprintf(stderr, "Failed on file read\n");
-		fail();
-	}
-
-	ret.memory = buf;
-	ret.size = size;
-	return ret;
-}
-
-static int
-read_line(char *input, int input_size) {
-	int i;
-	int c;
-
-	for (i = 0; i < input_size; i++) {
-		c = getc(stdin);
-		if (c == EOF || c == '\n' || c == '\0') {
-			input[i] = 0;
-			return 0;
-		}
-
-		input[i] = c;
-	}
-
-	return 1;
-}
-
 static void
 ask_user(char *what, char *where, int where_size) {
 	fprintf(stderr, "%s: ", what);
@@ -70,13 +25,15 @@ decrypt_file(void) {
 	/* TODO */
 }
 
-static void
-handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfile_buffer, int machine_size, int input_wrap_count, int wrap_count, bitarr input_file_bitarr, char *output_file) {
-	bitarr pass = binary_stream_to_bitarr(hex_to_binary_stream(pass_s));
-	int key_size = bitarray_length(input_file_bitarr);
+/* static void */
+/* handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfile_buffer, int machine_size, int input_wrap_count, int wrap_count, bitarr input_file_bitarr, char *output_file) { */
+/* 	/\* bitarr pass = binary_stream_to_bitarr(hex_to_binary_stream(pass_s)); *\/ */
+/* 	/\* int key_size = bitarray_length(input_file_bitarr); *\/ */
 
-	bitarr key = make_key_from_parameters(&pass, &salt, keyfile_buffer, machine_size, input_wrap_count, wrap_count, key_size);
-}
+/* 	/\* bitarr key = make_key(&pass, &salt, keyfile_buffer, machine_size, input_wrap_count, wrap_count, key_size); *\/ */
+
+/* 	/\* (void)key; *\/ */
+/* } */
 
 static void
 encrypt_file(void) {
@@ -122,9 +79,10 @@ encrypt_file(void) {
 
 	(void)keyfile_buffer;
 	(void)input_file_buffer;
-	(void)salt_s;
+	(void)salt_a;
 	(void)machine_size_int;
 	(void)input_wrap_count_int;
+	(void)wrap_count_int;
 
 	exit(1);
 }

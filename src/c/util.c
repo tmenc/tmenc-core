@@ -797,12 +797,12 @@ make_machine_from_secret(bitarr *salt_v, size_t machine_size)
 }
 
 static bitarr
-make_key(bitarr *pass_v, bitarr *salt_v, char *filepath, size_t size, size_t machine_size, size_t input_wrap_count, size_t wrap_count)
+make_key(bitarr *pass_v, bitarr *salt_v, struct buffer keyfile_buffer, size_t size, size_t machine_size, size_t input_wrap_count, size_t wrap_count)
 {
 	stream pass_stream;
 	stream salt_stream;
-	stream *file_byte_stream;
-	stream file_stream;
+	stream keyfile_byte_stream;
+	stream keyfile_stream;
 	bitarr machine_bits;
 	stream *input_stream_vec[3];
 	stream input_stream;
@@ -813,14 +813,14 @@ make_key(bitarr *pass_v, bitarr *salt_v, char *filepath, size_t size, size_t mac
 
 	pass_stream = bitarr_to_stream(pass_v);
 	salt_stream = bitarr_to_stream(salt_v);
-	file_byte_stream = file_to_byte_stream(filepath);
-	file_stream = byte_stream_to_binary_stream(file_byte_stream);
+	keyfile_byte_stream = buffer_to_byte_stream(&keyfile_buffer);
+	keyfile_stream = byte_stream_to_binary_stream(&keyfile_byte_stream);
 
 	machine_bits = make_machine_from_secret(salt_v, machine_size);
 
 	input_stream_vec[0] = &pass_stream;
 	input_stream_vec[1] = &salt_stream;
-	input_stream_vec[2] = &file_stream;
+	input_stream_vec[2] = &keyfile_stream;
 	input_stream = append_streams(3, input_stream_vec);
 	input_bits = binary_stream_to_bitarr(&input_stream); /* TODO: dont load file into memory */
 	input_cycle_stream = bitarr_to_cycle_stream(input_bits);
@@ -888,3 +888,47 @@ parse_u16_orfail(char *str) {
 	return re;
 }
 
+static struct buffer
+read_file(char *path) {
+	int size;
+	char *buf;
+	FILE *fp = fopen(path, "rb");
+	struct buffer ret;
+
+	fseek(fp, 0, SEEK_END);
+	size = ftell(fp);
+	fseek(fp, 0, SEEK_SET);
+
+	buf = dynalloc(size);
+	if (buf == NULL) {
+		fprintf(stderr, "Could not allocate enough memory\n");
+		fail();
+	}
+
+	if ((int)fread(buf, sizeof(*buf), size, fp) < size) {
+		fprintf(stderr, "Failed on file read\n");
+		fail();
+	}
+
+	ret.memory = buf;
+	ret.size = size;
+	return ret;
+}
+
+static int
+read_line(char *input, int input_size) {
+	int i;
+	int c;
+
+	for (i = 0; i < input_size; i++) {
+		c = getc(stdin);
+		if (c == EOF || c == '\n' || c == '\0') {
+			input[i] = 0;
+			return 0;
+		}
+
+		input[i] = c;
+	}
+
+	return 1;
+}
