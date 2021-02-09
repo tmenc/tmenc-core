@@ -31,7 +31,7 @@ handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfil
 	bitarr pass = binary_stream_to_bitarr(&pass_stream);
 	int key_size = bitarray_length(input_file_bitarr);
 
-	bitarr key = make_key(&pass, &salt, keyfile_buffer, machine_size, input_wrap_count, wrap_count, key_size);
+	bitarr key = make_key(&pass, &salt, keyfile_buffer, key_size, machine_size, input_wrap_count, wrap_count);
 
 	(void)key;
 }
