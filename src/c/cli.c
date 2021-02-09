@@ -25,15 +25,16 @@ decrypt_file(void) {
 	/* TODO */
 }
 
-/* static void */
-/* handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfile_buffer, int machine_size, int input_wrap_count, int wrap_count, bitarr input_file_bitarr, char *output_file) { */
-/* 	/\* bitarr pass = binary_stream_to_bitarr(hex_to_binary_stream(pass_s)); *\/ */
-/* 	/\* int key_size = bitarray_length(input_file_bitarr); *\/ */
+static void
+handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfile_buffer, int machine_size, int input_wrap_count, int wrap_count, bitarr input_file_bitarr, char *output_file) {
+	stream pass_stream = hex_to_binary_stream(pass_s);
+	bitarr pass = binary_stream_to_bitarr(&pass_stream);
+	int key_size = bitarray_length(input_file_bitarr);
 
-/* 	/\* bitarr key = make_key(&pass, &salt, keyfile_buffer, machine_size, input_wrap_count, wrap_count, key_size); *\/ */
+	bitarr key = make_key(&pass, &salt, keyfile_buffer, machine_size, input_wrap_count, wrap_count, key_size);
 
-/* 	/\* (void)key; *\/ */
-/* } */
+	(void)key;
+}
 
 static void
 encrypt_file(void) {
@@ -48,11 +49,11 @@ encrypt_file(void) {
 
 	struct buffer keyfile_buffer;
 	struct buffer input_file_buffer;
-	stream *salt_binary_stream = dynalloc(sizeof(stream));
+	stream salt_binary_stream;
 	bitarr salt_a;
-	stream *input_file_byte_stream = dynalloc(sizeof(stream));
-	stream *input_file_stream = dynalloc(sizeof(stream));
-	bitarr *input_file_bitarr = dynalloc(sizeof(bitarr));
+	stream input_file_byte_stream;
+	stream input_file_stream;
+	bitarr input_file_bitarr;
 	int machine_size_int;
 	int input_wrap_count_int;
 	int wrap_count_int;
@@ -68,21 +69,23 @@ encrypt_file(void) {
 
 	keyfile_buffer = read_file(keyfile);
 	input_file_buffer = read_file(input_file); /* TODO: don't store input file in memoery */
-	*salt_binary_stream = hex_to_binary_stream(salt);
-	salt_a = binary_stream_to_bitarr(salt_binary_stream);
-	*input_file_byte_stream = buffer_to_byte_stream(&input_file_buffer);
-	*input_file_stream = byte_stream_to_binary_stream(input_file_byte_stream);
-	*input_file_bitarr = binary_stream_to_bitarr(input_file_stream);
+	salt_binary_stream = hex_to_binary_stream(salt);
+	salt_a = binary_stream_to_bitarr(&salt_binary_stream);
+	input_file_byte_stream = buffer_to_byte_stream(&input_file_buffer);
+	input_file_stream = byte_stream_to_binary_stream(&input_file_byte_stream);
+	input_file_bitarr = binary_stream_to_bitarr(&input_file_stream);
 	machine_size_int = parse_u16_orfail(machine_size);
 	input_wrap_count_int = parse_u16_orfail(input_wrap_count);
 	wrap_count_int = parse_u16_orfail(wrap_count);
 
-	(void)keyfile_buffer;
-	(void)input_file_buffer;
-	(void)salt_a;
-	(void)machine_size_int;
-	(void)input_wrap_count_int;
-	(void)wrap_count_int;
+	/* (void)keyfile_buffer; */
+	/* (void)input_file_buffer; */
+	/* (void)salt_a; */
+	/* (void)machine_size_int; */
+	/* (void)input_wrap_count_int; */
+	/* (void)wrap_count_int; */
+
+	/* handle_file_buffer(1, pass, salt_a, keyfile_buffer, machine_size_int, input_wrap_count_int, wrap_count_int, input_file_bitarr, output_file); */
 
 	exit(1);
 }
