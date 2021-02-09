@@ -85,7 +85,7 @@ encrypt_file(void) {
 	/* (void)input_wrap_count_int; */
 	/* (void)wrap_count_int; */
 
-	/* handle_file_buffer(1, pass, salt_a, keyfile_buffer, machine_size_int, input_wrap_count_int, wrap_count_int, input_file_bitarr, output_file); */
+	handle_file_buffer(1, pass, salt_a, keyfile_buffer, machine_size_int, input_wrap_count_int, wrap_count_int, input_file_bitarr, output_file);
 
 	exit(1);
 }
