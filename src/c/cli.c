@@ -29,9 +29,16 @@ static void
 handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfile_buffer, int machine_size, int input_wrap_count, int wrap_count, bitarr input_file_bitarr, char *output_file) {
 	stream pass_stream = hex_to_binary_stream(pass_s);
 	bitarr pass = binary_stream_to_bitarr(&pass_stream);
-	/* int key_size = bitarray_length(input_file_bitarr); */
+	int key_size = bitarray_length(input_file_bitarr);
 
-	bitarr key = make_key(&pass, &salt, keyfile_buffer, 100, machine_size, input_wrap_count, wrap_count);
+	bitarr key = make_key(&pass, &salt, keyfile_buffer, key_size, machine_size, input_wrap_count, wrap_count);
+
+	printf("%d %d %d %d %d\n",
+		bitarray_at(key, 0),
+		bitarray_at(key, 1),
+		bitarray_at(key, 2),
+		bitarray_at(key, 3),
+		bitarray_at(key, 4));
 
 	(void)key;
 }
