@@ -827,10 +827,6 @@ make_key(bitarr *pass_v, bitarr *salt_v, struct buffer keyfile_buffer, size_t si
 
 	env_stream = make_tm_env(machine_bits, &input_cycle_stream);
 	input_size = bitarray_length(input_bits);
-
-	printf("EXIT2");
-	exit(1);
-
 	return tm_get_stream_bitarr(&env_stream, input_wrap_count, input_size, wrap_count, size);
 }
 
