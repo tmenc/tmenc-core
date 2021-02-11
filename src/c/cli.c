@@ -47,9 +47,19 @@ handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfil
 	if (encryptQ) {
 		stream salt_stream = bitarr_to_stream(&salt);
 		size_t salt_len = bitarray_length(salt);
+		stream salt_len_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, salt_len);
+		stream key_size_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, key_size);
+		stream machine_size_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, machine_size);
+		stream input_wrap_count_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, input_wrap_count);
+		stream wrap_count_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, wrap_count);
 
 		(void)salt_stream;
 		(void)salt_len;
+		(void)salt_len_stream;
+		(void)key_size_stream;
+		(void)machine_size_stream;
+		(void)input_wrap_count_stream;
+		(void)wrap_count_stream;
 	} else {
 		assert(0 && "TODO");
 	}
