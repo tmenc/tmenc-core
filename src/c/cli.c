@@ -53,13 +53,27 @@ handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfil
 		stream input_wrap_count_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, input_wrap_count);
 		stream wrap_count_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, wrap_count);
 
-		(void)salt_stream;
-		(void)salt_len;
-		(void)salt_len_stream;
-		(void)key_size_stream;
-		(void)machine_size_stream;
-		(void)input_wrap_count_stream;
-		(void)wrap_count_stream;
+		stream *combination[8];
+		int i = 0;
+		combination[i++] = &machine_size_stream;
+		combination[i++] = &input_wrap_count_stream;
+		combination[i++] = &wrap_count_stream;
+		combination[i++] = &salt_len_stream;
+		combination[i++] = &salt_stream;
+		combination[i++] = &key_size_stream;
+		combination[i++] = &xored_stream;
+		{
+			stream binary_stream = append_streams(i, combination);
+
+			(void)salt_stream;
+			(void)salt_len;
+			(void)salt_len_stream;
+			(void)key_size_stream;
+			(void)machine_size_stream;
+			(void)input_wrap_count_stream;
+			(void)wrap_count_stream;
+			(void)binary_stream;
+		}
 	} else {
 		assert(0 && "TODO");
 	}
