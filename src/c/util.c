@@ -1,7 +1,7 @@
 #include <stdio.h>  /* fprintf, fopen */
 
-size_t BLOCK_LEN = 8;
-size_t SIZE_BLOCK_LEN = 4 * BLOCK_LEN; /* 32 bit integer */
+#define BLOCK_LEN          8
+#define SIZE_BLOCK_LEN     (4 * BLOCK_LEN) /* 32 bit integer */
 
 /****************
  * SIZED BUFFER *
