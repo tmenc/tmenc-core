@@ -53,7 +53,7 @@ handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfil
 		stream input_wrap_count_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, input_wrap_count);
 		stream wrap_count_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, wrap_count);
 
-		stream *combination[8];
+		stream *combination[20];
 		int i = 0;
 		combination[i++] = &machine_size_stream;
 		combination[i++] = &input_wrap_count_stream;
