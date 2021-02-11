@@ -653,10 +653,10 @@ hex_to_byte(char hex_char) {
 		default: {
 			fprintf(stderr, "GOT A NON HEX CHAR <%c>(= %d)!\n", hex_char, hex_char);
 			debug_fail();
-			return 255;
 		}
 #endif
 	}
+	return 255;
 }
 
 struct hex_to_byte_stream_closure {

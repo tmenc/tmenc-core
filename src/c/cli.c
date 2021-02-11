@@ -71,7 +71,8 @@ handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfil
 			fclose(output_file);
 		}
 	} else {
-		assert(0 && "TODO");
+		puts("TODO");
+		fail();
 	}
 }
 

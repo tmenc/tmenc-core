@@ -1,5 +1,5 @@
 
-#define DEBUG
+/* #define DEBUG */
 
 #include <stdlib.h> /* malloc, free */
 #include <stddef.h> /* size_t */
