@@ -32,6 +32,7 @@ handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfil
 	int key_size = bitarray_length(input_file_bitarr);
 
 	bitarr key = make_key(&pass, &salt, keyfile_buffer, key_size, machine_size, input_wrap_count, wrap_count);
+	stream xored_stream = xor_with_key(key, input_file_bitarr);
 
 	printf("%d %d %d %d %d\n",
 		bitarray_at(key, 0),
@@ -84,13 +85,6 @@ encrypt_file(void) {
 	machine_size_int = parse_u16_orfail(machine_size);
 	input_wrap_count_int = parse_u16_orfail(input_wrap_count);
 	wrap_count_int = parse_u16_orfail(wrap_count);
-
-	/* (void)keyfile_buffer; */
-	/* (void)input_file_buffer; */
-	/* (void)salt_a; */
-	/* (void)machine_size_int; */
-	/* (void)input_wrap_count_int; */
-	/* (void)wrap_count_int; */
 
 	handle_file_buffer(1, pass, salt_a, keyfile_buffer, machine_size_int, input_wrap_count_int, wrap_count_int, input_file_bitarr, output_file);
 
