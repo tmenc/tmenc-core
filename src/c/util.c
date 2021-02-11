@@ -968,8 +968,8 @@ xor_with_key(bitarr a, bitarr b) {
 	struct xor_with_key_closure *ctx;
 
 #ifdef DEBUG
-	if (a.bit_size != b.bit_size) {
-		fprintf(stderr, "Must be same size, but got %d and %d\n", (int)a.bit_size, (int)b.bit_size);
+	if (bitarray_length(a) != bitarray_length(b)) {
+		fprintf(stderr, "Must be same size, but got %d and %d\n", (int)bitarray_length(a), (int)bitarray_length(b));
 		debug_fail();
 	}
 #endif

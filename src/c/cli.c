@@ -43,6 +43,16 @@ handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfil
 
 	(void)key;
 	(void)xored_stream;
+
+	if (encryptQ) {
+		stream salt_stream = bitarr_to_stream(&salt);
+		size_t salt_len = bitarray_length(salt);
+
+		(void)salt_stream;
+		(void)salt_len;
+	} else {
+		assert(0 && "TODO");
+	}
 }
 
 static void
