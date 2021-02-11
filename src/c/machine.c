@@ -10,6 +10,15 @@
 #include <stdio.h>  /* fprintf */
 #include <assert.h>
 #include <string.h>
+
+static void fail(void);
+
+static void
+debug_fail(void) {
+	assert(0 && 0);
+	fail();
+}
+
 #endif
 #ifdef TRACE_ALLOCATIONS
 #include <stdio.h>  /* fprintf */

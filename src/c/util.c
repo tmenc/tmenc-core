@@ -932,3 +932,50 @@ read_line(char *input, int input_size) {
 
 	return 1;
 }
+
+struct xor_with_key_closure {
+	bitarr a;
+	bitarr b;
+	size_t position;
+};
+
+static opaque
+xor_with_key_generator(void *state, bit *finished_q) {
+	struct xor_with_key_closure *ctx = state;
+	opaque ret;
+
+	if (ctx->position < ctx->a.bit_size) {
+		/* TODO: optimize this by xoring whole byte at once? */
+		ret.binary = bitarray_at(ctx->a, ctx->position) ^ bitarray_at(ctx->b, ctx->position);
+		ctx->position++;
+	} else {
+		*finished_q = 1;
+		ret.other = NULL;
+	}
+
+	return ret;
+}
+
+static stream
+xor_with_key(bitarr a, bitarr b) {
+	stream ret;
+	struct xor_with_key_closure *ctx;
+
+#ifdef DEBUG
+	if (a.bit_size != b.bit_size) {
+		fprintf(stderr, "Must be same size, but got %d and %d\n", (int)a.bit_size, (int)b.bit_size);
+		debug_fail();
+	}
+#endif
+
+	ctx = dynalloc(sizeof(struct xor_with_key_closure));
+	ctx->a = a;
+	ctx->b = b;
+	ctx->position = 0;
+
+	ret.finished_q = 0;
+	ret.state = ctx;
+	ret.generator = xor_with_key_generator;
+
+	return ret;
+}

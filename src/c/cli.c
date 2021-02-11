@@ -42,6 +42,7 @@ handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfil
 		bitarray_at(key, 4));
 
 	(void)key;
+	(void)xored_stream;
 }
 
 static void
