@@ -64,15 +64,9 @@ handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfil
 		combination[i++] = &xored_stream;
 		{
 			stream binary_stream = append_streams(i, combination);
+			stream padded_stream = pad_stream(BLOCK_LEN, &binary_stream);
 
-			(void)salt_stream;
-			(void)salt_len;
-			(void)salt_len_stream;
-			(void)key_size_stream;
-			(void)machine_size_stream;
-			(void)input_wrap_count_stream;
-			(void)wrap_count_stream;
-			(void)binary_stream;
+			(void)padded_stream;
 		}
 	} else {
 		assert(0 && "TODO");
