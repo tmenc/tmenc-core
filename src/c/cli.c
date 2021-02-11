@@ -26,7 +26,7 @@ decrypt_file(void) {
 }
 
 static void
-handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfile_buffer, int machine_size, int input_wrap_count, int wrap_count, bitarr input_file_bitarr, char *output_file) {
+handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfile_buffer, int machine_size, int input_wrap_count, int wrap_count, bitarr input_file_bitarr, FILE *output_file) {
 	stream pass_stream = hex_to_binary_stream(pass_s);
 	bitarr pass = binary_stream_to_bitarr(&pass_stream);
 	int key_size = bitarray_length(input_file_bitarr);
@@ -65,8 +65,10 @@ handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfil
 		{
 			stream binary_stream = append_streams(i, combination);
 			stream padded_stream = pad_stream(BLOCK_LEN, &binary_stream);
+			stream byte_stream = binary_stream_to_byte_stream(&padded_stream);
 
-			(void)padded_stream;
+			byte_stream_dump_to_file(&byte_stream, output_file);
+			fclose(output_file);
 		}
 	} else {
 		assert(0 && "TODO");
@@ -94,6 +96,7 @@ encrypt_file(void) {
 	int machine_size_int;
 	int input_wrap_count_int;
 	int wrap_count_int;
+	FILE *ofp;
 
 	ask_user("pass", pass, sizeof(pass));
 	ask_user("salt", salt, sizeof(salt));
@@ -103,6 +106,12 @@ encrypt_file(void) {
 	ask_user("wrap_count", wrap_count, sizeof(wrap_count));
 	ask_user("input_file", input_file, sizeof(input_file));
 	ask_user("output_file", output_file, sizeof(output_file));
+
+	ofp = fopen(output_file, "w");
+	if (ofp == NULL) {
+		fprintf(stderr, "Could not open output file\n");
+		fail();
+	}
 
 	keyfile_buffer = read_file(keyfile);
 	input_file_buffer = read_file(input_file); /* TODO: don't store input file in memoery */
@@ -115,9 +124,7 @@ encrypt_file(void) {
 	input_wrap_count_int = parse_u16_orfail(input_wrap_count);
 	wrap_count_int = parse_u16_orfail(wrap_count);
 
-	handle_file_buffer(1, pass, salt_a, keyfile_buffer, machine_size_int, input_wrap_count_int, wrap_count_int, input_file_bitarr, output_file);
-
-	exit(1);
+	handle_file_buffer(1, pass, salt_a, keyfile_buffer, machine_size_int, input_wrap_count_int, wrap_count_int, input_file_bitarr, ofp);
 }
 
 static void

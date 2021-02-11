@@ -988,3 +988,25 @@ xor_with_key(bitarr a, bitarr b) {
 
 	return ret;
 }
+
+static void
+byte_stream_dump_to_file(stream *s, FILE* fp) {
+	opaque x;
+
+	while (1) {
+		x = stream_read(s);
+		if (stream_finished(s)) {
+			fflush(fp);
+			return;
+		}
+
+		if(fputc(x.byte, fp) != x.byte) {
+#ifdef DEBUG
+			fprintf(stderr, "Error during file write: %s\n", strerror(errno));
+			debug_fail();
+#endif
+		}
+	}
+}
+
+

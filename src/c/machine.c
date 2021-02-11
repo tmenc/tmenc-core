@@ -12,6 +12,7 @@
 #include <stdio.h>  /* fprintf */
 #include <assert.h>
 #include <string.h>
+#include <errno.h> /* for errno */
 
 static void fail(void);
 
