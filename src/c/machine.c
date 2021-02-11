@@ -94,7 +94,7 @@ bitarray_at(bitarr arr, size_t at) {
 #ifdef DEBUG
 	if (at >= arr.bit_size) {
 		fprintf(stderr, "OUT OF BOUNDS: %lu ; BIT_SIZE = %lu\n", (unsigned long)at, (unsigned long)arr.bit_size);
-		assert(0);
+		debug_fail();
 	}
 #endif
 
@@ -113,7 +113,7 @@ bitarray_set_bit(bitarr arr, size_t at, bit value) {
 #ifdef DEBUG
 	if (at >= arr.bit_size) {
 		fprintf(stderr, "OUT OF BOUNDS: %lu ; BIT_SIZE = %lu\n", (unsigned long)at, (unsigned long)arr.bit_size);
-		assert(0);
+		debug_fail();
 	}
 #endif
 
@@ -140,7 +140,7 @@ bitarray_alloc(size_t bit_size) {
 	memset(ret.buffer, 0, size);
 	if (ret.buffer == NULL) {
 		fprintf(stderr, "COULD NOT ALLOCATE BUFFER OF SIZE %lu\n", (unsigned long)size);
-		assert(0);
+		debug_fail();
 	}
 #endif
 	ret.bit_capacity = size * CONTAINER_BITS;
@@ -350,6 +350,7 @@ tm_env_step(tm_env *env) {
 #ifdef DEBUG
 	if (stream_finished(env->input_stream)) {
 		fprintf(stderr, "tm input_stream finished but it should never do that\n");
+		debug_fail();
 	}
 #endif
 

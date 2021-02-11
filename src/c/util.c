@@ -32,6 +32,7 @@ bitarray_push(bitarr *arr, bit o) {
 #ifdef DEBUG
 		if (arr->buffer == NULL) {
 			fprintf(stderr, "COULD NOT GROW VECTOR TO SIZE %lu\n", (unsigned long)size);
+			debug_fail();
 		}
 #endif
 		arr->bit_capacity = size * CONTAINER_BITS;
@@ -69,6 +70,7 @@ vector_create_alloced(int size) {
 #ifdef DEBUG
 	if (ret.buffer == NULL) {
 		fprintf(stderr, "COULD NOT ALLOCATE EMPTY VECTOR\n");
+		debug_fail();
 	}
 #endif
 	return ret;
@@ -92,6 +94,7 @@ vector_push(vector *vec, opaque object) {
 #ifdef DEBUG
 		if (vec->buffer == NULL) {
 			fprintf(stderr, "COULD NOT GROW VECTOR TO SIZE %lu\n", (unsigned long)(vec->capacity));
+			debug_fail();
 		}
 #endif
 	}
@@ -588,6 +591,7 @@ binary_stream_to_byte_stream_generator(void *state, bit *finished_q) {
 #ifdef DEBUG
 			if (!(count == 0)) {
 				fprintf(stderr, "NOT PADDED TO 8 BITS!\n");
+				debug_fail();
 			}
 #endif
 			*finished_q = 1;
@@ -642,12 +646,13 @@ hex_to_byte(char hex_char) {
 		case 'E': return 14;
 		case 'f': return 15;
 		case 'F': return 15;
-		default: {
 #ifdef DEBUG
+		default: {
 			fprintf(stderr, "GOT A NON HEX CHAR <%c>(= %d)!\n", hex_char, hex_char);
-#endif
+			debug_fail();
 			return 255;
 		}
+#endif
 	}
 }
 
@@ -675,6 +680,7 @@ hex_to_byte_stream_generator(void *state, bit *finished_q) {
 #ifdef DEBUG
 		if (x > 15 || y > 15) {
 			fprintf(stderr, "Expected hex character!\n");
+			debug_fail();
 		}
 #endif
 
