@@ -1,12 +1,14 @@
 
 #define DEBUG
-#define TRACE_ALLOCATIONS
 
 #include <stdlib.h> /* malloc, free */
 #include <stddef.h> /* size_t */
 #include <stdint.h> /* uint32_t */
 
 #ifdef DEBUG
+
+#define TRACE_ALLOCATIONS
+
 #include <stdio.h>  /* fprintf */
 #include <assert.h>
 #include <string.h>
