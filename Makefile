@@ -125,8 +125,8 @@ build/cli.exe: build build/cli.c
 test-c-cli: build/cli.exe
 	printf 'encrypt\n0a0bff\n0a0b00\ntest/test-keyfile.txt\n1000\n100\n3\ntest/testfile\nbuild/cli-encrypted-c\nEND' | build/cli.exe
 	diff -q test/testfile-encrypted build/cli-encrypted-c
-	printf 'decrypt\n0a0bff\ntest/test-keyfile.txt\nbuild/cli-encrypted-c\nbuild/cli-decrypted-c\nEND' | build/cli.exe
-	diff -q test/testfile build/cli-decrypted-c
+	# printf 'decrypt\n0a0bff\ntest/test-keyfile.txt\nbuild/cli-encrypted-c\nbuild/cli-decrypted-c\nEND' | build/cli.exe
+	# diff -q test/testfile build/cli-decrypted-c
 
 test-c-rng: build/test build/test/test-rng.exe
 	./build/test/test-rng.exe > build/test/test-c-rng.txt
