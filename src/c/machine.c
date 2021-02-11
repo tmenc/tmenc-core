@@ -21,10 +21,6 @@ debug_fail(void) {
 	fail();
 }
 
-#ifdef TRACE_ALLOCATIONS
-#include <stdio.h>  /* fprintf */
-#endif
-
 #endif
 
 /*********
