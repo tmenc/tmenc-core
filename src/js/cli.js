@@ -101,7 +101,7 @@ function decrypt_file() {
 		var salt_len = binary_stream_read_integer(SIZE_BLOCK_LEN, input_file_stream);
 		var salt = stream_read_n_bitarr(salt_len, input_file_stream);
 		var xored_len = binary_stream_read_integer(SIZE_BLOCK_LEN, input_file_stream);
-		var xored_bitarr = binary_stream_to_bitarr(stream_read_n_stream(xored_len, input_file_stream));
+		var xored_bitarr = stream_read_n_bitarr(xored_len, input_file_stream);
 
 		console.log('salt_len:', salt_len);
 		console.log('xored_len:', xored_len);

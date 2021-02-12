@@ -81,6 +81,8 @@ decrypt_file(void) {
 	int input_wrap_count_int;
 	int wrap_count_int;
 	FILE *ofp;
+	int xored_len;
+	bitarr xored_bitarr;
 
 	ask_user("pass", pass, sizeof(pass));
 	ask_user("keyfile", keyfile, sizeof(keyfile));
@@ -102,6 +104,8 @@ decrypt_file(void) {
 	wrap_count_int = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
 	salt_len = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
 	salt_a = stream_read_n_bitarr(salt_len, &input_file_stream);
+	xored_len = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
+	xored_bitarr = stream_read_n_bitarr(xored_len, &input_file_stream);
 
 	/* salt_binary_stream = hex_to_binary_stream(salt); */
 	/* salt_a = binary_stream_to_bitarr(&salt_binary_stream); */
