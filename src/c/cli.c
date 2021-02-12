@@ -56,8 +56,10 @@ handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfil
 			fclose(output_file);
 		}
 	} else {
-		puts("TODO");
-		fail();
+		stream byte_stream = binary_stream_to_byte_stream(&xored_stream);
+
+		byte_stream_dump_to_file(&byte_stream, output_file);
+		fclose(output_file);
 	}
 }
 
