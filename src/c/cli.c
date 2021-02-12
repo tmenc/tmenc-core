@@ -110,6 +110,7 @@ decrypt_file(void) {
 	/* input_wrap_count_int = parse_u16_orfail(input_wrap_count); */
 	/* wrap_count_int = parse_u16_orfail(wrap_count); */
 
+	fprintf(stderr, "TODO\n");
 	exit(1);
 
 	/* handle_file_buffer(1, pass, salt_a, keyfile_buffer, machine_size_int, input_wrap_count_int, wrap_count_int, input_file_bitarr, ofp); */
