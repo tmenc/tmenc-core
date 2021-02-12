@@ -32,12 +32,10 @@ bitarray_push(bitarr *arr, bit o) {
 		new_bit_size = ((arr->bit_capacity) + 1) * 2;
 		size = bit_length_to_byte_length(new_bit_size);
 		arr->buffer = realloc(arr->buffer, size);
-#ifdef DEBUG
 		if (arr->buffer == NULL) {
 			fprintf(stderr, "COULD NOT GROW VECTOR TO SIZE %lu\n", (unsigned long)size);
-			debug_fail();
+			fail();
 		}
-#endif
 		arr->bit_capacity = size * CONTAINER_BITS;
 	}
 
@@ -70,12 +68,10 @@ vector_create_alloced(int size) {
 	ret.size = 0;
 	ret.capacity = size;
 	ret.buffer = dynalloc((ret.capacity) * sizeof(opaque));
-#ifdef DEBUG
 	if (ret.buffer == NULL) {
 		fprintf(stderr, "COULD NOT ALLOCATE EMPTY VECTOR\n");
-		debug_fail();
+		fail();
 	}
-#endif
 	return ret;
 }
 
@@ -94,12 +90,10 @@ vector_push(vector *vec, opaque object) {
 	if ((vec->size) >= (vec->capacity)) {
 		vec->capacity = (vec->capacity + 1) * 2;
 		vec->buffer = realloc(vec->buffer, (vec->capacity) * (sizeof(opaque)));
-#ifdef DEBUG
 		if (vec->buffer == NULL) {
 			fprintf(stderr, "COULD NOT GROW VECTOR TO SIZE %lu\n", (unsigned long)(vec->capacity));
-			debug_fail();
+			fail();
 		}
-#endif
 	}
 	vec->buffer[vec->size] = object;
 	vec->size++;
@@ -202,6 +196,31 @@ binary_stream_to_bitarr(stream *s) {
 
 		bitarray_push(&ret, x.binary);
 	}
+}
+
+/* NOTE: user must ensure that stream is binary! */
+static bitarr
+stream_read_n_bitarr(int n, stream *s) {
+	bitarr ret = bitarray_alloc(n);
+	opaque x;
+	int i;
+
+	if (stream_finished(s)) {
+		fprintf(stderr, "Bad input file\n");
+		fail();
+	}
+
+	for (i = 0; i < n; i++) {
+		x = stream_read(s);
+		if (stream_finished(s)) {
+			fprintf(stderr, "Bad input file\n");
+			fail();
+		}
+
+		bitarray_set_bit(&ret, i, x.binary);
+	}
+
+	return ret;
 }
 
 struct bitarr_to_stream_closure {
@@ -469,6 +488,35 @@ integer_to_binary_stream_reset(struct integer_to_binary_stream_s* s, size_t n) {
 	s->me.finished_q = 0;
 }
 
+/* Only positive */
+static int
+binary_stream_read_integer(int size, stream *s) {
+	int i;
+	int ret = 0;
+	bit x;
+	int p = 1;
+
+	if (stream_finished(s)) {
+		fprintf(stderr, "Bad input file\n");
+		fail();
+		return -1;
+	}
+
+	for (i = 0; i < size; i++) {
+		x = stream_read(s).binary;
+		if (stream_finished(s)) {
+			fprintf(stderr, "Bad input file\n");
+			fail();
+			return -1;
+		}
+
+		ret += p * x;
+		p *= 2;
+	}
+
+	return ret;
+}
+
 struct byte_stream_to_binary_stream_closure {
 	struct integer_to_binary_stream_s *conv;
 	stream *bytes;
@@ -591,12 +639,11 @@ binary_stream_to_byte_stream_generator(void *state, bit *finished_q) {
 	while (1) {
 		b = stream_read(s).binary;
 		if (stream_finished(s)) {
-#ifdef DEBUG
 			if (!(count == 0)) {
 				fprintf(stderr, "NOT PADDED TO 8 BITS!\n");
-				debug_fail();
+				fail();
 			}
-#endif
+
 			*finished_q = 1;
 			ret.other = NULL;
 			return ret;
@@ -649,14 +696,12 @@ hex_to_byte(char hex_char) {
 		case 'E': return 14;
 		case 'f': return 15;
 		case 'F': return 15;
-#ifdef DEBUG
 		default: {
 			fprintf(stderr, "GOT A NON HEX CHAR <%c>(= %d)!\n", hex_char, hex_char);
-			debug_fail();
+			fail();
+			return 255;
 		}
-#endif
 	}
-	return 255;
 }
 
 struct hex_to_byte_stream_closure {
@@ -1001,10 +1046,8 @@ byte_stream_dump_to_file(stream *s, FILE* fp) {
 		}
 
 		if(fputc(x.byte, fp) != x.byte) {
-#ifdef DEBUG
 			fprintf(stderr, "Error during file write: %s\n", strerror(errno));
-			debug_fail();
-#endif
+			fail();
 		}
 	}
 }
