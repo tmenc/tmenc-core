@@ -107,17 +107,10 @@ decrypt_file(void) {
 	xored_len = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
 	xored_bitarr = stream_read_n_bitarr(xored_len, &input_file_stream);
 
-	/* salt_binary_stream = hex_to_binary_stream(salt); */
-	/* salt_a = binary_stream_to_bitarr(&salt_binary_stream); */
-	/* input_file_bitarr = binary_stream_to_bitarr(&input_file_stream); */
-	/* machine_size_int = parse_u16_orfail(machine_size); */
-	/* input_wrap_count_int = parse_u16_orfail(input_wrap_count); */
-	/* wrap_count_int = parse_u16_orfail(wrap_count); */
+	handle_file_buffer(0, pass, salt_a, keyfile_buffer, machine_size_int, input_wrap_count_int, wrap_count_int, input_file_bitarr, ofp);
 
 	fprintf(stderr, "TODO\n");
 	exit(1);
-
-	/* handle_file_buffer(1, pass, salt_a, keyfile_buffer, machine_size_int, input_wrap_count_int, wrap_count_int, input_file_bitarr, ofp); */
 }
 
 static void
