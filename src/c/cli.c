@@ -1,5 +1,4 @@
 #include <stdio.h>  /* getc, putc, fprintf */
-#include <string.h>
 
 /* 0 - unknown
  * 1 - encrypt
@@ -10,12 +9,12 @@ static void
 ask_user(char *what, char *where, int where_size) {
 	fprintf(stderr, "%s: ", what);
 	if (read_line(where, where_size)) {
-		fprintf(stderr, "Bad string. Maximum size is: %d\n", where_size - 1);
+		fprintf(stderr, "bad string. maximum size is: %d\n", where_size - 1);
 		fail();
 	}
 }
 
-static int
+static bit
 string_equal_p(char *a, char *b) {
 	return (strcmp(a, b) == 0);
 }

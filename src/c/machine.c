@@ -49,7 +49,9 @@ typedef union opaque_u opaque;
 
 static void
 maybe_free(void *ptr) {
+#ifdef DEBUG
 	free(ptr);
+#endif
 }
 
 static void*
