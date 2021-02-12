@@ -833,9 +833,9 @@ tm_get_stream_bitarr(stream *s, size_t input_wrap_count, size_t input_size, size
 }
 
 static bitarr
-make_machine_from_secret(bitarr *salt_v, size_t machine_size)
+make_machine_from_secret(bitarr salt_v, size_t machine_size)
 {
-	size_t len = salt_v->bit_size;
+	size_t len = bitarray_length(salt_v);
 	bitarr output;
 	size_t i;
 	bit x;
@@ -843,7 +843,7 @@ make_machine_from_secret(bitarr *salt_v, size_t machine_size)
 	output = bitarray_alloc(machine_size);
 
 	for (i = 0; i < machine_size; i++) {
-		x = bitarray_at(*salt_v, i % len);
+		x = bitarray_at(salt_v, i % len);
 		bitarray_set_bit(output, i, x);
 	}
 
@@ -851,7 +851,7 @@ make_machine_from_secret(bitarr *salt_v, size_t machine_size)
 }
 
 static bitarr
-make_key(bitarr *pass_v, bitarr *salt_v, struct buffer keyfile_buffer, size_t size, size_t machine_size, size_t input_wrap_count, size_t wrap_count)
+make_key(bitarr pass_v, bitarr salt_v, struct buffer keyfile_buffer, size_t size, size_t machine_size, size_t input_wrap_count, size_t wrap_count)
 {
 	stream pass_stream;
 	stream salt_stream;
@@ -865,8 +865,8 @@ make_key(bitarr *pass_v, bitarr *salt_v, struct buffer keyfile_buffer, size_t si
 	stream env_stream;
 	size_t input_size;
 
-	pass_stream = bitarr_to_stream(pass_v);
-	salt_stream = bitarr_to_stream(salt_v);
+	pass_stream = bitarr_to_stream(&pass_v);
+	salt_stream = bitarr_to_stream(&salt_v);
 	keyfile_byte_stream = buffer_to_byte_stream(&keyfile_buffer);
 	keyfile_stream = byte_stream_to_binary_stream(&keyfile_byte_stream);
 
