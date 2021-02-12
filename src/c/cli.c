@@ -30,7 +30,7 @@ handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfil
 	stream xored_stream = xor_with_key(key, input_file_bitarr);
 
 	if (encryptQ) {
-		stream salt_stream = bitarr_to_stream(&salt);
+		stream salt_stream = bitarr_to_stream(salt);
 		size_t salt_len = bitarray_length(salt);
 		stream salt_len_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, salt_len);
 		stream key_size_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, key_size);

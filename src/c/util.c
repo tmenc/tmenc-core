@@ -224,7 +224,7 @@ stream_read_n_bitarr(int n, stream *s) {
 }
 
 struct bitarr_to_stream_closure {
-	bitarr *arr;
+	bitarr arr;
 	size_t i;
 };
 
@@ -233,8 +233,8 @@ bitarr_to_stream_generator(void *state, bit *finished_q) {
 	struct bitarr_to_stream_closure *ctx = state;
 	opaque ret;
 
-	if (ctx->i < ctx->arr->bit_size) {
-		ret.binary = bitarray_at(*(ctx->arr), ctx->i);
+	if (ctx->i < bitarray_length(ctx->arr)) {
+		ret.binary = bitarray_at(ctx->arr, ctx->i);
 		ctx->i = 1 + ctx->i;
 	} else {
 		*finished_q = 1;
@@ -246,7 +246,7 @@ bitarr_to_stream_generator(void *state, bit *finished_q) {
 }
 
 static stream
-bitarr_to_stream(bitarr *arr) {
+bitarr_to_stream(bitarr arr) {
 	struct bitarr_to_stream_closure *ctx;
 	stream ret;
 
@@ -865,8 +865,8 @@ make_key(bitarr pass_v, bitarr salt_v, struct buffer keyfile_buffer, size_t size
 	stream env_stream;
 	size_t input_size;
 
-	pass_stream = bitarr_to_stream(&pass_v);
-	salt_stream = bitarr_to_stream(&salt_v);
+	pass_stream = bitarr_to_stream(pass_v);
+	salt_stream = bitarr_to_stream(salt_v);
 	keyfile_byte_stream = buffer_to_byte_stream(&keyfile_buffer);
 	keyfile_stream = byte_stream_to_binary_stream(&keyfile_byte_stream);
 

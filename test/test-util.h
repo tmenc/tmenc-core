@@ -308,7 +308,7 @@ void test_binary_stream_to_byte_stream() {
 
 	bitarray_print(a);
 
-	bs2 = bitarr_to_stream(&a);
+	bs2 = bitarr_to_stream(a);
 	vs2 = binary_stream_to_byte_stream(&bs2);
 	v2 = stream_to_vector(&vs2);
 
@@ -518,7 +518,7 @@ test_make_key()
 	input_wrap_count = 11;
 	wrap_count = 17;
 
-	key = make_key(&pass_v, &salt_v, keyfile_buffer, size, machine_size, input_wrap_count, wrap_count);
+	key = make_key(pass_v, salt_v, keyfile_buffer, size, machine_size, input_wrap_count, wrap_count);
 
 	correct_v = bitarray_alloc(12);
 	i = 0;
