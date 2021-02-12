@@ -107,7 +107,7 @@ decrypt_file(void) {
 	xored_len = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
 	xored_bitarr = stream_read_n_bitarr(xored_len, &input_file_stream);
 
-	handle_file_buffer(0, pass, salt_a, keyfile_buffer, machine_size_int, input_wrap_count_int, wrap_count_int, input_file_bitarr, ofp);
+	handle_file_buffer(0, pass, salt_a, keyfile_buffer, machine_size_int, input_wrap_count_int, wrap_count_int, xored_bitarr, ofp);
 
 	fprintf(stderr, "TODO\n");
 	exit(1);
