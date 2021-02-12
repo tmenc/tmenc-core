@@ -23,7 +23,7 @@ tests: tests-build-js-srcs test-build-c-srcs
 
 test-all: test-quality test-changes
 test-quality: test-nist-big test-nist-small js-hash
-test-changes: test-key-compatibility test-js-misc test-js-rng test-js-cli test-c-misc test-c-rng test-js-cli test-c-cli
+test-changes: test-key-compatibility test-js-misc test-c-misc test-js-rng test-c-rng test-js-cli test-c-cli
 
 tests-build-c-csrs: $(C_TEST_SRCS)
 tests-build-js-srcs: $(JS_TEST_SRCS)
