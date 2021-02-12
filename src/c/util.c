@@ -217,7 +217,7 @@ stream_read_n_bitarr(int n, stream *s) {
 			fail();
 		}
 
-		bitarray_set_bit(&ret, i, x.binary);
+		bitarray_set_bit(ret, i, x.binary);
 	}
 
 	return ret;

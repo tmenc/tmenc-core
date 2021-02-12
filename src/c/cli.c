@@ -64,7 +64,6 @@ handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfil
 static void
 decrypt_file(void) {
 	char pass[512];
-	char salt[8192];
 	char keyfile[512];
 	char input_wrap_count[32];
 	char wrap_count[32];
@@ -73,7 +72,7 @@ decrypt_file(void) {
 
 	struct buffer keyfile_buffer;
 	struct buffer input_file_buffer;
-	stream salt_binary_stream;
+	int salt_len;
 	bitarr salt_a;
 	stream input_file_byte_stream;
 	stream input_file_stream;
@@ -102,7 +101,7 @@ decrypt_file(void) {
 	input_wrap_count_int = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
 	wrap_count_int = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
 	salt_len = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
-	salt = stream_read_n_bitarr(salt_len, &input_file_stream);
+	salt_a = stream_read_n_bitarr(salt_len, &input_file_stream);
 
 	/* salt_binary_stream = hex_to_binary_stream(salt); */
 	/* salt_a = binary_stream_to_bitarr(&salt_binary_stream); */
