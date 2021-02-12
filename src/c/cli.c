@@ -65,8 +65,6 @@ static void
 decrypt_file(void) {
 	char pass[512];
 	char keyfile[512];
-	char input_wrap_count[32];
-	char wrap_count[32];
 	char input_file[512];
 	char output_file[512];
 
@@ -76,7 +74,6 @@ decrypt_file(void) {
 	bitarr salt_a;
 	stream input_file_byte_stream;
 	stream input_file_stream;
-	bitarr input_file_bitarr;
 	int machine_size_int;
 	int input_wrap_count_int;
 	int wrap_count_int;
