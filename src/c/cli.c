@@ -20,12 +20,12 @@ string_equal_p(char *a, char *b) {
 }
 
 static void
-handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfile_buffer, int machine_size, int input_wrap_count, int wrap_count, bitarr input_file_bitarr, FILE *output_file) {
+handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfile_buffer, int input_wrap_count, int wrap_count, bitarr input_file_bitarr, FILE *output_file) {
 	stream pass_stream = hex_to_binary_stream(pass_s);
 	bitarr pass = binary_stream_to_bitarr(&pass_stream);
 	int key_size = bitarray_length(input_file_bitarr);
 
-	bitarr key = make_key(pass, salt, keyfile_buffer, key_size, machine_size, input_wrap_count, wrap_count);
+	bitarr key = make_key(pass, salt, keyfile_buffer, key_size, input_wrap_count, wrap_count);
 	stream xored_stream = xor_with_key(key, input_file_bitarr);
 
 	if (encryptQ) {
@@ -33,13 +33,11 @@ handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfil
 		size_t salt_len = bitarray_length(salt);
 		stream salt_len_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, salt_len);
 		stream key_size_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, key_size);
-		stream machine_size_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, machine_size);
 		stream input_wrap_count_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, input_wrap_count);
 		stream wrap_count_stream = integer_to_binary_stream(SIZE_BLOCK_LEN, wrap_count);
 
 		stream *combination[20];
 		int i = 0;
-		combination[i++] = &machine_size_stream;
 		combination[i++] = &input_wrap_count_stream;
 		combination[i++] = &wrap_count_stream;
 		combination[i++] = &salt_len_stream;
@@ -75,7 +73,6 @@ decrypt_file(void) {
 	bitarr salt_a;
 	stream input_file_byte_stream;
 	stream input_file_stream;
-	int machine_size_int;
 	int input_wrap_count_int;
 	int wrap_count_int;
 	FILE *ofp;
@@ -97,7 +94,6 @@ decrypt_file(void) {
 	input_file_buffer = read_file(input_file); /* TODO: don't store input file in memoery */
 	input_file_byte_stream = buffer_to_byte_stream(&input_file_buffer);
 	input_file_stream = byte_stream_to_binary_stream(&input_file_byte_stream);
-	machine_size_int = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
 	input_wrap_count_int = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
 	wrap_count_int = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
 	salt_len = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
@@ -105,7 +101,7 @@ decrypt_file(void) {
 	xored_len = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
 	xored_bitarr = stream_read_n_bitarr(xored_len, &input_file_stream);
 
-	handle_file_buffer(0, pass, salt_a, keyfile_buffer, machine_size_int, input_wrap_count_int, wrap_count_int, xored_bitarr, ofp);
+	handle_file_buffer(0, pass, salt_a, keyfile_buffer, input_wrap_count_int, wrap_count_int, xored_bitarr, ofp);
 }
 
 static void
@@ -113,7 +109,6 @@ encrypt_file(void) {
 	char pass[512];
 	char salt[8192];
 	char keyfile[512];
-	char machine_size[32];
 	char input_wrap_count[32];
 	char wrap_count[32];
 	char input_file[512];
@@ -126,7 +121,6 @@ encrypt_file(void) {
 	stream input_file_byte_stream;
 	stream input_file_stream;
 	bitarr input_file_bitarr;
-	int machine_size_int;
 	int input_wrap_count_int;
 	int wrap_count_int;
 	FILE *ofp;
@@ -134,7 +128,6 @@ encrypt_file(void) {
 	ask_user("pass", pass, sizeof(pass));
 	ask_user("salt", salt, sizeof(salt));
 	ask_user("keyfile", keyfile, sizeof(keyfile));
-	ask_user("machine_size", machine_size, sizeof(machine_size));
 	ask_user("input_wrap_count", input_wrap_count, sizeof(input_wrap_count));
 	ask_user("wrap_count", wrap_count, sizeof(wrap_count));
 	ask_user("input_file", input_file, sizeof(input_file));
@@ -153,11 +146,10 @@ encrypt_file(void) {
 	input_file_byte_stream = buffer_to_byte_stream(&input_file_buffer);
 	input_file_stream = byte_stream_to_binary_stream(&input_file_byte_stream);
 	input_file_bitarr = binary_stream_to_bitarr(&input_file_stream);
-	machine_size_int = parse_u16_orfail(machine_size);
 	input_wrap_count_int = parse_u16_orfail(input_wrap_count);
 	wrap_count_int = parse_u16_orfail(wrap_count);
 
-	handle_file_buffer(1, pass, salt_a, keyfile_buffer, machine_size_int, input_wrap_count_int, wrap_count_int, input_file_bitarr, ofp);
+	handle_file_buffer(1, pass, salt_a, keyfile_buffer, input_wrap_count_int, wrap_count_int, input_file_bitarr, ofp);
 }
 
 static void

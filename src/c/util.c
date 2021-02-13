@@ -833,25 +833,7 @@ tm_get_stream_bitarr(stream *s, size_t input_wrap_count, size_t input_size, size
 }
 
 static bitarr
-make_machine_from_secret(bitarr salt_v, size_t machine_size)
-{
-	size_t len = bitarray_length(salt_v);
-	bitarr output;
-	size_t i;
-	bit x;
-
-	output = bitarray_alloc(machine_size);
-
-	for (i = 0; i < machine_size; i++) {
-		x = bitarray_at(salt_v, i % len);
-		bitarray_set_bit(output, i, x);
-	}
-
-	return output;
-}
-
-static bitarr
-make_key(bitarr pass_v, bitarr salt_v, struct buffer keyfile_buffer, size_t size, size_t machine_size, size_t input_wrap_count, size_t wrap_count)
+make_key(bitarr pass_v, bitarr salt_v, struct buffer keyfile_buffer, size_t size, size_t input_wrap_count, size_t wrap_count)
 {
 	stream pass_stream;
 	stream salt_stream;
@@ -870,7 +852,7 @@ make_key(bitarr pass_v, bitarr salt_v, struct buffer keyfile_buffer, size_t size
 	keyfile_byte_stream = buffer_to_byte_stream(&keyfile_buffer);
 	keyfile_stream = byte_stream_to_binary_stream(&keyfile_byte_stream);
 
-	machine_bits = make_machine_from_secret(salt_v, machine_size);
+	machine_bits = salt_v;
 
 	input_stream_vec[0] = &pass_stream;
 	input_stream_vec[1] = &salt_stream;
@@ -946,8 +928,13 @@ static struct buffer
 read_file(char *path) {
 	int size;
 	char *buf;
-	FILE *fp = fopen(path, "rb");
 	struct buffer ret;
+	FILE *fp = fopen(path, "rb");
+
+	if (fp == NULL) {
+		fprintf(stderr, "Could not open file\n");
+		fail();
+	}
 
 	fseek(fp, 0, SEEK_END);
 	size = ftell(fp);
