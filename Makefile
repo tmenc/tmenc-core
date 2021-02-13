@@ -1,8 +1,11 @@
 
 HERE = $(PWD)
 CC = gcc
-CFLAGS = -std=c89 -Werror -Wall -pedantic -O0 -g -Wno-unused-function
-# CFLAGS = -Ofast
+
+FAST_FLAGS = -Ofast
+DEBUG_FLAGS = -std=c89 -Werror -Wall -pedantic -O0 -g -Wno-unused-function
+CFLAGS = $(DEBUG_FLAGS)
+# CFLAGS = $(FAST_FLAGS)
 
 NODE = node --trace-uncaught
 
@@ -23,7 +26,7 @@ tests: tests-build-js-srcs test-build-c-srcs
 
 test-all: test-changes test-quality
 test-quality:
-	$(MAKE) CFLAGS=-Ofast test-nist-big test-nist-small test-js-hash
+	$(MAKE) CFLAGS=$(FAST_FLAGS) test-nist-big test-nist-small test-js-hash
 test-changes: test-key-compatibility test-js-misc test-c-misc test-js-rng test-c-rng test-js-cli test-c-cli
 
 tests-build-c-csrs: $(C_TEST_SRCS)
@@ -49,7 +52,7 @@ benchmark-dirty:
 
 benchmark:
 	if [ -z "$(BENCHMARK_COMMIT)" ] ; then if ! [ -z "$$(git status --short 2>&1)" ] ; then echo "STASH CHANGES FIRST!" ; exit 1 ; fi ; fi
-	$(MAKE) 'CFLAGS=-Ofast' 'build/test/test-benchmark.exe'
+	$(MAKE) CFLAGS=$(FAST_FLAGS) 'build/test/test-benchmark.exe'
 
 	TRIMED=$$(python measure-time.py | tail -n 1) && \
 	echo "TIME: $$TRIMED" && \
@@ -62,11 +65,11 @@ benchmark:
 	true
 
 unchanged-referencefile:
-	$(MAKE) $(NIST_TEST_DATA_FILE) 'CFLAGS=-Ofast'
+	$(MAKE) $(NIST_TEST_DATA_FILE) CFLAGS=$(FAST_FLAGS)
 	mv $(NIST_TEST_DATA_FILE) $(NIST_TEST_DATA_FILE)-reference
 
 unchanged-checkfile-remake:
-	$(MAKE) $(NIST_TEST_DATA_FILE) 'CFLAGS=-Ofast'
+	$(MAKE) $(NIST_TEST_DATA_FILE) CFLAGS=$(FAST_FLAGS)
 	mv $(NIST_TEST_DATA_FILE) $(NIST_TEST_DATA_FILE)-check
 
 unchanged-checkfile:
@@ -79,7 +82,7 @@ unchanged-checkfile:
 
 unchanged-check:
 	$(MAKE) unchanged-checkfile
-	$(MAKE) $(NIST_TEST_DATA_FILE) 'CFLAGS=-Ofast'
+	$(MAKE) $(NIST_TEST_DATA_FILE) CFLAGS=$(FAST_FLAGS)
 	diff -q $(NIST_TEST_DATA_FILE) $(NIST_TEST_DATA_FILE)-check
 
 # ls -lh build/test/benchmark.bin
