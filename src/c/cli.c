@@ -30,10 +30,6 @@ handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfil
 	bitarr key = make_key(pass, salt, keyfile_buffer, key_size, input_wrap_count, wrap_count);
 	stream xored_stream = xor_with_key(key, input_file_bitarr);
 
-	printf("key = ");
-	bitarray_print(key);
-	printf("\n");
-
 	if (encryptQ) {
 		stream salt_stream = bitarr_to_stream(salt);
 		size_t salt_len = bitarray_length(salt);
