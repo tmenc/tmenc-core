@@ -864,6 +864,7 @@ make_key(bitarr pass_v, bitarr salt_v, struct buffer keyfile_buffer, size_t size
 	stream input_cycle_stream;
 	stream env_stream;
 	size_t input_size;
+	int i;
 
 	pass_stream = bitarr_to_stream(pass_v);
 	salt_stream = bitarr_to_stream(salt_v);
@@ -871,6 +872,12 @@ make_key(bitarr pass_v, bitarr salt_v, struct buffer keyfile_buffer, size_t size
 	keyfile_stream = byte_stream_to_binary_stream(&keyfile_byte_stream);
 
 	machine_bits = make_machine_from_secret(salt_v, bitarray_length(salt_v));
+
+	printf("machine_bits = ");
+	for (i = 0; i < bitarray_length(machine_bits); i++) {
+		printf("%d ", (int)bitarray_at(machine_bits, i));
+	}
+	printf("\n");
 
 	input_stream_vec[0] = &pass_stream;
 	input_stream_vec[1] = &salt_stream;
