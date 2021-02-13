@@ -117,7 +117,7 @@ function make_tm_env(machine_bits, input_stream) {
 		var memory_tape_register = double_tape_get(memory_tape);
 		var ret = tm(read_tape_bit, memory_tape_register);
 
-		var new_register_value = memory_tape_register + ret.increment_bit;
+		var new_register_value = (memory_tape_register + ret.increment_bit) % 65526;
 		double_tape_set(memory_tape, new_register_value);
 
 		if (ret.direction_bit == 0) {

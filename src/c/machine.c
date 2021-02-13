@@ -360,7 +360,7 @@ tm_env_step(tm_env *env) {
 
 	ret = machine_step(&(env->tm), read_tape_bit, memory_tape_register);
 
-	new_register_value = memory_tape_register + ret.increment_bit;
+	new_register_value = (memory_tape_register + ret.increment_bit) % 65526;
 	double_tape_set(env->memory_tape, new_register_value);
 
 	if (ret.direction_bit == 0) {
