@@ -336,6 +336,16 @@ function byte_stream_to_byte_buffer(stream) {
 	return buf;
 }
 
+function closest_power_of_two(x) {
+	var ret = 1;
+
+	while (ret < x) {
+		ret *= 2;
+	}
+
+	return ret;
+}
+
 function make_machine_from_secret(salt_vector, machine_size) {
 	var len = salt_vector.length;
 	var output = bitarray_alloc(machine_size);
@@ -380,7 +390,7 @@ function make_key(pass_v, salt_v, file_buffer, size, input_wrap_count, wrap_coun
 	var salt_stream = vector_to_stream(salt_v);
 	var file_v = binary_stream_to_bitarr(byte_stream_to_binary_stream(buffer_to_byte_stream(file_buffer)));
 	var file_stream = vector_to_stream(file_v);
-	var machine_bits = make_machine_from_secret(salt_v, bitarray_length(salt_v));
+	var machine_bits = make_machine_from_secret(salt_v, closest_power_of_two(bitarray_length(salt_v)));
 
 	var input_stream = append_streams([pass_stream, salt_stream, file_stream]);
 	var input_bits = binary_stream_to_bitarr(input_stream);

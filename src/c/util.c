@@ -839,6 +839,18 @@ tm_get_stream_bitarr(stream *s, size_t input_wrap_count, size_t input_size, size
 	return out;
 }
 
+static size_t
+closest_power_of_two(size_t x)
+{
+	size_t ret = 1;
+
+	while (ret < x) {
+		ret *= 2;
+	}
+
+	return ret;
+}
+
 static bitarr
 make_machine_from_secret(bitarr salt_v, size_t machine_size)
 {
@@ -877,7 +889,7 @@ make_key(bitarr pass_v, bitarr salt_v, struct buffer keyfile_buffer, size_t size
 	keyfile_byte_stream = buffer_to_byte_stream(&keyfile_buffer);
 	keyfile_stream = byte_stream_to_binary_stream(&keyfile_byte_stream);
 
-	machine_bits = make_machine_from_secret(salt_v, bitarray_length(salt_v));
+	machine_bits = make_machine_from_secret(salt_v, closest_power_of_two(bitarray_length(salt_v)));
 
 	input_stream_vec[0] = &pass_stream;
 	input_stream_vec[1] = &salt_stream;
