@@ -237,9 +237,9 @@ function test_make_key() {
 	var input_wrap_count = 11;
 	var wrap_count = 17;
 
-	var key = make_key(pass_v, salt_v, file_buffer, size, machine_size, input_wrap_count, wrap_count);
+	var key = make_key(pass_v, salt_v, file_buffer, size, input_wrap_count, wrap_count);
 	// console.log(key);
-	assert_arr_equal(key, [0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0]);
+	assert_arr_equal(key, [1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0]);
 }
 
 
