@@ -219,6 +219,7 @@ double_tape_set(double_tape *tape, size_t value) {
 
 struct tm_s {
 	size_t machine_len;
+	size_t machine_len_minus_1;
 	size_t machine_pos;
 	bitarr machine_bits;
 };
@@ -229,6 +230,7 @@ make_tm(bitarr machine_bits) {
 	struct tm_s me;
 
 	me.machine_len = bitarray_length(machine_bits);
+	me.machine_len_minus_1 = me.machine_len - 1;
 	me.machine_pos = 0;
 	me.machine_bits = machine_bits;
 
@@ -237,7 +239,7 @@ make_tm(bitarr machine_bits) {
 
 static void
 machine_advance(tm *me, size_t by) {
-	me->machine_pos = ((me->machine_pos) + by) & (me->machine_len - 1);
+	me->machine_pos = ((me->machine_pos) + by) & me->machine_len_minus_1;
 }
 
 static bit
