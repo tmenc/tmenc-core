@@ -73,7 +73,7 @@ function make_tm(machine_bits) {
 	}
 
 	function machine_advance(by) {
-		machine_pos = (machine_pos + by) % machine_len;
+		machine_pos = (machine_pos + by) & (machine_len - 1);
 	}
 
 	function machine_read() {
@@ -111,6 +111,10 @@ function make_tm(machine_bits) {
 function make_tm_env(machine_bits, input_stream) {
 	var tm = make_tm(machine_bits);
 	var memory_tape = double_tape_create();
+
+	if ((bitarray_length(machine_bits) & (bitarray_length(machine_bits) - 1)) != 0) {
+		throw "Machine size is not power of 2";
+	}
 
 	return function() {
 		var read_tape_bit = input_stream();
