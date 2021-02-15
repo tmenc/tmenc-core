@@ -451,16 +451,19 @@ static void
 test_basic_out()
 {
 	bit machine_bits_array[3] = { 1, 0, 1 };
+	bitarr machine_bits0;
 	bitarr machine_bits;
 	size_t i;
 	stream zero;
 	stream env_stream;
 	bit x;
 
-	machine_bits = bitarray_alloc(3);
+	machine_bits0 = bitarray_alloc(3);
 	for (i = 0; i < 3; i++) {
-		bitarray_set_bit(machine_bits, i, machine_bits_array[i]);
+		bitarray_set_bit(machine_bits0, i, machine_bits_array[i]);
 	}
+
+	machine_bits = make_machine_from_secret(machine_bits0, closest_power_of_two(bitarray_length(machine_bits0)));
 
 	zero = const_zero_stream();
 
