@@ -237,7 +237,7 @@ make_tm(bitarr machine_bits) {
 
 static void
 machine_advance(tm *me, size_t by) {
-	me->machine_pos = ((me->machine_pos) + by) % (me->machine_len);
+	me->machine_pos = ((me->machine_pos) + by) & (me->machine_len - 1);
 }
 
 static bit
@@ -384,6 +384,14 @@ static stream
 make_tm_env(bitarr machine_bits, stream *input_stream) {
 	tm_env *env;
 	stream ret;
+
+#ifdef DEBUG
+	/* Check if power of 2 */
+	if ((bitarray_length(machine_bits) & (bitarray_length(machine_bits) - 1)) != 0) {
+		fprintf(stderr, "Machine size is not power of 2\n");
+		debug_fail();
+	}
+#endif
 
 	rng = 0;
 	env = dynalloc(sizeof(tm_env));
