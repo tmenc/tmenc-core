@@ -814,6 +814,7 @@ file_to_byte_stream(char *filepath) {
 	FILE *fp = fopen(filepath, "rb");
 	if (fp == NULL) {
 		fprintf(stderr, "COULD NOT OPEN FILE %s!\n", filepath);
+		fail();
 		return NULL;
 	}
 
