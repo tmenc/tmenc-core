@@ -1073,6 +1073,7 @@ byte_stream_dump_to_file(stream *s, FILE* fp) {
 		if(fputc(x.byte, fp) != x.byte) {
 			fprintf(stderr, "Error during file write: %s\n", strerror(errno));
 			fail();
+			return;
 		}
 	}
 }
