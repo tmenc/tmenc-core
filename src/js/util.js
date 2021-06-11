@@ -3,6 +3,14 @@ function END_OF_STREAM_TOKEN() {
 	return END_OF_STREAM_TOKEN;
 }
 
+function buffer_from_string(str) {
+	var vec = [];
+	for (var i = 0; i < str.length; i++) {
+		vec.push(str.charCodeAt(i));
+	}
+	return new Uint8Array(vec);
+}
+
 function stream_to_vector(pop) {
 	var vec = [];
 	while (true) {
@@ -97,6 +105,11 @@ function byte_stream_to_binary_stream(pop) {
 			return x;
 		}
 	};
+}
+
+function buffer_to_binary_stream(buf) {
+	var bytes = buffer_to_byte_stream(buf);
+	return byte_stream_to_binary_stream(bytes);
 }
 
 function pad_stream(block_size, stream) {
@@ -412,7 +425,8 @@ function xor_with_key(key_tape, input_file_bitarr) {
 }
 
 function handle_file_buffer(encryptQ, pass_s, salt, keyfile_buffer, input_wrap_count, wrap_count, input_file_bitarr, output_cb) {
-	var pass = binary_stream_to_bitarr(hex_to_binary_stream(pass_s));
+	var pass_buf = buffer_from_string(pass_s);
+	var pass = binary_stream_to_bitarr(buffer_to_binary_stream(pass_buf));
 	var key_size = bitarray_length(input_file_bitarr);
 
 	var key = make_key(pass, salt, keyfile_buffer, key_size, input_wrap_count, wrap_count);
