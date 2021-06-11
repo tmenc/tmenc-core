@@ -967,7 +967,7 @@ normalize_text_buffer(struct buffer buf) {
 		}
 	}
 
-	buf.size = i;
+	buf.size = k;
 }
 
 static size_t
