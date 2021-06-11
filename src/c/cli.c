@@ -1,7 +1,5 @@
 #include <stdio.h>  /* getc, putc, fprintf */
 
-#include "../test/test-util.h"
-
 /* 0 - unknown
  * 1 - encrypt
  * 2 - decrypt */
