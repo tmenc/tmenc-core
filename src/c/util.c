@@ -890,6 +890,10 @@ make_machine_from_secret(bitarr salt_v, size_t machine_size)
 
 	output = bitarray_alloc(machine_size);
 
+	if (len < machine_size) {
+		fprintf(stderr, "Padding SALT from %d to %d\n", (int)len, (int)machine_size);
+	}
+
 	for (i = 0; i < machine_size; i++) {
 		x = bitarray_at(salt_v, i % len);
 		bitarray_set_bit(output, i, x);
