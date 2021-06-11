@@ -401,6 +401,19 @@ function make_key(pass_v, salt_v, file_buffer, size, input_wrap_count, wrap_coun
 	return tm_get_stream_bitarr(env_stream, input_wrap_count, input_size, wrap_count, size);
 }
 
+var BLOCK_LEN = 8;
+var SIZE_BLOCK_LEN = 4 * BLOCK_LEN; // 32 bit integer
+
+function xor_with_key(key_tape, input_file_bitarr) {
+	var key_size = bitarray_length(key_tape);
+	function xorer(i) {
+		return key_tape[i] ^ bitarray_at(input_file_bitarr, i);
+	}
+
+	var xored_stream = stream_map(stream_range(key_size), xorer);
+	return xored_stream;
+}
+
 function handle_file_buffer(encryptQ, pass_s, salt, keyfile_buffer, input_wrap_count, wrap_count, input_file_bitarr, output_file) {
 	var pass = binary_stream_to_bitarr(hex_to_binary_stream(pass_s));
 	var key_size = bitarray_length(input_file_bitarr);

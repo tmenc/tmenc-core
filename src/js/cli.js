@@ -8,9 +8,6 @@ var rl = readline.createInterface({
 	terminal: false,
 });
 
-var BLOCK_LEN = 8;
-var SIZE_BLOCK_LEN = 4 * BLOCK_LEN; // 32 bit integer
-
 function read_things(keys, callback) {
 	var i = 0;
 	var arr = [];
@@ -26,16 +23,6 @@ function read_things(keys, callback) {
 	}
 
 	rl.question(keys[0] + ': ', rlcb);
-}
-
-function xor_with_key(key_tape, input_file_bitarr) {
-	var key_size = bitarray_length(key_tape);
-	function xorer(i) {
-		return key_tape[i] ^ bitarray_at(input_file_bitarr, i);
-	}
-
-	var xored_stream = stream_map(stream_range(key_size), xorer);
-	return xored_stream;
 }
 
 function encrypt_file() {
