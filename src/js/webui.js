@@ -41,7 +41,7 @@ function read_keyfile_cb(pass, keyfile_buffer, input_file_buffer) {
 }
 
 function read_input_file_cb(e) {
-	var input_file_buffer = e.target.result;
+	var input_file_buffer = new Uint8Array(e.target.result);
 	var pass = document.getElementById('pinput').value;
 
 	var keyObject = document.getElementById('key_input');
@@ -51,7 +51,7 @@ function read_input_file_cb(e) {
 	if (file) {
 		 var reader = new FileReader();
 		 reader.onload = function (e) {
-			 var keyfile_buffer = e.target.result;
+			 var keyfile_buffer = new Uint8Array(e.target.result);
 			 read_keyfile_cb(pass, keyfile_buffer, input_file_buffer);
 		 }
 		 reader.readAsArrayBuffer(file);
