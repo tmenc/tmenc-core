@@ -39,7 +39,7 @@ printf "output_file: "
 read OUTPUT_FILE
 
 printf \
-	"%s%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
+	"%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
 	"encrypt" \
 	"$PASS" \
 	"$SALT" \
