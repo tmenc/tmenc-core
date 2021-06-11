@@ -37,7 +37,7 @@ function read_keyfile_cb(pass, keyfile_buffer, input_file_buffer) {
 		document.getElementById('main_out').innerHTML = out_string;
 	}
 
-	encrypt(pass, keyfile_buffer, input_file_buffer, output_cb);
+	decrypt(pass, keyfile_buffer, input_file_buffer, output_cb);
 }
 
 function read_input_file_cb(e) {
