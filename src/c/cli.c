@@ -193,7 +193,7 @@ get_file_info(void) {
 static void
 set_mode(void) {
 	char answer[20];
-	ask_user("entrypt/decrypt", answer, sizeof(answer));
+	ask_user("entrypt/decrypt/get_file_info", answer, sizeof(answer));
 
 	if (string_equal_p(answer, "encrypt")) {
 		mode = 1;
