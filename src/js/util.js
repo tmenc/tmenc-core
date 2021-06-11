@@ -326,15 +326,7 @@ function buffer_to_vector(buffer) {
 }
 
 function byte_stream_to_byte_buffer(stream) {
-	var vec = stream_to_vector(stream);
-	var size = vec.length;
-	var buf = Buffer.alloc(size);
-
-	for (var i = 0; i < size; i++) {
-		var x = vec[i];
-		buf.writeUInt8(x, i);
-	}
-	return buf;
+	return new Uint8Array(stream_to_vector(stream));
 }
 
 function closest_power_of_two(x) {
