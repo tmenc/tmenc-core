@@ -161,6 +161,36 @@ encrypt_file(void) {
 }
 
 static void
+get_file_info(void) {
+	char input_file[512];
+
+	struct buffer input_file_buffer;
+	int salt_len;
+	bitarr salt_a;
+	stream input_file_byte_stream;
+	stream input_file_stream;
+	int input_wrap_count_int;
+	int wrap_count_int;
+	int xored_len;
+
+	ask_user("input_file", input_file, sizeof(input_file));
+
+	input_file_buffer = read_file(input_file); /* TODO: don't store input file in memoery */
+	input_file_byte_stream = buffer_to_byte_stream(&input_file_buffer);
+	input_file_stream = byte_stream_to_binary_stream(&input_file_byte_stream);
+	salt_len = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
+	salt_a = stream_read_n_bitarr(salt_len, &input_file_stream);
+	input_wrap_count_int = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
+	wrap_count_int = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
+	xored_len = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
+
+	/* TODO: fprintf(stdout, "SALT=%s", salt_a); */ (void)salt_a;
+	fprintf(stdout, "INPUT_WRAP_COUNT= %d\n", input_wrap_count_int);
+	fprintf(stdout, "WRAP_COUNT= %d\n", wrap_count_int);
+	fprintf(stdout, "XORED_LEN= %d\n", xored_len);
+}
+
+static void
 set_mode(void) {
 	char answer[20];
 	ask_user("entrypt/decrypt", answer, sizeof(answer));
@@ -169,6 +199,8 @@ set_mode(void) {
 		mode = 1;
 	} else if (string_equal_p(answer, "decrypt")) {
 		mode = 2;
+	} else if (string_equal_p(answer, "get_file_info")) {
+		mode = 3;
 	} else {
 		fprintf(stderr, "Expected encrypt or decrypt, got %s\n", answer);
 		fail();
@@ -180,8 +212,10 @@ entry(void) {
 	set_mode();
 	if (mode == 1) {
 		encrypt_file();
-	} else {
+	} else if (mode == 2) {
 		decrypt_file();
+	} else if (mode == 3) {
+		get_file_info();
 	}
 }
 
