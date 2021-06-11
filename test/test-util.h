@@ -524,17 +524,17 @@ test_make_key()
 	correct_v = bitarray_alloc(12);
 	i = 0;
 	bitarray_set_bit(correct_v, i++, 1);
-	bitarray_set_bit(correct_v, i++, 0);
-	bitarray_set_bit(correct_v, i++, 0);
 	bitarray_set_bit(correct_v, i++, 1);
 	bitarray_set_bit(correct_v, i++, 1);
 	bitarray_set_bit(correct_v, i++, 0);
+	bitarray_set_bit(correct_v, i++, 1);
+	bitarray_set_bit(correct_v, i++, 0);
+	bitarray_set_bit(correct_v, i++, 0);
+	bitarray_set_bit(correct_v, i++, 1);
 	bitarray_set_bit(correct_v, i++, 0);
 	bitarray_set_bit(correct_v, i++, 1);
 	bitarray_set_bit(correct_v, i++, 1);
 	bitarray_set_bit(correct_v, i++, 1);
-	bitarray_set_bit(correct_v, i++, 1);
-	bitarray_set_bit(correct_v, i++, 0);
 
 	bitarray_print(key);
 	bitarray_print(correct_v);
