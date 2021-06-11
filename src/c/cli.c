@@ -60,6 +60,21 @@ handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfil
 	}
 }
 
+static FILE*
+open_file(char *path) {
+	if (string_equal_p("-", path)) {
+		return stdout;
+	} else {
+		FILE* ret = fopen(path, "w");
+		if (ret == NULL) {
+			fprintf(stderr, "Could not open output file\n");
+			fail();
+		}
+
+		return ret;
+	}
+}
+
 static void
 decrypt_file(void) {
 	char pass[512];
@@ -84,11 +99,7 @@ decrypt_file(void) {
 	ask_user("input_file", input_file, sizeof(input_file));
 	ask_user("output_file", output_file, sizeof(output_file));
 
-	ofp = fopen(output_file, "w");
-	if (ofp == NULL) {
-		fprintf(stderr, "Could not open output file\n");
-		fail();
-	}
+	ofp = open_file(output_file);
 
 	keyfile_buffer = read_file(keyfile);
 	input_file_buffer = read_file(input_file); /* TODO: don't store input file in memoery */
@@ -133,11 +144,7 @@ encrypt_file(void) {
 	ask_user("input_file", input_file, sizeof(input_file));
 	ask_user("output_file", output_file, sizeof(output_file));
 
-	ofp = fopen(output_file, "w");
-	if (ofp == NULL) {
-		fprintf(stderr, "Could not open output file\n");
-		fail();
-	}
+	ofp = open_file(output_file);
 
 	keyfile_buffer = read_file(keyfile);
 	input_file_buffer = read_file(input_file); /* TODO: don't store input file in memoery */
