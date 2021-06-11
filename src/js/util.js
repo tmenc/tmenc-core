@@ -343,6 +343,10 @@ function make_machine_from_secret(salt_vector, machine_size) {
 	var len = salt_vector.length;
 	var output = bitarray_alloc(machine_size);
 
+	if (len < machine_size) {
+		console.log("Padding SALT from", len, "to", machine_size);
+	}
+
 	for (var i = 0; i < machine_size; i++) {
 		bitarray_set_bit(output, i, salt_vector[i % len]);
 	}
