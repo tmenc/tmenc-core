@@ -883,6 +883,93 @@ tm_get_stream_bitarr(stream *s, size_t input_wrap_count, size_t input_size, size
 	return out;
 }
 
+static char
+normalize_text_char(char c) {
+	switch (c) {
+		case 'a': return 'a';
+		case 'b': return 'b';
+		case 'c': return 'c';
+		case 'd': return 'd';
+		case 'e': return 'e';
+		case 'f': return 'f';
+		case 'g': return 'g';
+		case 'h': return 'h';
+		case 'i': return 'i';
+		case 'j': return 'j';
+		case 'k': return 'k';
+		case 'l': return 'l';
+		case 'm': return 'm';
+		case 'n': return 'n';
+		case 'o': return 'o';
+		case 'p': return 'p';
+		case 'q': return 'q';
+		case 'r': return 'r';
+		case 's': return 's';
+		case 't': return 't';
+		case 'u': return 'u';
+		case 'v': return 'v';
+		case 'w': return 'w';
+		case 'x': return 'x';
+		case 'y': return 'y';
+		case 'z': return 'z';
+
+		case 'A': return 'a';
+		case 'B': return 'b';
+		case 'C': return 'c';
+		case 'D': return 'd';
+		case 'E': return 'e';
+		case 'F': return 'f';
+		case 'G': return 'g';
+		case 'H': return 'h';
+		case 'I': return 'i';
+		case 'J': return 'j';
+		case 'K': return 'k';
+		case 'L': return 'l';
+		case 'M': return 'm';
+		case 'N': return 'n';
+		case 'O': return 'o';
+		case 'P': return 'p';
+		case 'Q': return 'q';
+		case 'R': return 'r';
+		case 'S': return 's';
+		case 'T': return 't';
+		case 'U': return 'u';
+		case 'V': return 'v';
+		case 'W': return 'w';
+		case 'X': return 'x';
+		case 'Y': return 'y';
+		case 'Z': return 'z';
+
+		default: return ' ';
+	}
+}
+
+static void
+normalize_text_buffer(struct buffer buf) {
+	size_t i;
+	size_t k = 0;
+	int is_last_unknown = 1; /* to trim left pretend that we begin with whitespace */
+
+	for (i = 0; i < buf.size; i++) {
+		char c = buf.memory[i];
+		char x = normalize_text_char(c);
+
+		if (x == ' ') {
+			if (is_last_unknown == 0) {
+				buf.memory[k] = x;
+				k++;
+			}
+
+			is_last_unknown = 1;
+		} else {
+			buf.memory[k] = x;
+			k++;
+		}
+	}
+
+	buf.size = i;
+}
+
 static size_t
 closest_power_of_two(size_t x)
 {
