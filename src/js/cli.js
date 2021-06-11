@@ -8,10 +8,6 @@ var rl = readline.createInterface({
 	terminal: false,
 });
 
-function debug_vec(v) {
-	console.log('len(v):', v.length, 'v:', v);
-}
-
 var BLOCK_LEN = 8;
 var SIZE_BLOCK_LEN = 4 * BLOCK_LEN; // 32 bit integer
 
@@ -21,7 +17,6 @@ function read_things(keys, callback) {
 
 	function rlcb(x) {
 		arr.push(x);
-		// console.log('arr[' + keys[i] + '] = ' + x);
 		i++;
 		if (i < keys.length) {
 			rl.question(keys[i] + ': ', rlcb);
@@ -62,7 +57,6 @@ function handle_file_buffer(encryptQ, pass_s, salt, keyfile_buffer, input_wrap_c
 		var byte_stream = binary_stream_to_byte_stream(padded_stream);
 		var buf = byte_stream_to_byte_buffer(byte_stream);
 
-		console.log('encrypt buf:', buf);
 		fs.writeFileSync(output_file, buf);
 	} else {
 		var byte_stream = binary_stream_to_byte_stream(xored_stream);
@@ -99,9 +93,6 @@ function decrypt_file() {
 		var salt = stream_read_n_bitarr(salt_len, input_file_stream);
 		var xored_len = binary_stream_read_integer(SIZE_BLOCK_LEN, input_file_stream);
 		var xored_bitarr = stream_read_n_bitarr(xored_len, input_file_stream);
-
-		console.log('salt_len:', salt_len);
-		console.log('xored_len:', xored_len);
 
 		return handle_file_buffer(false, pass, salt, keyfile_buffer, input_wrap_count, wrap_count, xored_bitarr, output_file);
 	}
