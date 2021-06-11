@@ -33,13 +33,15 @@ ask_user(char *what, char *where, int where_size) {
 }
 
 static void
-handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfile_buffer, int input_wrap_count, int wrap_count, bitarr input_file_bitarr, FILE *output_file) {
-	struct buffer pass_buf = buffer_from_string(pass_s);
-	stream pass_stream = buffer_to_binary_stream(&pass_buf);
+handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfile_buffer0, int input_wrap_count, int wrap_count, bitarr input_file_bitarr, FILE *output_file) {
+	struct buffer pass_buf0 = buffer_from_string(pass_s);
+	struct buffer *pass_buf = normalize_text_buffer(&pass_buf0);
+	stream pass_stream = buffer_to_binary_stream(pass_buf);
 	bitarr pass = binary_stream_to_bitarr(&pass_stream);
 	int key_size = bitarray_length(input_file_bitarr);
+	struct buffer *keyfile_buffer = normalize_text_buffer(&keyfile_buffer0);
 
-	bitarr key = make_key(pass, salt, keyfile_buffer, key_size, input_wrap_count, wrap_count);
+	bitarr key = make_key(pass, salt, *keyfile_buffer, key_size, input_wrap_count, wrap_count);
 	stream xored_stream = xor_with_key(key, input_file_bitarr);
 
 	if (encryptQ) {

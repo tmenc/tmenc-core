@@ -944,7 +944,7 @@ normalize_text_char(char c) {
 	}
 }
 
-static void
+static struct buffer*
 normalize_text_buffer(struct buffer *buf) {
 	size_t i;
 	size_t k = 0;
@@ -976,6 +976,7 @@ normalize_text_buffer(struct buffer *buf) {
 
 	buf->memory[k] = 0;
 	buf->size = k;
+	return buf;
 }
 
 static size_t
