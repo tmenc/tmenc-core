@@ -123,13 +123,13 @@ test-c-misc: build/test build/test/test-misc.exe
 build/cli.c: src/c/machine.c src/c/util.c src/c/cli.c
 	cat $^ > $@
 
-build/cli.exe: build build/cli.c
+build/tmenc-cli: build build/cli.c
 	$(CC) $(CFLAGS) -o $@ build/cli.c
 
-test-c-cli: build/cli.exe
-	printf 'encrypt\n0a0bff\n0a0b00\ntest/test-keyfile.txt\n1000\n100\ntest/testfile\nbuild/cli-encrypted-c\nEND' | build/cli.exe
+test-c-cli: build/tmenc-cli
+	printf 'encrypt\n0a0bff\n0a0b00\ntest/test-keyfile.txt\n1000\n100\ntest/testfile\nbuild/cli-encrypted-c\nEND' | build/tmenc-cli
 	diff -q test/testfile-encrypted build/cli-encrypted-c
-	printf 'decrypt\n0a0bff\ntest/test-keyfile.txt\nbuild/cli-encrypted-c\nbuild/cli-decrypted-c\nEND' | build/cli.exe
+	printf 'decrypt\n0a0bff\ntest/test-keyfile.txt\nbuild/cli-encrypted-c\nbuild/cli-decrypted-c\nEND' | build/tmenc-cli
 	diff -q test/testfile build/cli-decrypted-c
 
 test-c-rng: build/test build/test/test-rng.exe
