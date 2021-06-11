@@ -553,7 +553,7 @@ test_normalize_text()
 
 	normalize_text_buffer(buf);
 
-	printf("the memo <%s>\n", buf.memory);
+	printf("the memo <%s> (%d vs %d)\n", buf.memory, (int)buf.size, (int)strlen(expected));
 
 	assert(buf.size == strlen(expected));
 	assert(string_equal_p(buf.memory, expected) == 1);
