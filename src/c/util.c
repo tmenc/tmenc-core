@@ -974,7 +974,7 @@ normalize_text_buffer(struct buffer buf) {
 		is_last_unknown = is_current_unknown;
 	}
 
-	buf.memory[k] = 0;
+	/* buf.memory[k] = 0; */
 	buf.size = k;
 }
 
