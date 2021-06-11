@@ -1,6 +1,7 @@
 
 HERE = $(PWD)
 CC = gcc
+PREFIX = $(HOME)/.local
 
 FAST_FLAGS = -Ofast
 DEBUG_FLAGS = -std=c89 -Werror -Wall -pedantic -O0 -g -Wno-unused-function
@@ -20,9 +21,12 @@ C_TEST_FILES = $(shell ls -d -1 test/*.c)
 C_TEST_FILES_P = $(addprefix build/,$(C_TEST_FILES))
 C_TEST_SRCS = $(C_TEST_FILES_P:%.c=%.exe)
 
-all: build-js
+all: build-js build/tmenc-cli
 build-js: | build build-js-srcs
 tests: tests-build-js-srcs test-build-c-srcs
+
+install: build/tmenc-cli
+	ln -sf $(HERE)/build/tmenc-cli $(PREFIX)/bin/
 
 test-all: test-changes test-quality
 test-quality:
