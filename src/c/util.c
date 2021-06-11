@@ -815,19 +815,19 @@ string_equal_p(char *a, char *b) {
 static FILE*
 open_file(char *path, char *mode) {
 	if (string_equal_p("-", path)) {
-		if (string_equal_p("w", mode)) {
+		if (string_equal_p("w", mode) || string_equal_p("wb", mode)) {
 			return stdout;
-		} else if (string_equal_p("r", mode)) {
+		} else if (string_equal_p("r", mode) || string_equal_p("rb", mode)) {
 			return stdin;
 		} else {
-			fprintf(stderr, "Expected 'r' or 'w' in 'open_file' but got %s\n", mode);
+			fprintf(stderr, "Expected 'r' or 'w' or 'rb' or 'wb' in 'open_file' but got %s\n", mode);
 			fail();
 			return NULL;
 		}
 	} else {
 		FILE* ret = fopen(path, mode);
 		if (ret == NULL) {
-			fprintf(stderr, "Could not open output file\n");
+			fprintf(stderr, "Could not open file '%s'\n", path);
 			fail();
 		}
 
@@ -839,7 +839,7 @@ static stream*
 file_to_byte_stream(char *filepath) {
 	stream *ret;
 
-	FILE *fp = fopen(filepath, "rb");
+	FILE *fp = open_file(filepath, "rb");
 	if (fp == NULL) {
 		fprintf(stderr, "COULD NOT OPEN FILE %s!\n", filepath);
 		fail();
@@ -995,7 +995,7 @@ read_file(char *path) {
 	int size;
 	char *buf;
 	struct buffer ret;
-	FILE *fp = fopen(path, "rb");
+	FILE *fp = open_file(path, "rb");
 
 	if (fp == NULL) {
 		fprintf(stderr, "Could not open file\n");
