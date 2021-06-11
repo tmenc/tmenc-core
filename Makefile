@@ -27,6 +27,7 @@ tests: tests-build-js-srcs test-build-c-srcs
 
 install: build/tmenc-cli
 	ln -sf $(HERE)/build/tmenc-cli $(PREFIX)/bin/
+	ln -sf $(HERE)/src/scripts/* $(PREFIX)/bin/
 
 test-all: test-changes test-quality
 test-quality:
