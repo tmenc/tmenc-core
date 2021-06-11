@@ -948,9 +948,10 @@ static struct buffer*
 normalize_text_buffer(struct buffer *buf) {
 	size_t i;
 	size_t k = 0;
+	size_t len = buf->size;
 	int is_last_unknown = 1; /* to trim left pretend that we begin with whitespace */
 
-	for (i = 0; i < buf->size; i++) {
+	for (i = 0; i < len; i++) {
 		char c = buf->memory[i];
 		char x = normalize_text_char(c);
 

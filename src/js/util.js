@@ -342,6 +342,99 @@ function byte_stream_to_byte_buffer(stream) {
 	return new Uint8Array(stream_to_vector(stream));
 }
 
+function normalize_text_char(c) {
+	switch (c) {
+		case 'a': return 'a';
+		case 'b': return 'b';
+		case 'c': return 'c';
+		case 'd': return 'd';
+		case 'e': return 'e';
+		case 'f': return 'f';
+		case 'g': return 'g';
+		case 'h': return 'h';
+		case 'i': return 'i';
+		case 'j': return 'j';
+		case 'k': return 'k';
+		case 'l': return 'l';
+		case 'm': return 'm';
+		case 'n': return 'n';
+		case 'o': return 'o';
+		case 'p': return 'p';
+		case 'q': return 'q';
+		case 'r': return 'r';
+		case 's': return 's';
+		case 't': return 't';
+		case 'u': return 'u';
+		case 'v': return 'v';
+		case 'w': return 'w';
+		case 'x': return 'x';
+		case 'y': return 'y';
+		case 'z': return 'z';
+
+		case 'A': return 'a';
+		case 'B': return 'b';
+		case 'C': return 'c';
+		case 'D': return 'd';
+		case 'E': return 'e';
+		case 'F': return 'f';
+		case 'G': return 'g';
+		case 'H': return 'h';
+		case 'I': return 'i';
+		case 'J': return 'j';
+		case 'K': return 'k';
+		case 'L': return 'l';
+		case 'M': return 'm';
+		case 'N': return 'n';
+		case 'O': return 'o';
+		case 'P': return 'p';
+		case 'Q': return 'q';
+		case 'R': return 'r';
+		case 'S': return 's';
+		case 'T': return 't';
+		case 'U': return 'u';
+		case 'V': return 'v';
+		case 'W': return 'w';
+		case 'X': return 'x';
+		case 'Y': return 'y';
+		case 'Z': return 'z';
+
+		default: return ' ';
+	}
+}
+
+function normalize_text_buffer(buf) {
+	var i;
+	var is_last_unknown = true; /* to trim left pretend that we begin with whitespace */
+	var ret = [];
+	var len = buf.length;
+
+	var space = ' '.charCodeAt(0);
+
+	for (i = 0; i < len; i++) {
+		var c = String.fromCharCode(buf[i]);
+		var x = normalize_text_char(c).charCodeAt(0);
+
+		var is_current_unknown = (x == space);
+
+		if (is_last_unknown && is_current_unknown) {
+			continue;
+		} else if (is_last_unknown && !is_current_unknown) {
+			if (ret.length != 0) {
+				ret.push(space);
+			}
+
+			ret.push(x);
+		} else if (!is_last_unknown && !is_current_unknown) {
+			ret.push(x);
+		}
+
+		is_last_unknown = is_current_unknown;
+	}
+
+	var arr = new Uint8Array(ret);
+	return arr;
+}
+
 function closest_power_of_two(x) {
 	var ret = 1;
 
@@ -424,10 +517,12 @@ function xor_with_key(key_tape, input_file_bitarr) {
 	return xored_stream;
 }
 
-function handle_file_buffer(encryptQ, pass_s, salt, keyfile_buffer, input_wrap_count, wrap_count, input_file_bitarr, output_cb) {
-	var pass_buf = buffer_from_string(pass_s);
+function handle_file_buffer(encryptQ, pass_s, salt, keyfile_buffer0, input_wrap_count, wrap_count, input_file_bitarr, output_cb) {
+	var pass_buf0 = buffer_from_string(pass_s);
+	var pass_buf = normalize_text_buffer(pass_buf0);
 	var pass = binary_stream_to_bitarr(buffer_to_binary_stream(pass_buf));
 	var key_size = bitarray_length(input_file_bitarr);
+	var keyfile_buffer = normalize_text_buffer(keyfile_buffer0);
 
 	var key = make_key(pass, salt, keyfile_buffer, key_size, input_wrap_count, wrap_count);
 	var xored_stream = xor_with_key(key, input_file_bitarr);
