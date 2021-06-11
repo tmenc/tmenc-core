@@ -414,7 +414,7 @@ function xor_with_key(key_tape, input_file_bitarr) {
 	return xored_stream;
 }
 
-function handle_file_buffer(encryptQ, pass_s, salt, keyfile_buffer, input_wrap_count, wrap_count, input_file_bitarr, output_file) {
+function handle_file_buffer(encryptQ, pass_s, salt, keyfile_buffer, input_wrap_count, wrap_count, input_file_bitarr, output_cb) {
 	var pass = binary_stream_to_bitarr(hex_to_binary_stream(pass_s));
 	var key_size = bitarray_length(input_file_bitarr);
 
@@ -434,29 +434,24 @@ function handle_file_buffer(encryptQ, pass_s, salt, keyfile_buffer, input_wrap_c
 		var byte_stream = binary_stream_to_byte_stream(padded_stream);
 		var buf = byte_stream_to_byte_buffer(byte_stream);
 
-		fs.writeFileSync(output_file, buf);
+		output_cb(buf);
 	} else {
 		var byte_stream = binary_stream_to_byte_stream(xored_stream);
 		var buf = byte_stream_to_byte_buffer(byte_stream);
-		fs.writeFileSync(output_file, buf);
+		output_cb(buf);
 	}
 }
 
-function encrypt(pass_s, salt_s, keyfile, input_wrap_count_s, wrap_count_s, input_file, output_file) {
-	var keyfile_buffer = fs.readFileSync(keyfile);
-	var input_file_buffer = fs.readFileSync(input_file);
+function encrypt(pass_s, salt_s, keyfile_buffer, input_wrap_count_s, wrap_count_s, input_file_buffer, output_cb) {
 	var salt = binary_stream_to_bitarr(hex_to_binary_stream(salt_s));
 	var input_file_stream = byte_stream_to_binary_stream(buffer_to_byte_stream(input_file_buffer));
 	var input_file_bitarr = binary_stream_to_bitarr(input_file_stream);
 	var input_wrap_count = parseInt(input_wrap_count_s);
 	var wrap_count = parseInt(wrap_count_s);
-	return handle_file_buffer(true, pass_s, salt, keyfile_buffer, input_wrap_count, wrap_count, input_file_bitarr, output_file);
+	return handle_file_buffer(true, pass_s, salt, keyfile_buffer, input_wrap_count, wrap_count, input_file_bitarr, output_cb);
 }
 
-function decrypt(pass, keyfile, input_file, output_file) {
-	var keyfile_buffer = fs.readFileSync(keyfile);
-
-	var input_file_buffer = fs.readFileSync(input_file);
+function decrypt(pass, keyfile_buffer, input_file_buffer, output_cb) {
 	var input_file_stream = byte_stream_to_binary_stream(buffer_to_byte_stream(input_file_buffer));
 
 	var input_wrap_count = binary_stream_read_integer(SIZE_BLOCK_LEN, input_file_stream);
@@ -466,5 +461,5 @@ function decrypt(pass, keyfile, input_file, output_file) {
 	var xored_len = binary_stream_read_integer(SIZE_BLOCK_LEN, input_file_stream);
 	var xored_bitarr = stream_read_n_bitarr(xored_len, input_file_stream);
 
-	return handle_file_buffer(false, pass, salt, keyfile_buffer, input_wrap_count, wrap_count, xored_bitarr, output_file);
+	return handle_file_buffer(false, pass, salt, keyfile_buffer, input_wrap_count, wrap_count, xored_bitarr, output_cb);
 }
