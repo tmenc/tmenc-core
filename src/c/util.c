@@ -945,13 +945,13 @@ normalize_text_char(char c) {
 }
 
 static void
-normalize_text_buffer(struct buffer buf) {
+normalize_text_buffer(struct buffer *buf) {
 	size_t i;
 	size_t k = 0;
 	int is_last_unknown = 1; /* to trim left pretend that we begin with whitespace */
 
-	for (i = 0; i < buf.size; i++) {
-		char c = buf.memory[i];
+	for (i = 0; i < buf->size; i++) {
+		char c = buf->memory[i];
 		char x = normalize_text_char(c);
 
 		int is_current_unknown = (x == ' ');
@@ -960,22 +960,22 @@ normalize_text_buffer(struct buffer buf) {
 			continue;
 		} else if (is_last_unknown && !is_current_unknown) {
 			if (k != 0) {
-				buf.memory[k] = ' ';
+				buf->memory[k] = ' ';
 				k++;
 			}
 
-			buf.memory[k] = x;
+			buf->memory[k] = x;
 			k++;
 		} else if (!is_last_unknown && !is_current_unknown) {
-			buf.memory[k] = x;
+			buf->memory[k] = x;
 			k++;
 		}
 
 		is_last_unknown = is_current_unknown;
 	}
 
-	/* buf.memory[k] = 0; */
-	buf.size = k;
+	buf->memory[k] = 0;
+	buf->size = k;
 }
 
 static size_t
