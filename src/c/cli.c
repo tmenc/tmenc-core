@@ -54,10 +54,10 @@ handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfil
 
 		stream *combination[20];
 		int i = 0;
-		combination[i++] = &input_wrap_count_stream;
-		combination[i++] = &wrap_count_stream;
 		combination[i++] = &salt_len_stream;
 		combination[i++] = &salt_stream;
+		combination[i++] = &input_wrap_count_stream;
+		combination[i++] = &wrap_count_stream;
 		combination[i++] = &key_size_stream;
 		combination[i++] = &xored_stream;
 		{
@@ -106,10 +106,10 @@ decrypt_file(void) {
 	input_file_buffer = read_file(input_file); /* TODO: don't store input file in memoery */
 	input_file_byte_stream = buffer_to_byte_stream(&input_file_buffer);
 	input_file_stream = byte_stream_to_binary_stream(&input_file_byte_stream);
-	input_wrap_count_int = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
-	wrap_count_int = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
 	salt_len = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
 	salt_a = stream_read_n_bitarr(salt_len, &input_file_stream);
+	input_wrap_count_int = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
+	wrap_count_int = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
 	xored_len = binary_stream_read_integer(SIZE_BLOCK_LEN, &input_file_stream);
 	xored_bitarr = stream_read_n_bitarr(xored_len, &input_file_stream);
 
