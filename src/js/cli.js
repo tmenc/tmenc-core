@@ -33,6 +33,7 @@ function xor_with_key(key_tape, input_file_bitarr) {
 	function xorer(i) {
 		return key_tape[i] ^ bitarray_at(input_file_bitarr, i);
 	}
+
 	var xored_stream = stream_map(stream_range(key_size), xorer);
 	return xored_stream;
 }
@@ -96,6 +97,7 @@ function decrypt_file() {
 
 		return handle_file_buffer(false, pass, salt, keyfile_buffer, input_wrap_count, wrap_count, xored_bitarr, output_file);
 	}
+
 	read_things(['pass', 'keyfile', 'input_file', 'output_file'], read_cb);
 }
 
