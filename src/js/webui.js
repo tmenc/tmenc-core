@@ -25,10 +25,6 @@ function bytes_to_utf8(bytes) {
 }
 
 function read_keyfile_cb(pass, keyfile_buffer, input_file_buffer) {
-	console.log("pass:", pass);
-	console.log("keyfile:", keyfile_buffer);
-	console.log("input:", input_file_buffer);
-
 	function output_cb(buf) {
 		var out_string = bytes_to_utf8(buf);
 		var re = new RegExp('(\r|\n)', 'g');
