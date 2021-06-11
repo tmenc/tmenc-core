@@ -127,9 +127,9 @@ build/tmenc-cli: build build/cli.c
 	$(CC) $(CFLAGS) -o $@ build/cli.c
 
 test-c-cli: build/tmenc-cli
-	printf 'encrypt\n0a0bff\n0a0b00\ntest/test-keyfile.txt\n1000\n100\ntest/testfile\nbuild/cli-encrypted-c\nEND' | build/tmenc-cli
+	printf 'encrypt\nTest-Password\n0a0b00\ntest/test-keyfile.txt\n1000\n100\ntest/testfile\nbuild/cli-encrypted-c\nEND' | build/tmenc-cli
 	diff -q test/testfile-encrypted build/cli-encrypted-c
-	printf 'decrypt\n0a0bff\ntest/test-keyfile.txt\nbuild/cli-encrypted-c\nbuild/cli-decrypted-c\nEND' | build/tmenc-cli
+	printf 'decrypt\nTest-Password\ntest/test-keyfile.txt\nbuild/cli-encrypted-c\nbuild/cli-decrypted-c\nEND' | build/tmenc-cli
 	diff -q test/testfile build/cli-decrypted-c
 
 test-c-rng: build/test build/test/test-rng.exe
@@ -137,9 +137,9 @@ test-c-rng: build/test build/test/test-rng.exe
 	diff -q test/rng-test-data.txt build/test/test-c-rng.txt
 
 test-js-cli: all
-	printf 'encrypt\n0a0bff\n0a0b00\ntest/test-keyfile.txt\n1000\n100\ntest/testfile\nbuild/cli-encrypted\nEND' | $(NODE) build/cli.js
+	printf 'encrypt\nTest-Password\n0a0b00\ntest/test-keyfile.txt\n1000\n100\ntest/testfile\nbuild/cli-encrypted\nEND' | $(NODE) build/cli.js
 	diff -q test/testfile-encrypted build/cli-encrypted
-	printf 'decrypt\n0a0bff\ntest/test-keyfile.txt\nbuild/cli-encrypted\nbuild/cli-decrypted\nEND' | $(NODE) build/cli.js
+	printf 'decrypt\nTest-Password\ntest/test-keyfile.txt\nbuild/cli-encrypted\nbuild/cli-decrypted\nEND' | $(NODE) build/cli.js
 	diff -q test/testfile build/cli-decrypted
 
 generate-entropy: build/test build/test/test-entropy.exe
