@@ -542,12 +542,16 @@ test_make_key()
 }
 
 static void
-test_normalize_text()
-{
-	char initial[] = "   Hello    there, Buddy!  ";
-	char expected[] = "hello there buddy";
-
+test_normcase(char *input, char *expected) {
+	int i;
+	int len = strlen(input) + 1;
+	char *initial = malloc(sizeof(char) * len);
 	struct buffer buf;
+
+	for (i = 0; i < len; i++) {
+		initial[i] = input[i];
+	}
+
 	buf.memory = initial;
 	buf.size = strlen(buf.memory);
 
@@ -555,5 +559,15 @@ test_normalize_text()
 
 	assert(buf.size == strlen(expected));
 	assert(string_equal_p(buf.memory, expected) == 1);
+}
+
+static void
+test_normalize_text()
+{
+	test_normcase("   Hello    there, Buddy!  ", "hello there buddy");
+	test_normcase("   Hello there, Buddy!  ", "hello there buddy");
+	test_normcase("Hello    there, Buddy!  ", "hello there buddy");
+	test_normcase("Hello    there, Buddy!", "hello there buddy");
+	test_normcase("Hello    there, Buddy!", "hello there buddy");
 }
 
