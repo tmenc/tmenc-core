@@ -300,7 +300,7 @@ function buffer_to_byte_stream(js_Buffer) {
 	function pop() {
 		i = i + 1;
 		if (i < len) {
-			return js_Buffer.readUInt8(i);
+			return js_Buffer[i];
 		} else {
 			return END_OF_STREAM_TOKEN;
 		}

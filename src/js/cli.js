@@ -31,8 +31,8 @@ function encrypt_file() {
 			fs.writeFileSync(output_file, buf);
 		}
 
-		var keyfile_buffer = fs.readFileSync(keyfile);
-		var input_file_buffer = fs.readFileSync(input_file);
+		var keyfile_buffer = new Uint8Array(fs.readFileSync(keyfile));
+		var input_file_buffer = new Uint8Array(fs.readFileSync(input_file));
 		encrypt(pass_s, salt_s, keyfile_buffer, input_wrap_count_s, wrap_count_s, input_file_buffer, output_cb);
 	}
 
@@ -45,8 +45,8 @@ function decrypt_file() {
 			fs.writeFileSync(output_file, buf);
 		}
 
-		var keyfile_buffer = fs.readFileSync(keyfile);
-		var input_file_buffer = fs.readFileSync(input_file);
+		var keyfile_buffer = new Uint8Array(fs.readFileSync(keyfile));
+		var input_file_buffer = new Uint8Array(fs.readFileSync(input_file));
 		decrypt(pass, keyfile_buffer, input_file_buffer, output_cb);
 	}
 
