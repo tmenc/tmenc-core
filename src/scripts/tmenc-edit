@@ -1,0 +1,68 @@
+#!/bin/sh
+
+while true
+do
+	printf "input_file: "
+	read INPUT_FILE
+	test -f "$INPUT_FILE" && break
+	echo "Such file does not exist, try again"
+done
+
+while true
+do
+	printf "keyfile: "
+	read -s KEYFILE
+	test -f "$KEYFILE" && break
+	echo "Such file does not exist, try again"
+done
+
+printf "pass: "
+read -s PASS
+
+SALT=$(cat /dev/urandom | basenc --base16 --wrap 0 | head -c 256) # 1024-bit random salt
+
+INFO=$(printf "get_file_info\n$INPUT_FILE\n" | tmenc-cli)
+INPUT_WRAP_COUNT=$(echo "$INFO" | awk '{ if ($1 == "INPUT_WRAP_COUNT=") print $2 }')
+WRAP_COUNT=$(echo "$INFO" | awk '{ if ($1 == "WRAP_COUNT=") print $2 }')
+
+RID=$(cat /dev/urandom | basenc --base16 --wrap 0 | head -c 3)
+OUTPUT_FILE="tmenc-$RID"
+
+if printf \
+	"%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
+	"decrypt" \
+	"$PASS" \
+	"$KEYFILE" \
+	"$INPUT_FILE" \
+	"$OUTPUT_FILE" \
+	| tmenc-cli
+then
+
+	vim -n "$OUTPUT_FILE"
+
+	if printf \
+		"%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
+		"encrypt" \
+		"$PASS" \
+		"$SALT" \
+		"$KEYFILE" \
+		"$INPUT_WRAP_COUNT" \
+		"$WRAP_COUNT" \
+		"$OUTPUT_FILE" \
+		"$INPUT_FILE" \
+		| tmenc-cli
+	then
+		rm -f "$OUTPUT_FILE"
+		echo "All done, goodbye :)"
+	else
+		echo "Encryption failed! Please remove decrypted file '$OUTPUT_FILE' when done"
+	fi
+
+else
+	echo Decryption failed, exiting now
+	exit 1
+fi
+
+
+
+
