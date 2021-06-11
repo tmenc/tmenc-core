@@ -1,14 +1,31 @@
 #!/bin/sh
 
+while true
+do
+	printf "input_file: "
+	read INPUT_FILE
+	test -f "$INPUT_FILE" && break
+	echo "Such file does not exist, try again"
+done
+
+while true
+do
+	printf "keyfile: "
+	stty -echo
+	read KEYFILE
+	stty echo
+	test -f "$KEYFILE" && break
+	echo "Such file does not exist, try again"
+done
+
 printf "pass: "
+stty -echo
 read PASS
+stty echo
 
 # printf "salt: "
 # read SALT
 SALT=$(cat /dev/urandom | basenc --base16 | head -c 256) # 1024-bit random salt
-
-printf "keyfile: "
-read KEYFILE
 
 # printf "input_wrap_count: "
 # read INPUT_WRAP_COUNT
@@ -17,9 +34,6 @@ INPUT_WRAP_COUNT=1000
 # printf "wrap_count: "
 # read WRAP_COUNT
 WRAP_COUNT=0
-
-printf "input_file: "
-read INPUT_FILE
 
 printf "output_file: "
 read OUTPUT_FILE
