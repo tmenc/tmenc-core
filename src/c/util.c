@@ -807,6 +807,34 @@ file_to_byte_stream_generator(void *state, bit *finished_q) {
 	return ret;
 }
 
+static bit
+string_equal_p(char *a, char *b) {
+	return (strcmp(a, b) == 0);
+}
+
+static FILE*
+open_file(char *path, char *mode) {
+	if (string_equal_p("-", path)) {
+		if (string_equal_p("w", mode)) {
+			return stdout;
+		} else if (string_equal_p("r", mode)) {
+			return stdin;
+		} else {
+			fprintf(stderr, "Expected 'r' or 'w' in 'open_file' but got %s\n", mode);
+			fail();
+			return NULL;
+		}
+	} else {
+		FILE* ret = fopen(path, mode);
+		if (ret == NULL) {
+			fprintf(stderr, "Could not open output file\n");
+			fail();
+		}
+
+		return ret;
+	}
+}
+
 static stream*
 file_to_byte_stream(char *filepath) {
 	stream *ret;
