@@ -12,6 +12,14 @@ struct buffer {
 	size_t size;
 };
 
+static struct buffer
+buffer_from_string(char *str) {
+	struct buffer ret;
+	ret.memory = str;
+	ret.size = strlen(str);
+	return ret;
+}
+
 /********************
  * BITARR AS VECTOR *
  ********************/
@@ -574,6 +582,13 @@ byte_stream_to_binary_stream(stream *bytes) {
 	return ret;
 }
 
+static stream
+buffer_to_binary_stream(struct buffer *buf) {
+	stream *bytes = dynalloc(sizeof(stream));
+	*bytes = buffer_to_byte_stream(buf);
+	return byte_stream_to_binary_stream(bytes);
+}
+
 struct pad_stream_closure {
 	stream* s;
 	size_t block_size;
@@ -1024,24 +1039,6 @@ read_file(char *path) {
 	ret.memory = buf;
 	ret.size = size;
 	return ret;
-}
-
-static int
-read_line(char *input, int input_size) {
-	int i;
-	int c;
-
-	for (i = 0; i < input_size; i++) {
-		c = getc(stdin);
-		if (c == EOF || c == '\n' || c == '\0') {
-			input[i] = 0;
-			return 0;
-		}
-
-		input[i] = c;
-	}
-
-	return 1;
 }
 
 struct xor_with_key_closure {

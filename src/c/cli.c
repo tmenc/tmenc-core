@@ -5,6 +5,24 @@
  * 2 - decrypt */
 int mode = 0;
 
+static int
+read_line(char *input, int input_size) {
+	int i;
+	int c;
+
+	for (i = 0; i < input_size; i++) {
+		c = getc(stdin);
+		if (c == EOF || c == '\n' || c == '\0') {
+			input[i] = 0;
+			return 0;
+		}
+
+		input[i] = c;
+	}
+
+	return 1;
+}
+
 static void
 ask_user(char *what, char *where, int where_size) {
 	fprintf(stderr, "%s: ", what);
@@ -16,7 +34,8 @@ ask_user(char *what, char *where, int where_size) {
 
 static void
 handle_file_buffer(bit encryptQ, char *pass_s, bitarr salt, struct buffer keyfile_buffer, int input_wrap_count, int wrap_count, bitarr input_file_bitarr, FILE *output_file) {
-	stream pass_stream = hex_to_binary_stream(pass_s);
+	struct buffer pass_buf = buffer_from_string(pass_s);
+	stream pass_stream = buffer_to_binary_stream(&pass_buf);
 	bitarr pass = binary_stream_to_bitarr(&pass_stream);
 	int key_size = bitarray_length(input_file_bitarr);
 
