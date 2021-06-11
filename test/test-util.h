@@ -541,3 +541,21 @@ test_make_key()
 	assert_bitarray_equal(correct_v, key);
 }
 
+static void
+test_normalize_text()
+{
+	char initial[] = "   Hello    there, Buddy!  ";
+	char expected[] = "hello there buddy";
+
+	struct buffer buf;
+	buf.memory = initial;
+	buf.size = strlen(buf.memory);
+
+	normalize_text_buffer(buf);
+
+	printf("the memo <%s>\n", buf.memory);
+
+	assert(buf.size == strlen(expected));
+	assert(string_equal_p(buf.memory, expected) == 1);
+}
+

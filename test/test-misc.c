@@ -10,6 +10,7 @@ int main() {
 	test_binary_stream_to_byte_stream();
 	test_basic_out();
 	test_make_key();
+	test_normalize_text();
 
 	printf("all passed");
 	return 0;

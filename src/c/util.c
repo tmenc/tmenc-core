@@ -954,19 +954,27 @@ normalize_text_buffer(struct buffer buf) {
 		char c = buf.memory[i];
 		char x = normalize_text_char(c);
 
-		if (x == ' ') {
-			if (is_last_unknown == 0) {
-				buf.memory[k] = x;
+		int is_current_unknown = (x == ' ');
+
+		if (is_last_unknown && is_current_unknown) {
+			continue;
+		} else if (is_last_unknown && !is_current_unknown) {
+			if (k != 0) {
+				buf.memory[k] = ' ';
 				k++;
 			}
 
-			is_last_unknown = 1;
-		} else {
+			buf.memory[k] = x;
+			k++;
+		} else if (!is_last_unknown && !is_current_unknown) {
 			buf.memory[k] = x;
 			k++;
 		}
+
+		is_last_unknown = is_current_unknown;
 	}
 
+	buf.memory[k] = 0;
 	buf.size = k;
 }
 
