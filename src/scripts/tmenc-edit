@@ -11,13 +11,17 @@ done
 while true
 do
 	printf "keyfile: "
-	read -s KEYFILE
+	stty -echo
+	read KEYFILE
+	stty echo
 	test -f "$KEYFILE" && break
 	echo "Such file does not exist, try again"
 done
 
 printf "pass: "
-read -s PASS
+stty -echo
+read PASS
+stty echo
 
 SALT=$(cat /dev/urandom | basenc --base16 --wrap 0 | head -c 256) # 1024-bit random salt
 
