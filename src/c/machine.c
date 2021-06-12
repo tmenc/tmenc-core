@@ -1,9 +1,9 @@
 
-#define DEBUG
-
 #include <stdlib.h> /* malloc, free */
 #include <stddef.h> /* size_t */
 #include <stdint.h> /* uint32_t */
+
+static void fail(void);
 
 #ifdef DEBUG
 
@@ -13,8 +13,6 @@
 #include <assert.h>
 #include <string.h>
 #include <errno.h> /* for errno */
-
-static void fail(void);
 
 static void
 debug_fail(void) {

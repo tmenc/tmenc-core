@@ -4,7 +4,7 @@ CC = gcc
 PREFIX = $(HOME)/.local
 
 FAST_FLAGS = -Ofast
-DEBUG_FLAGS = -std=c89 -Werror -Wall -pedantic -O0 -g -Wno-unused-function
+DEBUG_FLAGS = -std=c89 -Werror -Wall -pedantic -O0 -g -Wno-unused-function -DDEBUG
 CFLAGS = $(DEBUG_FLAGS)
 # CFLAGS = $(FAST_FLAGS)
 

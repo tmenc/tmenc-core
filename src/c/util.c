@@ -1,4 +1,5 @@
 #include <stdio.h>  /* fprintf, fopen */
+#include <string.h>  /* fprintf, fopen */
 
 #define BLOCK_LEN          8
 #define SIZE_BLOCK_LEN     (4 * BLOCK_LEN) /* 32 bit integer */
@@ -1205,7 +1206,7 @@ byte_stream_dump_to_file(stream *s, FILE* fp) {
 		}
 
 		if(fputc(x.byte, fp) != x.byte) {
-			fprintf(stderr, "Error during file write: %s\n", strerror(errno));
+			fprintf(stderr, "Error during file write\n");
 			fail();
 			return;
 		}
