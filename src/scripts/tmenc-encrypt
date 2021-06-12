@@ -25,10 +25,9 @@ stty -echo
 read PASS
 stty echo
 
-# printf "salt: "
-# read SALT
 SALT=$(cat /dev/urandom | basenc --base16 | head -c 256) # 1024-bit random salt
 
+# NOTE: reasonable defaults
 INPUT_WRAP_COUNT=1000
 WRAP_COUNT=0
 
