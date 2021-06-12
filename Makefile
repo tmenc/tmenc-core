@@ -28,7 +28,10 @@ tests: tests-build-js-srcs test-build-c-srcs
 build-c:
 	$(MAKE) -B build/tmenc-cli CFLAGS=$(FAST_FLAGS)
 
-install: build-c
+$(PREFIX)/bin:
+	mkdir -p $(PREFIX)/bin
+
+install: build-c $(PREFIX)/bin
 	ln -sf $(HERE)/build/tmenc-cli $(PREFIX)/bin/
 	ln -sf $(HERE)/src/scripts/* $(PREFIX)/bin/
 
