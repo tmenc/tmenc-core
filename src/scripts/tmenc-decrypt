@@ -39,6 +39,6 @@ do
 	printf "query: "
 	read QUERY
 	test -n "$QUERY" || break
-	printf "%s" "$PLAIN" | grep --color=yes -i -B 3 -A 20 -e $QUERY
+	printf "%s" "$PLAIN" | vim -n -
 done
 
