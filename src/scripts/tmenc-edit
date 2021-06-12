@@ -31,6 +31,9 @@ WRAP_COUNT=$(echo "$INFO" | awk '{ if ($1 == "WRAP_COUNT=") print $2 }')
 
 RID=$(cat /dev/urandom | basenc --base16 --wrap 0 | head -c 3)
 OUTPUT_FILE="tmenc-$RID"
+if touch "/tmp/$OUTPUT_FILE"
+then OUTPUT_FILE="/tmp/$OUTPUT_FILE"
+fi
 
 if printf \
 	"%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
