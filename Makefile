@@ -21,11 +21,14 @@ C_TEST_FILES = $(shell ls -d -1 test/*.c)
 C_TEST_FILES_P = $(addprefix build/,$(C_TEST_FILES))
 C_TEST_SRCS = $(C_TEST_FILES_P:%.c=%.exe)
 
-all: build-js build/tmenc-cli
+all: build-js build-c
 build-js: | build build-js-srcs
 tests: tests-build-js-srcs test-build-c-srcs
 
-install: build/tmenc-cli
+build-c:
+	$(MAKE) -B build/tmenc-cli CFLAGS=$(FAST_FLAGS)
+
+install: build-c
 	ln -sf $(HERE)/build/tmenc-cli $(PREFIX)/bin/
 	ln -sf $(HERE)/src/scripts/* $(PREFIX)/bin/
 
