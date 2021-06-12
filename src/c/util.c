@@ -1,5 +1,5 @@
 #include <stdio.h>  /* fprintf, fopen */
-#include <string.h>  /* fprintf, fopen */
+#include <string.h>  /* strlen */
 
 #define BLOCK_LEN          8
 #define SIZE_BLOCK_LEN     (4 * BLOCK_LEN) /* 32 bit integer */
