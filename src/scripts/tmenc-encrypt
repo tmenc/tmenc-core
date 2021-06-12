@@ -4,6 +4,7 @@ while true
 do
 	printf "input_file: "
 	read INPUT_FILE
+	INPUT_FILE=$(printf "%s" "$INPUT_FILE" | sed "s#~#$HOME#")
 	test -f "$INPUT_FILE" && break
 	echo "Such file does not exist, try again"
 done
@@ -14,6 +15,7 @@ do
 	stty -echo
 	read KEYFILE
 	stty echo
+	KEYFILE=$(printf "%s" "$KEYFILE" | sed "s#~#$HOME#")
 	test -f "$KEYFILE" && break
 	echo "Such file does not exist, try again"
 done
@@ -37,6 +39,7 @@ WRAP_COUNT=0
 
 printf "output_file: "
 read OUTPUT_FILE
+OUTPUT_FILE=$(printf "%s" "$OUTPUT_FILE" | sed "s#~#$HOME#")
 
 printf \
 	"%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
