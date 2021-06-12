@@ -1,0 +1,38 @@
+#!/bin/sh
+
+while true
+do
+	printf "input_file: "
+	read INPUT_FILE
+	test -f "$INPUT_FILE" && break
+	echo "Such file does not exist, try again"
+done
+
+while true
+do
+	printf "keyfile: "
+	stty -echo
+	read KEYFILE
+	stty echo
+	test -f "$KEYFILE" && break
+	echo "Such file does not exist, try again"
+done
+
+printf "pass: "
+stty -echo
+read PASS
+stty echo
+
+printf "query: "
+read QUERY
+
+printf \
+	"%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
+	"decrypt" \
+	"$PASS" \
+	"$KEYFILE" \
+	"$INPUT_FILE" \
+	"-" \
+	| tmenc-cli \
+	| grep --color=yes -i -B 3 -A 20 -e "$QUERY" "$@"
+
