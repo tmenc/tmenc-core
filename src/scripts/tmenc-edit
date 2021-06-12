@@ -29,9 +29,9 @@ INFO=$(printf "get_file_info\n$INPUT_FILE\n" | tmenc-cli)
 INPUT_WRAP_COUNT=$(echo "$INFO" | awk '{ if ($1 == "INPUT_WRAP_COUNT=") print $2 }')
 WRAP_COUNT=$(echo "$INFO" | awk '{ if ($1 == "WRAP_COUNT=") print $2 }')
 
-RID=$(cat /dev/urandom | basenc --base16 --wrap 0 | head -c 3)
+RID=$(cat /dev/urandom | basenc --base32 --wrap 0 | head -c 5)
 OUTPUT_FILE="tmenc-$RID"
-if touch "/tmp/$OUTPUT_FILE"
+if touch "/tmp/$OUTPUT_FILE" 2>/dev/null
 then OUTPUT_FILE="/tmp/$OUTPUT_FILE"
 fi
 
