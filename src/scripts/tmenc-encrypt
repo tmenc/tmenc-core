@@ -28,7 +28,7 @@ stty echo
 SALT=$(cat /dev/urandom | basenc --base16 | head -c 256) # 1024-bit random salt
 
 # NOTE: reasonable defaults
-INPUT_WRAP_COUNT=1000
+INPUT_WRAP_COUNT=2048
 WRAP_COUNT=0
 
 printf "output_file: "
