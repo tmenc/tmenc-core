@@ -25,16 +25,20 @@ stty -echo
 read PASS
 stty echo
 
-printf "query: "
-read QUERY
-
-printf \
+PLAIN=$(printf \
 	"%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
 	"decrypt" \
 	"$PASS" \
 	"$KEYFILE" \
 	"$INPUT_FILE" \
 	"-" \
-	| tmenc-cli \
-	| grep --color=yes -i -B 3 -A 20 -e "$QUERY" "$@"
+	| tmenc-cli )
+
+while true
+do
+	printf "query: "
+	read QUERY
+	test -n "$QUERY" || break
+	printf "%s" "$PLAIN" | grep --color=yes -i -B 3 -A 20 -e $QUERY
+done
 
