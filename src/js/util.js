@@ -344,6 +344,7 @@ function byte_stream_to_byte_buffer(stream) {
 
 function normalize_text_char(c) {
 	switch (c) {
+		case '0': return '0';
 		case '1': return '1';
 		case '2': return '2';
 		case '3': return '3';
@@ -353,7 +354,6 @@ function normalize_text_char(c) {
 		case '7': return '7';
 		case '8': return '8';
 		case '9': return '9';
-		case '0': return '0';
 
 		case 'a': return 'a';
 		case 'b': return 'b';
