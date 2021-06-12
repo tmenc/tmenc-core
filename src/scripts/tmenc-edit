@@ -63,6 +63,7 @@ then
 		echo "All done, goodbye :)"
 	else
 		echo "Encryption failed! Please remove decrypted file '$OUTPUT_FILE' when done"
+		exit 1
 	fi
 
 else
