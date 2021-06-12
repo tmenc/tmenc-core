@@ -59,6 +59,7 @@ then
 		"$INPUT_FILE" \
 		| tmenc-cli
 	then
+		shred --force --remove=wipesync --zero "$OUTPUT_FILE"
 		rm -f "$OUTPUT_FILE"
 		echo "All done, goodbye :)"
 	else
