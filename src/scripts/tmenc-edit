@@ -2,25 +2,25 @@
 
 while true
 do
-	printf "input_file: "
+	printf "input_file: " 1>&2
 	read INPUT_FILE
 	INPUT_FILE=$(printf "%s" "$INPUT_FILE" | sed "s#~#$HOME#")
 	test -f "$INPUT_FILE" && break
-	echo "Such file does not exist, try again"
+	echo "Such file does not exist, try again" 1>&2
 done
 
 while true
 do
-	printf "keyfile: "
+	printf "keyfile: " 1>&2
 	stty -echo
 	read KEYFILE
 	stty echo
 	KEYFILE=$(printf "%s" "$KEYFILE" | sed "s#~#$HOME#")
 	test -f "$KEYFILE" && break
-	echo "Such file does not exist, try again"
+	echo "Such file does not exist, try again" 1>&2
 done
 
-printf "pass: "
+printf "pass: " 1>&2
 stty -echo
 read PASS
 stty echo
@@ -61,16 +61,16 @@ then
 		"$INPUT_FILE" \
 		| tmenc-cli
 	then
-		shred --force --remove=wipesync --zero "$OUTPUT_FILE"
-		rm -f "$OUTPUT_FILE"
-		echo "All done, goodbye :)"
+		shred --force --remove=wipesync --zero "$OUTPUT_FILE" 1>&2
+		rm -f "$OUTPUT_FILE" 1>&2
+		echo "All done, goodbye :)" 1>&2
 	else
-		echo "Encryption failed! Please remove decrypted file '$OUTPUT_FILE' when done"
+		echo "Encryption failed! Please remove decrypted file '$OUTPUT_FILE' when done" 1>&2
 		exit 1
 	fi
 
 else
-	echo Decryption failed, exiting now
+	echo Decryption failed, exiting now 1>&2
 	exit 1
 fi
 
