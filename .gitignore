@@ -1,5 +1,2 @@
 *~
-*.o
-*.exe
-*.out
 build/
