@@ -33,5 +33,12 @@ printf \
 	"$INPUT_FILE" \
 	"-" \
 	| tmenc-cli \
-	| vim -n -
+	| vim -n - \
+	&
+
+PID=$?
+sleep 300
+kill -15 $PID
+clear
+reset
 
