@@ -1152,7 +1152,8 @@ read_optional_file(char *path) {
 	struct buffer ret;
 
 	if (strlen(path) == 0 || (strlen(path) == 1 && (path[0] == '\n' || path[0] == ' '))) {
-		ret.memory = NULL;
+		ret.memory = dynalloc(1);
+		ret.memory[0] = 0;
 		ret.size = 0;
 		return ret;
 	} else {
