@@ -464,30 +464,20 @@ integer_to_binary_stream_generator(void *state, bit *finished_q) {
 }
 
 static struct integer_to_binary_stream_s*
-integer_to_binary_stream_init(size_t size, size_t n) {
+integer_to_binary_stream_init(size_t size) {
 	struct integer_to_binary_stream_s *ret;
 
 	ret = dynalloc(sizeof(struct integer_to_binary_stream_s));
 	ret->i = 0;
-	ret->n = n;
+	ret->n = 0;
 	ret->size = size;
 	ret->auto_free = 0;
 
-	ret->me.finished_q = 0;
+	ret->me.finished_q = 1;
 	ret->me.state = ret;
 	ret->me.generator = integer_to_binary_stream_generator;
 
 	return ret;
-}
-
-static stream
-integer_to_binary_stream(size_t size, size_t n) {
-	struct integer_to_binary_stream_s* s;
-
-	s = integer_to_binary_stream_init(size, n);
-	s->auto_free = 1;
-
-	return s->me;
 }
 
 static void
@@ -495,6 +485,17 @@ integer_to_binary_stream_reset(struct integer_to_binary_stream_s* s, size_t n) {
 	s->n = n;
 	s->i = 0;
 	s->me.finished_q = 0;
+}
+
+static stream
+integer_to_binary_stream(size_t size, size_t n) {
+	struct integer_to_binary_stream_s* s;
+
+	s = integer_to_binary_stream_init(size);
+	integer_to_binary_stream_reset(s, n);
+	s->auto_free = 1;
+
+	return s->me;
 }
 
 /* Only positive */
@@ -538,18 +539,6 @@ byte_stream_to_binary_stream_generator(void *state, bit *finished_q) {
 	byte_t n;
 	bit x;
 
-	if (ctx->conv == NULL) {
-		n = stream_read(ctx->bytes).byte;
-		if (stream_finished(ctx->bytes)) {
-			*finished_q = 1;
-			maybe_free(state);
-			ret.other = NULL;
-			return ret;
-		}
-
-		ctx->conv = integer_to_binary_stream_init(8, n);
-	}
-
 	x = stream_read(&(ctx->conv->me)).binary;
 	if (stream_finished(&(ctx->conv->me))) {
 		n = stream_read(ctx->bytes).byte;
@@ -571,10 +560,11 @@ static stream
 byte_stream_to_binary_stream(stream *bytes) {
 	struct byte_stream_to_binary_stream_closure *ctx;
 	stream ret;
+	byte_t n;
 
 	ctx = dynalloc(sizeof(struct byte_stream_to_binary_stream_closure));
-	ctx->conv = NULL;
 	ctx->bytes = bytes;
+	ctx->conv = integer_to_binary_stream_init(8);
 
 	ret.finished_q = 0;
 	ret.state = ctx;
