@@ -1,5 +1,25 @@
 #!/bin/sh
 
+# NOTE: reasonable defaults
+INPUT_WRAP_COUNT=256
+WRAP_COUNT=0
+
+while true
+do
+	case "$1" in
+		--input-wrap-count=*)
+			INPUT_WRAP_COUNT=$(echo "$1" | sed 's/.*=/')
+			;;
+		--wrap-count=*)
+			INPUT_WRAP_COUNT=$(echo "$1" | sed 's/.*=/')
+			;;
+		*)
+			break
+			;;
+	esac
+	shift
+done
+
 while true
 do
 	printf "input_file: " 1>&2
@@ -26,10 +46,6 @@ read PASS
 stty echo
 
 SALT=$(cat /dev/urandom | basenc --base16 --wrap 0 | head -c 256) # 1024-bit random salt
-
-# NOTE: reasonable defaults
-INPUT_WRAP_COUNT=256
-WRAP_COUNT=0
 
 printf "output_file: " 1>&2
 read OUTPUT_FILE
