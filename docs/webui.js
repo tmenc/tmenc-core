@@ -89,8 +89,6 @@ function handleClick(output_cb) {
 		}
 		var file = files[0];
 
-		console.log("FILE: ", {file});
-
 		var reader = new FileReader();
 		reader.onload = read_input_file_cb(output_cb(file.name));
 		reader.readAsArrayBuffer(file);
