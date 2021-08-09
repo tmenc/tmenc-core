@@ -45,7 +45,7 @@ function download_cb(sourceName) {
 			props.type = 'application/pdf';
 		}
 
-		var blob = new Blob(buf, props || undefined);
+		var blob = new Blob([new Uint8Array(buf)], props || undefined);
 		var link = document.createElement('a');
 		link.href = window.URL.createObjectURL(blob);
 		link.download = sourceName;
