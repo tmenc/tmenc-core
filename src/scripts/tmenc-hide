@@ -51,6 +51,11 @@ printf "output_file: " 1>&2
 read OUTPUT_FILE
 OUTPUT_FILE=$(printf "%s" "$OUTPUT_FILE" | sed "s#~#$HOME#")
 
+echo "Encrypting with:"
+echo "   INPUT_WRAP_COUNT=$INPUT_WRAP_COUNT"
+echo "   WRAP_COUNT=$WRAP_COUNT"
+echo "   SALT=$SALT"
+
 printf \
 	"%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n" \
 	"encrypt" \
