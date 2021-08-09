@@ -4,8 +4,6 @@ while true
 do
 	printf "input_file: " 1>&2
 	read INPUT_FILE
-	echo
-
 	INPUT_FILE=$(printf "%s" "$INPUT_FILE" | sed "s#~#$HOME#")
 	test -f "$INPUT_FILE" && break
 	echo "Such file does not exist, try again" 1>&2

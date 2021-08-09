@@ -505,8 +505,14 @@ function make_key(pass_v, salt_v, file_buffer, size, input_wrap_count, wrap_coun
 	var file_stream = vector_to_stream(file_v);
 	var machine_bits = make_machine_from_secret(salt_v, closest_power_of_two(bitarray_length(salt_v)));
 
+	console.log({pass_v});
+	console.log({file_v});
+
 	var input_stream = append_streams([pass_stream, file_stream]);
 	var input_bits = binary_stream_to_bitarr(input_stream);
+
+	console.log({input_bits});
+
 	var input_cycle_stream = bitarr_to_cycle_stream(input_bits);
 
 	var env_stream = make_tm_env(machine_bits, input_cycle_stream);
