@@ -539,6 +539,7 @@ byte_stream_to_binary_stream_generator(void *state, bit *finished_q) {
 	bit x;
 
 	if (ctx->conv == NULL) {
+		n = stream_read(ctx->bytes).byte;
 		if (stream_finished(ctx->bytes)) {
 			*finished_q = 1;
 			maybe_free(state);
@@ -546,7 +547,6 @@ byte_stream_to_binary_stream_generator(void *state, bit *finished_q) {
 			return ret;
 		}
 
-		n = stream_read(ctx->bytes).byte;
 		ctx->conv = integer_to_binary_stream_init(8, n);
 	}
 
