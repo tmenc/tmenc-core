@@ -56,7 +56,7 @@ function read_input_file_cb(e) {
 	}
 }
 
-function handleSubmit(button) {
+function handleShow(button) {
 	var targetObject = document.getElementById('encoded_input');
 	var files = targetObject.files; // FileList object
 	if (files.length <= 0) {
@@ -70,4 +70,4 @@ function handleSubmit(button) {
 	reader.readAsArrayBuffer(file);
 }
 
-document.getElementById('submit').addEventListener('click', handleSubmit);
+document.getElementById('show').addEventListener('click', handleShow);
