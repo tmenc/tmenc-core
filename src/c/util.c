@@ -560,7 +560,6 @@ static stream
 byte_stream_to_binary_stream(stream *bytes) {
 	struct byte_stream_to_binary_stream_closure *ctx;
 	stream ret;
-	byte_t n;
 
 	ctx = dynalloc(sizeof(struct byte_stream_to_binary_stream_closure));
 	ctx->bytes = bytes;
