@@ -8,10 +8,10 @@ while true
 do
 	case "$1" in
 		--input-wrap-count=*)
-			INPUT_WRAP_COUNT=$(echo "$1" | sed 's/.*=/')
+			INPUT_WRAP_COUNT=$(echo "$1" | sed 's/.*=//')
 			;;
 		--wrap-count=*)
-			INPUT_WRAP_COUNT=$(echo "$1" | sed 's/.*=/')
+			WRAP_COUNT=$(echo "$1" | sed 's/.*=//')
 			;;
 		*)
 			break
