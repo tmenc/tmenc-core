@@ -24,50 +24,59 @@ function bytes_to_utf8(bytes) {
 	return result.join('');
 }
 
-function read_keyfile_cb(pass, keyfile_buffer, input_file_buffer) {
-	function output_cb(buf) {
-		var out_string = bytes_to_utf8(buf);
-		var re = new RegExp('(\r|\n)', 'g');
-		out_string = out_string.replace(re, '<br></br>');
+function show_cb(buf) {
+	var out_string = bytes_to_utf8(buf);
+	var re = new RegExp('(\r|\n)', 'g');
+	out_string = out_string.replace(re, '<br></br>');
 
-		document.getElementById('main_out').innerHTML = out_string;
-	}
+	document.getElementById('main_out').innerHTML = out_string;
+}
 
+function download_cb(buf) {
+	console.log("GOT IT", buf);
+}
+
+function read_keyfile_cb(output_cb, pass, keyfile_buffer, input_file_buffer) {
 	decrypt(pass, keyfile_buffer, input_file_buffer, output_cb);
 }
 
-function read_input_file_cb(e) {
-	var input_file_buffer = new Uint8Array(e.target.result);
-	var pass = document.getElementById('pinput').value;
+function read_input_file_cb(output_cb) {
+	return function (e) {
+		var input_file_buffer = new Uint8Array(e.target.result);
+		var pass = document.getElementById('pinput').value;
 
-	var keyObject = document.getElementById('key_input');
-	var files = keyObject.files; // FileList object
-	var file = files[0];
+		var keyObject = document.getElementById('key_input');
+		var files = keyObject.files; // FileList object
+		var file = files[0];
 
-	if (file) {
-		 var reader = new FileReader();
-		 reader.onload = function (e) {
-			 var keyfile_buffer = new Uint8Array(e.target.result);
-			 read_keyfile_cb(pass, keyfile_buffer, input_file_buffer);
-		 }
-		 reader.readAsArrayBuffer(file);
-	} else {
-		read_keyfile_cb(pass, new ArrayBuffer([]), input_file_buffer);
+		if (file) {
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				var keyfile_buffer = new Uint8Array(e.target.result);
+				read_keyfile_cb(output_cb, pass, keyfile_buffer, input_file_buffer);
+			}
+			reader.readAsArrayBuffer(file);
+		} else {
+			read_keyfile_cb(output_cb, pass, new ArrayBuffer([]), input_file_buffer);
+		}
 	}
 }
 
-function handleShow(button) {
-	var targetObject = document.getElementById('encoded_input');
-	var files = targetObject.files; // FileList object
-	if (files.length <= 0) {
-		alert('Choose target file!');
-		return;
-	}
-	var file = files[0];
+function handleClick(output_cb) {
+	return function (button) {
+		var targetObject = document.getElementById('encoded_input');
+		var files = targetObject.files; // FileList object
+		if (files.length <= 0) {
+			alert('Choose target file!');
+			return;
+		}
+		var file = files[0];
 
-	var reader = new FileReader();
-	reader.onload = read_input_file_cb;
-	reader.readAsArrayBuffer(file);
+		var reader = new FileReader();
+		reader.onload = read_input_file_cb(output_cb);
+		reader.readAsArrayBuffer(file);
+	}
 }
 
-document.getElementById('show').addEventListener('click', handleShow);
+document.getElementById('show').addEventListener('click', handleClick(show_cb));
+document.getElementById('download').addEventListener('click', handleClick(download_cb));
