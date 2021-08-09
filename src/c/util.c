@@ -1147,6 +1147,19 @@ read_file(char *path) {
 	return ret;
 }
 
+static struct buffer
+read_optional_file(char *path) {
+	struct buffer ret;
+
+	if (strlen(path) == 0 || (strlen(path) == 1 && (path[0] == '\n' || path[0] == ' '))) {
+		ret.memory = NULL;
+		ret.size = 0;
+		return ret;
+	} else {
+		return read_file(path);
+	}
+}
+
 struct xor_with_key_closure {
 	bitarr a;
 	bitarr b;

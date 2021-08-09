@@ -103,14 +103,7 @@ decrypt_file(void) {
 	ofp = open_file(output_file, "w");
 
 	printf("KEYFILE: %s\n", keyfile);
-	if (strlen(keyfile) == 0 || (strlen(keyfile) == 1 && (keyfile[0] == '\n' || keyfile[0] == ' '))) {
-		/* Skipping the keyfile, it's ok */
-		keyfile_buffer.memory = NULL;
-		keyfile_buffer.size = 0;
-	} else {
-		keyfile_buffer = read_file(keyfile);
-	}
-
+	keyfile_buffer = read_optional_file(keyfile);
 	input_file_buffer = read_file(input_file); /* TODO: don't store input file in memoery */
 	input_file_byte_stream = buffer_to_byte_stream(&input_file_buffer);
 	input_file_stream = byte_stream_to_binary_stream(&input_file_byte_stream);
@@ -155,7 +148,8 @@ encrypt_file(void) {
 
 	ofp = open_file(output_file, "w");
 
-	keyfile_buffer = read_file(keyfile);
+	printf("KEYFILE: %s\n", keyfile);
+	keyfile_buffer = read_optional_file(keyfile);
 	input_file_buffer = read_file(input_file); /* TODO: don't store input file in memoery */
 	salt_binary_stream = hex_to_binary_stream(salt);
 	salt_a = binary_stream_to_bitarr(&salt_binary_stream);
