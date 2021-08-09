@@ -548,12 +548,12 @@ function handle_file_buffer(encryptQ, pass_s, salt, keyfile_buffer0, input_wrap_
 		var binary_stream = append_streams([salt_len_stream, salt_stream, input_wrap_count_stream, wrap_count_stream, key_size_stream, xored_stream]);
 		var padded_stream = pad_stream(BLOCK_LEN, binary_stream);
 		var byte_stream = binary_stream_to_byte_stream(padded_stream);
-		var buf = byte_stream_to_byte_buffer(byte_stream);
+		var buf = stream_to_vector(byte_stream);
 
 		output_cb(buf);
 	} else {
 		var byte_stream = binary_stream_to_byte_stream(xored_stream);
-		var buf = byte_stream_to_byte_buffer(byte_stream);
+		var buf = stream_to_vector(byte_stream);
 		output_cb(buf);
 	}
 }

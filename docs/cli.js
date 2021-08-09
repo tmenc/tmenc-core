@@ -28,7 +28,7 @@ function read_things(keys, callback) {
 function encrypt_file() {
 	function read_cb(pass_s, salt_s, keyfile, input_wrap_count_s, wrap_count_s, input_file, output_file) {
 		function output_cb(buf) {
-			fs.writeFileSync(output_file, buf);
+			fs.writeFileSync(output_file, new Uint8Array(buf));
 		}
 
 		var keyfile_buffer = new Uint8Array(fs.readFileSync(keyfile));
@@ -42,7 +42,7 @@ function encrypt_file() {
 function decrypt_file() {
 	function read_cb(pass, keyfile, input_file, output_file) {
 		function output_cb(buf) {
-			fs.writeFileSync(output_file, buf);
+			fs.writeFileSync(output_file, new Uint8Array(buf));
 		}
 
 		var keyfile_buffer = new Uint8Array(fs.readFileSync(keyfile));
