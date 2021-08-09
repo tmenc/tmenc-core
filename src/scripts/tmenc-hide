@@ -36,6 +36,7 @@ do
 	read KEYFILE
 	stty echo
 	KEYFILE=$(printf "%s" "$KEYFILE" | sed "s#~#$HOME#")
+	test -z "$KEYFILE" && break
 	test -f "$KEYFILE" && break
 	echo "Such file does not exist, try again" 1>&2
 done
