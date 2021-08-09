@@ -24,23 +24,40 @@ function bytes_to_utf8(bytes) {
 	return result.join('');
 }
 
-function show_cb(buf) {
-	var out_string = bytes_to_utf8(buf);
-	var re = new RegExp('(\r|\n)', 'g');
-	out_string = out_string.replace(re, '<br></br>');
+function show_cb(sourceName) {
+	return function (buf) {
+		var out_string = bytes_to_utf8(buf);
+		var re = new RegExp('(\r|\n)', 'g');
+		out_string = out_string.replace(re, '<br></br>');
 
-	document.getElementById('main_out').innerHTML = out_string;
+		document.getElementById('main_out').innerHTML = out_string;
+	}
 }
 
-function download_cb(buf) {
-	console.log("GOT IT", buf);
+function download_cb(sourceName) {
+	return function (buf) {
+		var props = {};
+		if (sourceName.endsWith(".txt")) {
+			props.type = 'text/plain';
+		} else if (sourceName.endsWith(".json")) {
+			props.type = 'application/json';
+		} else if (sourceName.endsWith(".pdf")) {
+			props.type = 'application/pdf';
+		}
+
+		var blob = new Blob(buf, props || undefined);
+		var link = document.createElement('a');
+		link.href = window.URL.createObjectURL(blob);
+		link.download = sourceName;
+		link.click();
+	}
 }
 
 function read_keyfile_cb(output_cb, pass, keyfile_buffer, input_file_buffer) {
 	decrypt(pass, keyfile_buffer, input_file_buffer, output_cb);
 }
 
-function read_input_file_cb(output_cb) {
+function read_input_file_cb(output_cb, input_filename) {
 	return function (e) {
 		var input_file_buffer = new Uint8Array(e.target.result);
 		var pass = document.getElementById('pinput').value;
@@ -72,8 +89,10 @@ function handleClick(output_cb) {
 		}
 		var file = files[0];
 
+		console.log("FILE: ", {file});
+
 		var reader = new FileReader();
-		reader.onload = read_input_file_cb(output_cb);
+		reader.onload = read_input_file_cb(output_cb(file.name));
 		reader.readAsArrayBuffer(file);
 	}
 }
