@@ -35,6 +35,9 @@ install: build-c $(PREFIX)/bin
 	ln -sf $(HERE)/build/tmenc-cli $(PREFIX)/bin/
 	ln -sf $(HERE)/src/scripts/* $(PREFIX)/bin/
 
+deploy_webpage:
+	rsync --delete -P -r src/js $(MY_SERVER_NAME):tmenc
+
 test-all: test-changes test-quality
 test-quality:
 	$(MAKE) CFLAGS=$(FAST_FLAGS) test-nist-big test-nist-small test-js-hash
