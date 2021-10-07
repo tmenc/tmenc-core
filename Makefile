@@ -32,8 +32,8 @@ $(PREFIX)/bin:
 	mkdir -p $(PREFIX)/bin
 
 install: build-c $(PREFIX)/bin
-	ln -sf $(HERE)/build/tmenc-cli $(PREFIX)/bin/
-	ln -sf $(HERE)/src/scripts/* $(PREFIX)/bin/
+	cp $(HERE)/build/tmenc-cli $(PREFIX)/bin/
+	cp $(HERE)/src/scripts/* $(PREFIX)/bin/
 
 deploy_webpage:
 	rsync --delete -P -r src/js $(MY_SERVER_NAME):tmenc
