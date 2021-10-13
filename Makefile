@@ -36,7 +36,7 @@ install: build-c $(PREFIX)/bin
 	cp $(HERE)/src/scripts/* $(PREFIX)/bin/
 
 deploy_webpage:
-	rsync --delete -P -r src/js $(MY_SERVER_NAME):tmenc
+	rsync --delete -P -r src/js/ $(MY_SERVER_NAME):tmenc
 
 test-all: test-changes test-quality
 test-quality:
