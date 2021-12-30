@@ -1,3 +1,3 @@
 [submodule "nist-sts"]
 	path = test/nist-sts
-	url = git@github.com:tmenc/nist-sts.git
+	url = git://vauplace.xyz/nist-sts.git
