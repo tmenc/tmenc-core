@@ -26,7 +26,7 @@ build-js: | build build-js-srcs
 tests: tests-build-js-srcs test-build-c-srcs
 
 build-c:
-	$(MAKE) -B build/tmenc-cli CFLAGS=$(FAST_FLAGS)
+	$(MAKE) build/tmenc-cli CFLAGS=$(FAST_FLAGS)
 
 $(PREFIX)/bin:
 	mkdir -p $(PREFIX)/bin
@@ -160,7 +160,7 @@ generate-entropy: build/test build/test/test-entropy.exe
 	./build/test/test-entropy.exe > build/test/entropy.txt
 
 build/test:
-	mkdir -p $@ || true
+	mkdir -p $@
 
 $(NIST_EXECUTABLE): $(NIST_MAKEFILE)
 	cd $(NIST_DIR) && $(MAKE)
@@ -171,7 +171,7 @@ $(NIST_MAKEFILE):
 build-js-srcs: build/cli.js
 
 build:
-	mkdir $@ || true
+	mkdir -p $@
 
 build/cli.js: src/js/machine.js src/js/util.js src/js/cli.js
 	cat $^ > $@
